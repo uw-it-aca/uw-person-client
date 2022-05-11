@@ -54,14 +54,15 @@ class UWPDS(Postgres):
                    primary_key=True)
         )
 
-        historical_persons_view = Table(
+        Table(
             'historical_person',
             UWPDS.Base.metadata,
             Column('prior_uwnetid', TEXT(), primary_key=True),
             Column('prior_uwregid', TEXT(), primary_key=True),
             Column('id', Integer(), primary_key=True),
             autoload=True,
-            autoload_with=self.engine)
+            autoload_with=self.engine
+        )
 
         class Student(UWPDS.Base):
             __tablename__ = 'student'
@@ -100,6 +101,8 @@ class UWPDS(Postgres):
 
         self.Person = UWPDS.Base.classes.person
         self.HistoricalPerson = UWPDS.Base.classes.historical_person
+        self.PriorUWNetID = UWPDS.Base.classes.prior_uwnetids
+        self.PriorUWRegID = UWPDS.Base.classes.prior_uwregids
         self.Transcript = Transcript
         self.Student = Student
         self.Employee = Employee

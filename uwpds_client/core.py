@@ -37,6 +37,12 @@ class UWPDSClient():
         person = Person()
         person.uwnetid = sqla_person.uwnetid
         person.uwregid = sqla_person.uwregid
+        prior_uwnetids = DB.session.query(DB.PriorUWNetID).filter(
+            DB.PriorUWNetID.person_id == sqla_person.id).all()
+        person.prior_uwnetids = [pni.uwnetid for pni in prior_uwnetids]
+        prior_uwregids = DB.session.query(DB.PriorUWRegID).filter(
+            DB.PriorUWRegID.person_id == sqla_person.id).all()
+        person.prior_uwregids = [pri.uwregid for pri in prior_uwregids]
         person.pronouns = sqla_person.pronouns
         person.full_name = sqla_person.full_name
         person.display_name = sqla_person.display_name
