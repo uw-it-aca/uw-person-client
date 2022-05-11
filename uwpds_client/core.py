@@ -3,8 +3,8 @@
 
 from sqlalchemy.orm.exc import NoResultFound
 from uwpds_client.databases.uwpds import UWPDS
-from uwpds_client.components import Person, Student, Employee, Transcript, \
-    Major, Sport, Adviser, Term
+from uwpds_client.components import Person, Student, Employee, \
+    Transcript, Major, Sport, Adviser, Term
 
 
 DB = UWPDS()
@@ -17,14 +17,14 @@ class UWPDSClient():
     """
 
     def get_person_by_uwnetid(self, uwnetid, student=False, employee=False):
-        person = DB.session.query(DB.Person).filter(
-            DB.Person.uwnetid == uwnetid).one()
+        person = DB.session.query(DB.HistoricalPerson).filter(
+            DB.HistoricalPerson.prior_uwnetid == uwnetid).first()
         return self._map_person(
             person, include_student=student, include_employee=employee)
 
     def get_person_by_uwregid(self, uwregid, student=False, employee=False):
-        person = DB.session.query(DB.Person).filter(
-            DB.Person.uwregid == uwregid).one()
+        person = DB.session.query(DB.HistoricalPerson).filter(
+            DB.HistoricalPerson.prior_uwregid == uwregid).first()
         return self._map_person(
             person, include_student=student, include_employee=employee)
 
