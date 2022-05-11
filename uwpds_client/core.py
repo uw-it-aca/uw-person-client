@@ -3,6 +3,8 @@
 
 from sqlalchemy.orm.exc import NoResultFound
 from uwpds_client.databases.uwpds import UWPDS
+from uwpds_client.components import Person, Student, Employee, Transcript, \
+    Major, Sport, Adviser, Term
 
 
 DB = UWPDS()
@@ -17,186 +19,185 @@ class UWPDSClient():
     def get_person_by_uwnetid(self, uwnetid, student=False, employee=False):
         person = DB.session.query(DB.Person).filter(
             DB.Person.uwnetid == uwnetid).one()
-        return self._map_person_dict(
+        return self._map_person(
             person, include_student=student, include_employee=employee)
 
     def get_person_by_uwregid(self, uwregid, student=False, employee=False):
         person = DB.session.query(DB.Person).filter(
             DB.Person.uwregid == uwregid).one()
-        return self._map_person_dict(
+        return self._map_person(
             person, include_student=student, include_employee=employee)
 
     """
     Private Methods
     """
 
-    def _map_person_dict(self, person, include_student=False,
-                         include_employee=False):
-        person_dict = {}
-        person_dict["uwnetid"] = person.uwnetid
-        person_dict["uwregid"] = person.uwregid
-        person_dict["pronouns"] = person.pronouns
-        person_dict["full_name"] = person.full_name
-        person_dict["display_name"] = person.display_name
-        person_dict["first_name"] = person.first_name
-        person_dict["surname"] = person.surname
-        person_dict["preferred_first_name"] = person.preferred_first_name
-        person_dict["preferred_middle_name"] = person.preferred_middle_name
-        person_dict["preferred_surname"] = person.preferred_surname
-        person_dict["whitepages_publish"] = person.whitepages_publish
-        person_dict["active_student"] = person._is_active_student
-        person_dict["active_employee"] = person._is_active_employee
+    def _map_person(self, sqla_person, include_student=False,
+                    include_employee=False):
+        person = Person()
+        person.uwnetid = sqla_person.uwnetid
+        person.uwregid = sqla_person.uwregid
+        person.pronouns = sqla_person.pronouns
+        person.full_name = sqla_person.full_name
+        person.display_name = sqla_person.display_name
+        person.first_name = sqla_person.first_name
+        person.surname = sqla_person.surname
+        person.preferred_first_name = sqla_person.preferred_first_name
+        person.preferred_middle_name = \
+            sqla_person.preferred_middle_name
+        person.preferred_surname = sqla_person.preferred_surname
+        person.whitepages_publish = sqla_person.whitepages_publish
+        person.active_student = sqla_person._is_active_student
+        person.active_employee = sqla_person._is_active_employee
 
         if include_student is True:
             try:
                 student = DB.session.query(DB.Student).filter(
-                            DB.Student.person_id == person.id).one()
-                person_dict["student"] = \
-                    self._map_student_dict(student)
+                            DB.Student.person_id == sqla_person.id).one()
+                person.student = self._map_student(student)
             except NoResultFound:
                 pass
 
         if include_employee is True:
             try:
                 employee = DB.session.query(DB.Employee).filter(
-                    DB.Employee.person_id == person.id).one()
-                person_dict["employee"] = \
-                    self._map_employee_dict(employee)
+                    DB.Employee.person_id == sqla_person.id).one()
+                person.employee = self._map_employee(employee)
             except NoResultFound:
                 pass
 
-        return person_dict
+        return person
 
-    def _map_student_dict(self, student):
-        student_dict = {}
-        student_dict["student_number"] = student.student_number
-        student_dict["assigned_ethnic_code"] = student.assigned_ethnic_code
-        student_dict["assigned_ethnic_desc"] = student.assigned_ethnic_desc
-        student_dict["assigned_ethnic_group_desc"] = \
-            student.assigned_ethnic_group_desc
-        student_dict["birthdate"] = student.birthdate
-        student_dict["student_email"] = student.student_email
-        student_dict["external_email"] = student.external_email
-        student_dict["local_phone_number"] = student.local_phone_number
-        student_dict["gender"] = student.gender
-        student_dict["cumulative_gpa"] = student.cumulative_gpa
-        student_dict["total_credits"] = student.total_credits
-        student_dict["total_uw_credits"] = student.total_uw_credits
-        student_dict["campus_code"] = student.campus_code
-        student_dict["campus_desc"] = student.campus_desc
-        student_dict["class_code"] = student.class_code
-        student_dict["class_desc"] = student.class_desc
-        student_dict["resident_code"] = student.resident_code
-        student_dict["resident_desc"] = student.resident_desc
-        student_dict["perm_addr_line1"] = student.perm_addr_line1
-        student_dict["perm_addr_line2"] = student.perm_addr_line2
-        student_dict["perm_addr_city"] = student.perm_addr_city
-        student_dict["perm_addr_state"] = student.perm_addr_state
-        student_dict["perm_addr_5digit_zip"] = student.perm_addr_5digit_zip
-        student_dict["perm_addr_4digit_zip"] = student.perm_addr_4digit_zip
-        student_dict["perm_addr_country"] = student.perm_addr_country
-        student_dict["perm_addr_postal_code"] = student.perm_addr_postal_code
-        student_dict["registered_in_quarter"] = student.registered_in_quarter
+    def _map_student(self, sqla_student):
+        student = Student()
+        student.student_number = sqla_student.student_number
+        student.assigned_ethnic_code = \
+            sqla_student.assigned_ethnic_code
+        student.assigned_ethnic_desc = \
+            sqla_student.assigned_ethnic_desc
+        student.assigned_ethnic_group_desc = \
+            sqla_student.assigned_ethnic_group_desc
+        student.birthdate = sqla_student.birthdate
+        student.student_email = sqla_student.student_email
+        student.external_email = sqla_student.external_email
+        student.local_phone_number = sqla_student.local_phone_number
+        student.gender = sqla_student.gender
+        student.cumulative_gpa = sqla_student.cumulative_gpa
+        student.total_credits = sqla_student.total_credits
+        student.total_uw_credits = sqla_student.total_uw_credits
+        student.campus_code = sqla_student.campus_code
+        student.campus_desc = sqla_student.campus_desc
+        student.class_code = sqla_student.class_code
+        student.class_desc = sqla_student.class_desc
+        student.resident_code = sqla_student.resident_code
+        student.resident_desc = sqla_student.resident_desc
+        student.perm_addr_line1 = sqla_student.perm_addr_line1
+        student.perm_addr_line2 = sqla_student.perm_addr_line2
+        student.perm_addr_city = sqla_student.perm_addr_city
+        student.perm_addr_state = sqla_student.perm_addr_state
+        student.perm_addr_5digit_zip = sqla_student.perm_addr_5digit_zip
+        student.perm_addr_4digit_zip = sqla_student.perm_addr_4digit_zip
+        student.perm_addr_country = sqla_student.perm_addr_country
+        student.perm_addr_postal_code = sqla_student.perm_addr_postal_code
+        student.registered_in_quarter = sqla_student.registered_in_quarter
 
         # map majors
-        student_dict["majors"] = []
-        for major in student.major:
-            major_dict = self._map_major(major)
-            student_dict["majors"].append(major_dict)
+        student.majors = []
+        for major in sqla_student.major:
+            major = self._map_major(major)
+            student.majors.append(major)
 
         # map sports
-        student_dict["sports"] = []
-        for sport in student.sport:
-            sport_dict = self._map_sport(sport)
-            student_dict["sports"].append(sport_dict)
+        student.sports = []
+        for sport in sqla_student.sport:
+            sport = self._map_sport(sport)
+            student.sports.append(sport)
 
         # map advisers
-        student_dict["advisers"] = []
-        for adviser in student.adviser:
-            adviser_person_dict = self._map_person_dict(
+        student.advisers = []
+        for adviser in sqla_student.adviser:
+            adviser_person = self._map_person(
                 adviser.employee.person, include_employee=True)
-            student_dict["advisers"].append(adviser_person_dict)
+            student.advisers.append(adviser_person)
 
         # map transcripts
-        student_dict["transcripts"] = []
-        for transcript in student.transcript:
-            transcript_dict = self._map_transcript(transcript)
-            student_dict["transcripts"].append(transcript_dict)
+        student.transcripts = []
+        for transcript in sqla_student.transcript:
+            transcript = self._map_transcript(transcript)
+            student.transcripts.append(transcript)
 
-        return student_dict
+        return student
 
-    def _map_employee_dict(self, employee):
-        employee_dict = {}
-        employee_dict["employee_number"] = employee.employee_number
-        employee_dict["employee_affiliation_state"] = \
-            employee.employee_affiliation_state
-        employee_dict["email_addresses"] = employee.email_addresses
-        employee_dict["home_department"] = employee.home_department
-        employee_dict["primary_title"] = employee.title
-        employee_dict["primary_department"] = employee.department
+    def _map_employee(self, sqla_employee):
+        employee = Employee()
+        employee.employee_number = sqla_employee.employee_number
+        employee.employee_affiliation_state = \
+            sqla_employee.employee_affiliation_state
+        employee.email_addresses = sqla_employee.email_addresses
+        employee.home_department = sqla_employee.home_department
+        employee.primary_title = sqla_employee.title
+        employee.primary_department = sqla_employee.department
 
-        if employee.adviser:
-            employee_dict["adviser"] = self._map_adviser(employee.adviser)
+        if sqla_employee.adviser:
+            employee.adviser = self._map_adviser(sqla_employee.adviser)
 
-        return employee_dict
+        return employee
 
-    def _map_adviser(self, adviser):
-        adviser_dict = {}
-        adviser_dict["is_dept_adviser"] = adviser.is_dept_adviser
-        adviser_dict["advising_email"] = adviser.advising_email
-        adviser_dict["advising_phone_number"] = \
-            adviser.advising_phone_number
-        adviser_dict["advising_program"] = adviser.advising_program
-        adviser_dict["advising_pronouns"] = adviser.advising_pronouns
-        adviser_dict["booking_url"] = adviser.booking_url
-        return adviser_dict
+    def _map_adviser(self, sqla_adviser):
+        adviser = Adviser()
+        adviser.is_dept_adviser = sqla_adviser.is_dept_adviser
+        adviser.advising_email = sqla_adviser.advising_email
+        adviser.advising_phone_number = \
+            sqla_adviser.advising_phone_number
+        adviser.advising_program = sqla_adviser.advising_program
+        adviser.advising_pronouns = sqla_adviser.advising_pronouns
+        adviser.booking_url = sqla_adviser.booking_url
+        return adviser
 
-    def _map_sport(self, sport):
-        sport_dict = {}
-        sport_dict["sport_code"] = sport.sport_code
-        return sport_dict
+    def _map_sport(self, sqla_sport):
+        sport = Sport()
+        sport.sport_code = sqla_sport.sport_code
+        return sport
 
-    def _map_major(self, major):
-        major_dict = {}
-        major_dict["major_abbr_code"] = major.major_abbr_code
-        major_dict["major_full_code"] = major.major_full_code
-        major_dict["major_name"] = major.major_name
-        major_dict["major_short_name"] = major.major_short_name
-        return major_dict
+    def _map_major(self, sqla_major):
+        major = Major()
+        major.major_abbr_code = sqla_major.major_abbr_code
+        major.major_full_code = sqla_major.major_full_code
+        major.major_name = sqla_major.major_name
+        major.major_short_name = sqla_major.major_short_name
+        return major
 
-    def _map_transcript(self, transcript):
-        transcript_dict = {}
-        transcript_dict["tran_term"] = self._map_term(
-            transcript.tran_term)
-        transcript_dict["leave_ends_term"] = self._map_term(
-            transcript.leave_ends_term)
-        # transcript_dict["tran_net_id"] = transcript.tran_net_id
-        transcript_dict["resident"] = transcript.resident
-        transcript_dict["resident_cat"] = transcript.resident_cat
-        transcript_dict["veteran"] = transcript.veteran
-        transcript_dict["veteran_benefit"] = transcript.veteran_benefit
-        transcript_dict["class_code"] = transcript.class_code
-        transcript_dict["qtr_grade_points"] = \
-            float(transcript.qtr_grade_points)
-        transcript_dict["qtr_graded_attmp"] = \
-            float(transcript.qtr_graded_attmp)
-        transcript_dict["honors_program"] = transcript.honors_program
-        transcript_dict["special_program"] = transcript.special_program
-        transcript_dict["scholarship_type"] = transcript.scholarship_type
-        transcript_dict["yearly_honor_type"] = transcript.yearly_honor_type
-        transcript_dict["exemption_code"] = transcript.exemption_code
-        transcript_dict["grad_status"] = transcript.grad_status
-        transcript_dict["num_ind_study"] = transcript.num_ind_study
-        transcript_dict["num_courses"] = transcript.num_courses
-        transcript_dict["enroll_status"] = transcript.enroll_status
-        transcript_dict["tenth_day_credits"] = \
-            float(transcript.tenth_day_credits)
-        transcript_dict["tr_en_stat_dt"] = transcript.tr_en_stat_dt
-        print(transcript_dict)
-        return transcript_dict
+    def _map_transcript(self, sqla_transcript):
+        transcript = Transcript()
+        transcript.tran_term = self._map_term(
+            sqla_transcript.tran_term)
+        transcript.leave_ends_term = self._map_term(
+            sqla_transcript.leave_ends_term)
+        transcript.resident = sqla_transcript.resident
+        transcript.resident_cat = sqla_transcript.resident_cat
+        transcript.veteran = sqla_transcript.veteran
+        transcript.veteran_benefit = sqla_transcript.veteran_benefit
+        transcript.class_code = sqla_transcript.class_code
+        transcript.qtr_grade_points = \
+            float(sqla_transcript.qtr_grade_points)
+        transcript.qtr_graded_attmp = \
+            float(sqla_transcript.qtr_graded_attmp)
+        transcript.honors_program = sqla_transcript.honors_program
+        transcript.special_program = sqla_transcript.special_program
+        transcript.scholarship_type = sqla_transcript.scholarship_type
+        transcript.yearly_honor_type = sqla_transcript.yearly_honor_type
+        transcript.exemption_code = sqla_transcript.exemption_code
+        transcript.grad_status = sqla_transcript.grad_status
+        transcript.num_ind_study = sqla_transcript.num_ind_study
+        transcript.num_courses = sqla_transcript.num_courses
+        transcript.enroll_status = sqla_transcript.enroll_status
+        transcript.tenth_day_credits = \
+            float(sqla_transcript.tenth_day_credits)
+        transcript.tr_en_stat_dt = sqla_transcript.tr_en_stat_dt
+        return transcript
 
-    def _map_term(self, term):
-        term_dict = {}
-        term_dict["year"] = term.year
-        term_dict["quarter"] = term.quarter
-        return term_dict
+    def _map_term(self, sqla_term):
+        term = Term()
+        term.year = sqla_term.year
+        term.quarter = sqla_term.quarter
+        return term
