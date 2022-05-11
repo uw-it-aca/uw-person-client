@@ -10,9 +10,9 @@ class AbstractBase():
     def __getattr__(self, name):
         try:
             return self.__dict__[name]
-        except AttributeError:
-            raise AttributeError(f"Attribute {name} does not exist on "
-                                 f"instance of {type(self)}.")
+        except KeyError:
+            raise AttributeError(f"Attribute '{name}' does not exist on "
+                                 f"'{type(self).__name__}' instance.")
 
     def __setattr__(self, name, value):
         self.__dict__[name] = value
