@@ -16,24 +16,55 @@ class UWPDSClient():
     Public methods
     """
 
-    def get_person_by_uwnetid(self, uwnetid, student=False, employee=False):
-        person = DB.session.query(DB.HistoricalPerson).filter(
+    def get_person_by_uwnetid(self, uwnetid):
+        sqla_person = DB.session.query(DB.HistoricalPerson).filter(
             DB.HistoricalPerson.prior_uwnetid == uwnetid).first()
-        return self._map_person(
-            person, include_student=student, include_employee=employee)
+        return self._map_person(sqla_person)
 
-    def get_person_by_uwregid(self, uwregid, student=False, employee=False):
-        person = DB.session.query(DB.HistoricalPerson).filter(
+    def get_person_by_uwregid(self, uwregid):
+        sqla_person = DB.session.query(DB.HistoricalPerson).filter(
             DB.HistoricalPerson.prior_uwregid == uwregid).first()
-        return self._map_person(
-            person, include_student=student, include_employee=employee)
+        return self._map_person(sqla_person)
+
+    def get_persons(self, page=None, page_size=None):
+        sqla_persons = DB.session.query(DB.Person)
+        return self._get_page(sqla_persons,
+                              self._map_person,
+                              page=page,
+                              page_size=page_size)
+
+    def get_active_students(self, page=None, page_size=None):
+        sqla_persons = DB.session.query(DB.Person).filter(
+            DB.Person._is_active_student == True)  # noqa
+        return self._get_page(sqla_persons,
+                              self._map_person,
+                              page=page,
+                              page_size=page_size)
+
+    def get_active_employees(self, page=None, page_size=None):
+        sqla_persons = DB.session.query(DB.Person).filter(
+            DB.Person._is_active_employee == True)  # noqa
+        return self._get_page(sqla_persons,
+                              self._map_person,
+                              page=page,
+                              page_size=page_size)
 
     """
     Private Methods
     """
 
-    def _map_person(self, sqla_person, include_student=False,
-                    include_employee=False):
+    def _get_page(self, query, mapper, page=None, page_size=None):
+        """
+        Returns results for a single page of data. If page and page_size are
+        not specified, all results are returned
+        """
+        if page is not None and page_size is not None:
+            # limit results to page
+            query = query.limit(page_size).offset(
+                (page - 1) * page_size)
+        return [mapper(item)for item in query.all()]
+
+    def _map_person(self, sqla_person):
         person = Person()
         person.uwnetid = sqla_person.uwnetid
         person.uwregid = sqla_person.uwregid
@@ -56,21 +87,19 @@ class UWPDSClient():
         person.active_student = sqla_person._is_active_student
         person.active_employee = sqla_person._is_active_employee
 
-        if include_student is True:
-            try:
-                student = DB.session.query(DB.Student).filter(
-                            DB.Student.person_id == sqla_person.id).one()
-                person.student = self._map_student(student)
-            except NoResultFound:
-                pass
+        try:
+            student = DB.session.query(DB.Student).filter(
+                        DB.Student.person_id == sqla_person.id).one()
+            person.student = self._map_student(student)
+        except NoResultFound:
+            pass
 
-        if include_employee is True:
-            try:
-                employee = DB.session.query(DB.Employee).filter(
-                    DB.Employee.person_id == sqla_person.id).one()
-                person.employee = self._map_employee(employee)
-            except NoResultFound:
-                pass
+        try:
+            employee = DB.session.query(DB.Employee).filter(
+                DB.Employee.person_id == sqla_person.id).one()
+            person.employee = self._map_employee(employee)
+        except NoResultFound:
+            pass
 
         return person
 
@@ -122,8 +151,7 @@ class UWPDSClient():
         # map advisers
         student.advisers = []
         for adviser in sqla_student.adviser:
-            adviser_person = self._map_person(
-                adviser.employee.person, include_employee=True)
+            adviser_person = self._map_person(adviser.employee.person)
             student.advisers.append(adviser_person)
 
         # map transcripts
