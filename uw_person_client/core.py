@@ -2,15 +2,15 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from sqlalchemy.orm.exc import NoResultFound
-from uwpds_client.databases.uwpds import UWPDS
-from uwpds_client.components import Person, Student, Employee, \
+from uw_person_client.databases.uwpds import UWPDS
+from uw_person_client.components import Person, Student, Employee, \
     Transcript, Major, Sport, Adviser, Term
 
 
 DB = UWPDS()
 
 
-class UWPDSClient():
+class UWPersonClient():
 
     """
     Public methods
@@ -88,16 +88,16 @@ class UWPDSClient():
         person.active_employee = sqla_person._is_active_employee
 
         try:
-            student = DB.session.query(DB.Student).filter(
+            sqla_student = DB.session.query(DB.Student).filter(
                         DB.Student.person_id == sqla_person.id).one()
-            person.student = self._map_student(student)
+            person.student = self._map_student(sqla_student)
         except NoResultFound:
             pass
 
         try:
-            employee = DB.session.query(DB.Employee).filter(
+            sqla_employee = DB.session.query(DB.Employee).filter(
                 DB.Employee.person_id == sqla_person.id).one()
-            person.employee = self._map_employee(employee)
+            person.employee = self._map_employee(sqla_employee)
         except NoResultFound:
             pass
 
