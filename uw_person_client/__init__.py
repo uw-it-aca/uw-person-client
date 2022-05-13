@@ -5,9 +5,6 @@ import logging
 from conf.settings import AppSettings as settings  # noqa
 from commonconf.backends import use_configuration_backend
 
-# make relative imports from project possible
-from core import *
-
 # setup app settings
 use_configuration_backend('conf.settings.AppSettings')
 
