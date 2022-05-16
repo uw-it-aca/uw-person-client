@@ -5,4 +5,4 @@
 [![PyPi Version](https://img.shields.io/pypi/v/axdd-person-client.svg)](https://pypi.python.org/pypi/axdd-person-client)
 ![Python versions](https://img.shields.io/pypi/pyversions/axdd-person-client.svg)
 
-A library for connecting to the UW Person Datastore.
+A client library for connecting to the UW Person Datastore.
