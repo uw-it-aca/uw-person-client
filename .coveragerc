@@ -1,0 +1,4 @@
+[run]
+branch = True
+source = uw_person_client
+include = uw_person_client/*
