@@ -1,8 +1,8 @@
 # Copyright 2022 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-from uwpds_client.databases.postgres import Postgres
-from sqlalchemy import Table, Column, ForeignKey
+from uw_person_client.databases.postgres import Postgres
+from sqlalchemy import Table, Column, ForeignKey, TEXT, Integer
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import relationship
 
@@ -54,6 +54,16 @@ class UWPDS(Postgres):
                    primary_key=True)
         )
 
+        Table(
+            'historical_person',
+            UWPDS.Base.metadata,
+            Column('prior_uwnetid', TEXT(), primary_key=True),
+            Column('prior_uwregid', TEXT(), primary_key=True),
+            Column('id', Integer(), primary_key=True),
+            autoload=True,
+            autoload_with=self.engine
+        )
+
         class Student(UWPDS.Base):
             __tablename__ = 'student'
             sport = relationship("sport",
@@ -90,6 +100,9 @@ class UWPDS(Postgres):
         UWPDS.Base.prepare(self.engine, reflect=True)
 
         self.Person = UWPDS.Base.classes.person
+        self.HistoricalPerson = UWPDS.Base.classes.historical_person
+        self.PriorUWNetID = UWPDS.Base.classes.prior_uwnetids
+        self.PriorUWRegID = UWPDS.Base.classes.prior_uwregids
         self.Transcript = Transcript
         self.Student = Student
         self.Employee = Employee

@@ -3,7 +3,7 @@
 
 from commonconf import settings
 from sqlalchemy import create_engine
-from uwpds_client.databases import AbstractDatabase
+from uw_person_client.databases import AbstractDatabase
 
 
 URL_PATTERN = \
