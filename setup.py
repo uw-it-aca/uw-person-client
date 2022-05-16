@@ -6,12 +6,16 @@ See the README on `GitHub
 <https://github.com/uw-it-aca/axdd-person-client>`_.
 """
 
+version_path = 'uw_person_client/VERSION'
+VERSION = open(os.path.join(os.path.dirname(__file__), version_path)).read()
+VERSION = VERSION.replace("\n", "")
+
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='axdd-person-client',
-    version='1.0',
+    verson=VERSION,
     packages=['uw_person_client'],
     author="UW-IT AXDD",
     author_email="aca-it@uw.edu",
