@@ -1,7 +1,7 @@
 # Copyright 2022 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-from uwpds_client.databases.postgres import Postgres
+from uw_person_client.databases.postgres import Postgres
 from sqlalchemy import Table, Column, ForeignKey, TEXT, Integer
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import relationship
