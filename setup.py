@@ -15,7 +15,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='axdd-person-client',
-    verson=VERSION,
+    version=VERSION,
     packages=['uw_person_client'],
     author="UW-IT AXDD",
     author_email="aca-it@uw.edu",
