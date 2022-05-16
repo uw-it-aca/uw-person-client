@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import find_packages, setup
 
 README = """
 See the README on `GitHub
@@ -16,10 +16,10 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 setup(
     name='axdd-person-client',
     version=VERSION,
-    packages=['uw_person_client'],
+    packages=find_packages(),
+    include_package_data=True,
     author="UW-IT AXDD",
     author_email="aca-it@uw.edu",
-    include_package_data=True,
     install_requires=['commonconf',
                       'mock',
                       'psycopg2-binary',
