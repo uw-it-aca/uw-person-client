@@ -103,6 +103,8 @@ class UWPDS(Postgres):
         self.HistoricalPerson = UWPDS.Base.classes.historical_person
         self.PriorUWNetID = UWPDS.Base.classes.prior_uwnetids
         self.PriorUWRegID = UWPDS.Base.classes.prior_uwregids
-        self.Transcript = Transcript
         self.Student = Student
+        self.Transcript = Transcript
         self.Employee = Employee
+        self.Adviser = UWPDS.Base.classes.adviser
+        self.StudentToAdviser = student_to_adviser
