@@ -31,6 +31,13 @@ class UWPersonClient():
             raise PersonNotFoundException()
         return self._map_person(sqla_person)
 
+    def get_person_by_student_number(self, student_number):
+        sqla_person = DB.session.query(DB.Person).join(DB.Student).filter(
+            DB.Student.student_number == student_number).one_or_none()
+        if not sqla_person:
+            raise PersonNotFoundException()
+        return self._map_person(sqla_person)
+
     def get_persons(self, page=None, page_size=None):
         sqla_persons = DB.session.query(DB.Person)
         return self._get_page(sqla_persons,
