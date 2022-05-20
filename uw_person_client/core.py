@@ -5,6 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from uw_person_client.databases.uwpds import UWPDS
 from uw_person_client.components import Person, Student, Employee, \
     Transcript, Major, Sport, Adviser, Term
+from uw_person_client.exceptions import PersonNotFoundException
 
 
 DB = UWPDS()
@@ -19,11 +20,22 @@ class UWPersonClient():
     def get_person_by_uwnetid(self, uwnetid):
         sqla_person = DB.session.query(DB.HistoricalPerson).filter(
             DB.HistoricalPerson.prior_uwnetid == uwnetid).first()
+        if not sqla_person:
+            raise PersonNotFoundException()
         return self._map_person(sqla_person)
 
     def get_person_by_uwregid(self, uwregid):
         sqla_person = DB.session.query(DB.HistoricalPerson).filter(
             DB.HistoricalPerson.prior_uwregid == uwregid).first()
+        if not sqla_person:
+            raise PersonNotFoundException()
+        return self._map_person(sqla_person)
+
+    def get_person_by_student_number(self, student_number):
+        sqla_person = DB.session.query(DB.Person).join(DB.Student).filter(
+            DB.Student.student_number == student_number).one_or_none()
+        if not sqla_person:
+            raise PersonNotFoundException()
         return self._map_person(sqla_person)
 
     def get_persons(self, page=None, page_size=None):
@@ -48,6 +60,30 @@ class UWPersonClient():
                               self._map_person,
                               page=page,
                               page_size=page_size)
+
+    def get_advisers(self, advising_program=None):
+        sqla_persons = DB.session.query(DB.Person).join(DB.Employee).join(
+            DB.Adviser)
+        if advising_program:
+            sqla_persons = sqla_persons.filter(
+                DB.Adviser.advising_program == advising_program)
+        return [self._map_person(item)for item in sqla_persons.all()]
+
+    def get_persons_by_adviser_netid(self, uwnetid):
+        sqla_adviser = DB.session.query(DB.Adviser).join(DB.Employee).join(
+            DB.Person).filter(DB.Person.uwnetid == uwnetid).one()
+        sqla_persons = DB.session.query(DB.Person).join(DB.Student).join(
+            DB.StudentToAdviser).join(DB.Adviser).filter(
+            DB.Adviser.id == sqla_adviser.id)
+        return [self._map_person(item)for item in sqla_persons.all()]
+
+    def get_persons_by_adviser_regid(self, uwregid):
+        sqla_adviser = DB.session.query(DB.Adviser).join(DB.Employee).join(
+            DB.Person).filter(DB.Person.uwregid == uwregid).one()
+        sqla_persons = DB.session.query(DB.Person).join(DB.Student).join(
+            DB.StudentToAdviser).join(DB.Adviser).filter(
+            DB.Adviser.id == sqla_adviser.id)
+        return [self._map_person(item)for item in sqla_persons.all()]
 
     """
     Private Methods
