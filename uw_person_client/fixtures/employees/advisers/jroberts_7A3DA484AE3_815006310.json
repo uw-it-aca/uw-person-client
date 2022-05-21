@@ -1,0 +1,35 @@
+{
+ "active_employee": true,
+ "active_student": false,
+ "display_name": "John C Roberts",
+ "employee": {
+   "adviser": {
+     "advising_email": "jroberts@uw.edu",
+     "advising_phone_number": null,
+     "advising_program": "OMAD Advising",
+     "advising_pronouns": null,
+     "booking_url": null,
+     "is_dept_adviser": false
+   },
+   "email_addresses": [],
+   "employee_affiliation_state": "current",
+   "employee_number": "815006310",
+   "home_department": "MA: Student Advising",
+   "primary_department": "MA: Student Advising",
+   "primary_title": "Academic Counselor (E S 6)"
+ },
+ "first_name": "John C",
+ "full_name": "John C Roberts",
+ "preferred_first_name": null,
+ "preferred_middle_name": null,
+ "preferred_surname": null,
+ "prior_uwnetids": [
+   "jcroberts1"
+ ],
+ "prior_uwregids": [],
+ "pronouns": null,
+ "surname": "Roberts",
+ "uwnetid": "jroberts",
+ "uwregid": "7A3DA484AE3",
+ "whitepages_publish": false
+}

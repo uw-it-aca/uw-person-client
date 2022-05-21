@@ -38,6 +38,48 @@ class AbstractBase():
                           indent=2,
                           default=str)
 
+    def from_dict(self, data, obj=None):
+        if obj is None:
+            obj = self
+        for key, value in data.items():
+            if isinstance(value, dict):
+                if key == "employee":
+                    new_obj = Employee()
+                    obj.employee = new_obj.from_dict(value, obj=new_obj)
+                elif key == "adviser":
+                    new_obj = Adviser()
+                    obj.adviser = new_obj.from_dict(value, obj=new_obj)
+                elif key == "student":
+                    new_obj = Student()
+                    obj.student = new_obj.from_dict(value, obj=new_obj)
+                elif key == "tran_term":
+                    new_obj = Term()
+                    obj.tran_term = new_obj.from_dict(value, obj=new_obj)
+                elif key == "leave_ends_term":
+                    new_obj = Term()
+                    obj.leave_ends_term = new_obj.from_dict(value, obj=new_obj)
+            elif isinstance(value, list):
+                if key == "majors":
+                    obj_cls = Major
+                elif key == "advisers":
+                    obj_cls = Adviser
+                elif key == "transcripts":
+                    obj_cls = Transcript
+                elif key == "sports":
+                    obj_cls = Sport
+                items = []
+                for list_value in value:
+                    if isinstance(list_value, dict):
+                        new_obj = obj_cls()
+                        items.append(
+                            new_obj.from_dict(list_value, obj=new_obj))
+                    else:
+                        items.append(list_value)
+                obj.__setattr__(key, items)
+            else:
+                obj.__setattr__(key, value)
+        return obj
+
 
 class Person(AbstractBase):
     pass
