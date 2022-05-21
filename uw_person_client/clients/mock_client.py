@@ -29,20 +29,25 @@ class MockedUWPersonClient(AbstractUWPersonClient):
         file_names = self._glob_fixture_file(search_value)
         persons = []
         for file_name in file_names:
-            data = self._read_person_file(file_name)
-            persons.append(Person().from_dict(data))
+            persons.append(self._read_person_file(file_name))
         return persons
 
     def _read_caseload_file(self, search_value):
-        file_name = self._glob_fixture_file('**/_caseloads.json')[0]
+        file_name = self._glob_fixture_file('**/adviser_caseloads.json')[0]
         caseload = json.load(open(file_name))
         persons = []
-        for adviser_key, student_file_list in caseload.items():
-            if search_value in adviser_key:
+        for adviser_file_name, student_file_list in caseload.items():
+            if search_value in adviser_file_name:
                 for student_file in student_file_list:
                     persons.append(
                         self._read_person_file(f'**/students/{student_file}'))
         return persons
+
+    def _paginate(self, values, page=None, page_size=None):
+        if page is not None and page_size is not None:
+            offset = (page - 1) * page_size
+            values = values[offset:offset+page_size]
+        return values
 
     def get_person_by_uwnetid(self, uwnetid):
         return self._read_person_file(f'**/*{uwnetid}*.json')
@@ -54,19 +59,51 @@ class MockedUWPersonClient(AbstractUWPersonClient):
         return self._read_person_file(f'**/*{student_number}*.json')
 
     def get_persons(self, page=None, page_size=None):
-        return self._read_person_files('**/[!_]*.json')
+        return self._paginate(
+            self._read_person_files('[^adviser_caseloads]**/**/*.json'),
+            page=page,
+            page_size=page_size)
 
     def get_active_students(self, page=None, page_size=None):
-        return self._read_person_files('**/students/[!_]*.json')
+        return self._paginate(
+            self._read_person_files('**/students/**.json'),
+            page=page,
+            page_size=page_size)
 
     def get_active_employees(self, page=None, page_size=None):
-        return self._read_person_files('**/employees/[!_]*.json')
+        return self._paginate(
+            self._read_person_files('**/employees/**/*.json'),
+            page=page,
+            page_size=page_size)
 
-    def get_advisers(self, page=None, page_size=None):
-        return self._read_person_files('**/advisers/[!_]*.json')
+    def get_advisers(self, advising_program=None):
+        advisers = self._read_person_files('**/employees/advisers/*.json')
+        if advising_program:
+            filtered_advisers = []
+            for person in advisers:
+                if (person.employee.adviser.advising_program ==
+                        advising_program):
+                    filtered_advisers.append(person)
+            return filtered_advisers
+        else:
+            return advisers
 
     def get_persons_by_adviser_netid(self, uwnetid):
-        return self._read_caseload_file(uwnetid)
+        students = self.get_active_students()
+        persons = []
+        for person in students:
+            for adviser in person.student.advisers:
+                if adviser.uwnetid == uwnetid:
+                    persons.append(person)
+                    break
+        return persons
 
-    def get_persons_by_adviser_retid(self, uwregid):
-        return self._read_caseload_file(uwregid)
+    def get_persons_by_adviser_regid(self, uwregid):
+        students = self.get_active_students()
+        persons = []
+        for person in students:
+            for adviser in person.student.advisers:
+                if adviser.uwregid == uwregid:
+                    persons.append(person)
+                    break
+        return persons

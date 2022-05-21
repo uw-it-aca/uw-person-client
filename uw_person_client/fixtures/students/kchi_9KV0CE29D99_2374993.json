@@ -1,9 +1,9 @@
 {
  "active_employee": false,
  "active_student": true,
- "display_name": "David P. Black",
- "first_name": "David P.",
- "full_name": "David P. Black",
+ "display_name": "Karen Chi",
+ "first_name": "Karen",
+ "full_name": "Karen Chi",
  "preferred_first_name": null,
  "preferred_middle_name": null,
  "preferred_surname": null,
@@ -49,13 +49,13 @@
    "assigned_ethnic_code": null,
    "assigned_ethnic_desc": null,
    "assigned_ethnic_group_desc": null,
-   "birthdate": "1992-06-09",
+   "birthdate": "1993-04-02",
    "campus_code": "0",
    "campus_desc": "Seattle",
    "class_code": null,
    "class_desc": null,
    "cumulative_gpa": null,
-   "external_email": "dpblack@yahoo.com",
+   "external_email": "karenchi99@gmail.com",
    "gender": "M",
    "local_phone_number": "(206) 777-3209",
    "majors": [
@@ -78,8 +78,8 @@
    "resident_code": null,
    "resident_desc": null,
    "sports": [],
-   "student_email": "dpblack@uw.edu",
-   "student_number": "1471223",
+   "student_email": "kchi@uw.edu",
+   "student_number": "2374993",
    "total_credits": null,
    "total_uw_credits": "33.00",
    "transcripts": [
@@ -113,8 +113,8 @@
      }
    ]
  },
- "surname": "Blackburn",
- "uwnetid": "dpblack",
- "uwregid": "5B80CE20D21",
+ "surname": "Chi",
+ "uwnetid": "kchi",
+ "uwregid": "9KV0CE29D99",
  "whitepages_publish": false
 }
