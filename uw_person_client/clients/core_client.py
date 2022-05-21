@@ -2,87 +2,91 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from sqlalchemy.orm.exc import NoResultFound
+from uw_person_client.clients import AbstractUWPersonClient
 from uw_person_client.databases.uwpds import UWPDS
+from uw_person_client.exceptions import PersonNotFoundException
 from uw_person_client.components import Person, Student, Employee, \
     Transcript, Major, Sport, Adviser, Term
-from uw_person_client.exceptions import PersonNotFoundException
 
 
-DB = UWPDS()
-
-
-class UWPersonClient():
+class UWPersonClient(AbstractUWPersonClient):
 
     """
     Public methods
     """
 
+    def __init__(self):
+        self.DB = UWPDS()
+
     def get_person_by_uwnetid(self, uwnetid):
-        sqla_person = DB.session.query(DB.HistoricalPerson).filter(
-            DB.HistoricalPerson.prior_uwnetid == uwnetid).first()
+        sqla_person = self.DB.session.query(self.DB.HistoricalPerson).filter(
+            self.DB.HistoricalPerson.prior_uwnetid == uwnetid).first()
         if not sqla_person:
             raise PersonNotFoundException()
         return self._map_person(sqla_person)
 
     def get_person_by_uwregid(self, uwregid):
-        sqla_person = DB.session.query(DB.HistoricalPerson).filter(
-            DB.HistoricalPerson.prior_uwregid == uwregid).first()
+        sqla_person = self.DB.session.query(self.DB.HistoricalPerson).filter(
+            self.DB.HistoricalPerson.prior_uwregid == uwregid).first()
         if not sqla_person:
             raise PersonNotFoundException()
         return self._map_person(sqla_person)
 
     def get_person_by_student_number(self, student_number):
-        sqla_person = DB.session.query(DB.Person).join(DB.Student).filter(
-            DB.Student.student_number == student_number).one_or_none()
+        sqla_person = self.DB.session.query(self.DB.Person).join(
+            self.DB.Student).filter(
+            self.DB.Student.student_number == student_number).one_or_none()
         if not sqla_person:
             raise PersonNotFoundException()
         return self._map_person(sqla_person)
 
     def get_persons(self, page=None, page_size=None):
-        sqla_persons = DB.session.query(DB.Person)
+        sqla_persons = self.DB.session.query(self.DB.Person)
         return self._get_page(sqla_persons,
                               self._map_person,
                               page=page,
                               page_size=page_size)
 
     def get_active_students(self, page=None, page_size=None):
-        sqla_persons = DB.session.query(DB.Person).filter(
-            DB.Person._is_active_student == True)  # noqa
+        sqla_persons = self.DB.session.query(self.DB.Person).filter(
+            self.DB.Person._is_active_student == True)  # noqa
         return self._get_page(sqla_persons,
                               self._map_person,
                               page=page,
                               page_size=page_size)
 
     def get_active_employees(self, page=None, page_size=None):
-        sqla_persons = DB.session.query(DB.Person).filter(
-            DB.Person._is_active_employee == True)  # noqa
+        sqla_persons = self.DB.session.query(self.DB.Person).filter(
+            self.DB.Person._is_active_employee == True)  # noqa
         return self._get_page(sqla_persons,
                               self._map_person,
                               page=page,
                               page_size=page_size)
 
     def get_advisers(self, advising_program=None):
-        sqla_persons = DB.session.query(DB.Person).join(DB.Employee).join(
-            DB.Adviser)
+        sqla_persons = self.DB.session.query(self.DB.Person).join(
+            self.DB.Employee).join(self.DB.Adviser)
         if advising_program:
             sqla_persons = sqla_persons.filter(
-                DB.Adviser.advising_program == advising_program)
+                self.DB.Adviser.advising_program == advising_program)
         return [self._map_person(item)for item in sqla_persons.all()]
 
     def get_persons_by_adviser_netid(self, uwnetid):
-        sqla_adviser = DB.session.query(DB.Adviser).join(DB.Employee).join(
-            DB.Person).filter(DB.Person.uwnetid == uwnetid).one()
-        sqla_persons = DB.session.query(DB.Person).join(DB.Student).join(
-            DB.StudentToAdviser).join(DB.Adviser).filter(
-            DB.Adviser.id == sqla_adviser.id)
+        sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
+            self.DB.Employee).join(self.DB.Person).filter(
+            self.DB.Person.uwnetid == uwnetid).one()
+        sqla_persons = self.DB.session.query(self.DB.Person).join(
+            self.DB.Student).join(self.DB.StudentToAdviser).join(
+            self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
         return [self._map_person(item)for item in sqla_persons.all()]
 
     def get_persons_by_adviser_regid(self, uwregid):
-        sqla_adviser = DB.session.query(DB.Adviser).join(DB.Employee).join(
-            DB.Person).filter(DB.Person.uwregid == uwregid).one()
-        sqla_persons = DB.session.query(DB.Person).join(DB.Student).join(
-            DB.StudentToAdviser).join(DB.Adviser).filter(
-            DB.Adviser.id == sqla_adviser.id)
+        sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
+            self.DB.Employee).join(self.DB.Person).filter(
+            self.DB.Person.uwregid == uwregid).one()
+        sqla_persons = self.DB.session.query(self.DB.Person).join(
+            self.DB.Student).join(self.DB.StudentToAdviser).join(
+            self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
         return [self._map_person(item)for item in sqla_persons.all()]
 
     """
@@ -100,15 +104,16 @@ class UWPersonClient():
                 (page - 1) * page_size)
         return [mapper(item)for item in query.all()]
 
-    def _map_person(self, sqla_person):
+    def _map_person(self, sqla_person, include_employee=True,
+                    include_student=True):
         person = Person()
         person.uwnetid = sqla_person.uwnetid
         person.uwregid = sqla_person.uwregid
-        prior_uwnetids = DB.session.query(DB.PriorUWNetID).filter(
-            DB.PriorUWNetID.person_id == sqla_person.id).all()
+        prior_uwnetids = self.DB.session.query(self.DB.PriorUWNetID).filter(
+            self.DB.PriorUWNetID.person_id == sqla_person.id).all()
         person.prior_uwnetids = [pni.uwnetid for pni in prior_uwnetids]
-        prior_uwregids = DB.session.query(DB.PriorUWRegID).filter(
-            DB.PriorUWRegID.person_id == sqla_person.id).all()
+        prior_uwregids = self.DB.session.query(self.DB.PriorUWRegID).filter(
+            self.DB.PriorUWRegID.person_id == sqla_person.id).all()
         person.prior_uwregids = [pri.uwregid for pri in prior_uwregids]
         person.pronouns = sqla_person.pronouns
         person.full_name = sqla_person.full_name
@@ -123,19 +128,21 @@ class UWPersonClient():
         person.active_student = sqla_person._is_active_student
         person.active_employee = sqla_person._is_active_employee
 
-        try:
-            sqla_student = DB.session.query(DB.Student).filter(
-                        DB.Student.person_id == sqla_person.id).one()
-            person.student = self._map_student(sqla_student)
-        except NoResultFound:
-            pass
+        if include_student:
+            try:
+                sqla_student = self.DB.session.query(self.DB.Student).filter(
+                    self.DB.Student.person_id == sqla_person.id).one()
+                person.student = self._map_student(sqla_student)
+            except NoResultFound:
+                pass
 
-        try:
-            sqla_employee = DB.session.query(DB.Employee).filter(
-                DB.Employee.person_id == sqla_person.id).one()
-            person.employee = self._map_employee(sqla_employee)
-        except NoResultFound:
-            pass
+        if include_employee:
+            try:
+                sqla_employee = self.DB.session.query(self.DB.Employee).filter(
+                    self.DB.Employee.person_id == sqla_person.id).one()
+                person.employee = self._map_employee(sqla_employee)
+            except NoResultFound:
+                pass
 
         return person
 
@@ -187,7 +194,8 @@ class UWPersonClient():
         # map advisers
         student.advisers = []
         for adviser in sqla_student.adviser:
-            adviser_person = self._map_person(adviser.employee.person)
+            adviser_person = self._map_person(adviser.employee.person,
+                                              include_student=False)
             student.advisers.append(adviser_person)
 
         # map transcripts

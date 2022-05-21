@@ -12,6 +12,7 @@ class UWPDS(Postgres):
     Base = automap_base()
 
     def __init__(self, *args, **kwargs):
+        UWPDS.Base.metadata.clear()
         super().__init__(*args, **kwargs)
         self.initialize_relationships()
 

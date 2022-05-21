@@ -1,0 +1,33 @@
+{
+  "active_employee": true,
+  "active_student": false,
+  "display_name": "MICHAEL JOHN RIVERA",
+  "employee": {
+    "adviser": {
+      "advising_email": "mjrivera@uw.edu",
+      "advising_phone_number": "+1 206 686-6582",
+      "advising_program": "UAA Advising",
+      "advising_pronouns": null,
+      "booking_url": "https://go.oncehub.com/mjrivera",
+      "is_dept_adviser": false
+    },
+    "email_addresses": [],
+    "employee_affiliation_state": "current",
+    "employee_number": "818000679",
+    "home_department": "UAA: SAS - UA Assistant Director",
+    "primary_department": "UAA: SAS - UA Assistant Director",
+    "primary_title": "Academic Counselor (E S 6)"
+  },
+  "first_name": "MICHAEL",
+  "full_name": "MICHAEL JOHN RIVERA",
+  "preferred_first_name": null,
+  "preferred_middle_name": null,
+  "preferred_surname": null,
+  "prior_uwnetids": [],
+  "prior_uwregids": [],
+  "pronouns": null,
+  "surname": "JOHN RIVERA",
+  "uwnetid": "mjrivera",
+  "uwregid": "E5BEC5EEC06",
+  "whitepages_publish": false
+}

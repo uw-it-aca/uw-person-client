@@ -6,6 +6,9 @@ import os
 
 class AppSettings:
 
+    AXDD_PERSON_CLIENT_ENV = os.getenv('AXDD_PERSON_CLIENT_ENV',
+                                       default='localdev')
+
     UW_PERSON_DB_USERNAME = os.getenv('DATABASE_USERNAME',
                                       default='postgres')
     UW_PERSON_DB_PASSWORD = os.getenv('DATABASE_PASSWORD',
