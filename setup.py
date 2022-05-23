@@ -17,6 +17,10 @@ setup(
     name='axdd-person-client',
     version=VERSION,
     packages=find_packages(),
+    package_data={
+        # Include any *.json fixture files
+        "uw_person_client": ["fixtures/**/**/*.json"],
+    },
     include_package_data=True,
     author="UW-IT AXDD",
     author_email="aca-it@uw.edu",
