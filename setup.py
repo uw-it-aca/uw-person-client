@@ -19,7 +19,9 @@ setup(
     packages=find_packages(),
     package_data={
         # Include any *.json fixture files
-        "uw_person_client": ["fixtures/**/**/*.json"],
+        "uw_person_client": ["fixtures/**/**/*.json",
+                             "fixtures/**/*.json",
+                             "fixtures/*.json"],
     },
     include_package_data=True,
     author="UW-IT AXDD",
