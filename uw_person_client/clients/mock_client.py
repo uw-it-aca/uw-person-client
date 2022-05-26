@@ -32,17 +32,6 @@ class MockedUWPersonClient(AbstractUWPersonClient):
             persons.append(self._read_person_file(file_name))
         return persons
 
-    def _read_caseload_file(self, search_value):
-        file_name = self._glob_fixture_file('**/adviser_caseloads.json')[0]
-        caseload = json.load(open(file_name))
-        persons = []
-        for adviser_file_name, student_file_list in caseload.items():
-            if search_value in adviser_file_name:
-                for student_file in student_file_list:
-                    persons.append(
-                        self._read_person_file(f'**/students/{student_file}'))
-        return persons
-
     def _paginate(self, values, page=None, page_size=None):
         if page is not None and page_size is not None:
             offset = (page - 1) * page_size
@@ -60,7 +49,7 @@ class MockedUWPersonClient(AbstractUWPersonClient):
 
     def get_persons(self, page=None, page_size=None):
         return self._paginate(
-            self._read_person_files('[^adviser_caseloads]**/**/*.json'),
+            self._read_person_files('**/**.json'),
             page=page,
             page_size=page_size)
 
