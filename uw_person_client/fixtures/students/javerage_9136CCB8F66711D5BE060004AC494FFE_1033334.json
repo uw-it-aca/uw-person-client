@@ -60,7 +60,15 @@
     "class_desc": "Non-Matriculated",
     "cumulative_gpa": 3.1,
     "external_email": "javerage@gmail.com",
-    "gender": "F",
+    "gender": "M",
+    "intended_majors": [
+      {
+        "major_abbr_code": "ENV E",
+        "major_full_code": null,
+        "major_name": "ENVIRONMENTAL ENGR",
+        "major_short_name": "ENVIR ENGR"
+      }
+    ],
     "local_phone_number": "(206) 777-3209",
     "majors": [
       {
