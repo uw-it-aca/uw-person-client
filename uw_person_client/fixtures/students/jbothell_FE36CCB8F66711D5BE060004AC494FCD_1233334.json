@@ -59,6 +59,14 @@
     "cumulative_gpa": 3.2,
     "external_email": "jamesbstudent@yahoo.com",
     "gender": "M",
+    "intended_majors": [
+      {
+        "major_abbr_code": "ESS",
+        "major_full_code": null,
+        "major_name": "EARTH & SPACE SCIENCES",
+        "major_short_name": "ESS"
+      }
+    ],
     "local_phone_number": "(206) 231-3209",
     "majors": [
       {
