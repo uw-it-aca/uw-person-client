@@ -148,6 +148,7 @@ class UWPersonClient(AbstractUWPersonClient):
 
     def _map_student(self, sqla_student):
         student = Student()
+        student.system_key = sqla_student.system_key
         student.student_number = sqla_student.student_number
         student.assigned_ethnic_code = \
             sqla_student.assigned_ethnic_code
@@ -184,6 +185,12 @@ class UWPersonClient(AbstractUWPersonClient):
         for major in sqla_student.major:
             major = self._map_major(major)
             student.majors.append(major)
+
+        # map intended majors
+        student.intended_majors = []
+        for major in sqla_student.intended_major:
+            major = self._map_major(major)
+            student.intended_majors.append(major)
 
         # map sports
         student.sports = []
