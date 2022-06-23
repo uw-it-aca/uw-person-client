@@ -9,14 +9,15 @@ class AppSettings:
     AXDD_PERSON_CLIENT_ENV = os.getenv('AXDD_PERSON_CLIENT_ENV',
                                        default='localdev')
 
-    UW_PERSON_DB_USERNAME = os.getenv('DATABASE_USERNAME',
+    UW_PERSON_DB_USERNAME = os.getenv('UW_PERSON_DB_USERNAME',
                                       default='postgres')
-    UW_PERSON_DB_PASSWORD = os.getenv('DATABASE_PASSWORD',
+    UW_PERSON_DB_PASSWORD = os.getenv('UW_PERSON_DB_PASSWORD',
                                       default='postgres')
-    UW_PERSON_DB_DATABASE = os.getenv('DATABASE_DB_NAME', default='postgres')
-    UW_PERSON_DB_HOSTNAME = os.getenv('DATABASE_HOSTNAME',
+    UW_PERSON_DB_DATABASE = os.getenv('UW_PERSON_DB_DATABASE',
+                                      default='postgres')
+    UW_PERSON_DB_HOSTNAME = os.getenv('UW_PERSON_DB_HOSTNAME',
                                       default='localhost')
-    UW_PERSON_DB_PORT = os.getenv('DATABASE_PORT', default='5432')
+    UW_PERSON_DB_PORT = os.getenv('UW_PERSON_DB_PORT', default='5432')
 
     def get(self, attr):
         return getattr(AppSettings, attr)
