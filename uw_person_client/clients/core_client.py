@@ -6,7 +6,7 @@ from uw_person_client.clients import AbstractUWPersonClient
 from uw_person_client.databases.uwpds import UWPDS
 from uw_person_client.exceptions import PersonNotFoundException
 from uw_person_client.components import Person, Student, Employee, \
-    Transcript, Major, Sport, Adviser, Term
+    Transcript, Major, Sport, Adviser, Term, Transfer
 
 
 class UWPersonClient(AbstractUWPersonClient):
@@ -156,35 +156,128 @@ class UWPersonClient(AbstractUWPersonClient):
             sqla_student.assigned_ethnic_desc
         student.assigned_ethnic_group_desc = \
             sqla_student.assigned_ethnic_group_desc
+        student.application_status_code = sqla_student.application_status_code
+        student.application_status_desc = sqla_student.application_status_desc
+        student.application_type_code = sqla_student.application_type_code
+        student.application_type_desc = sqla_student.application_type_desc
+        student.applied_to_graduate_yr_qtr_desc = \
+            sqla_student.applied_to_graduate_yr_qtr_desc
+        student.applied_to_graduate_yr_qtr_id = \
+            sqla_student.applied_to_graduate_yr_qtr_id
+        student.asuwind = sqla_student.asuwind
         student.birthdate = sqla_student.birthdate
-        student.student_email = sqla_student.student_email
-        student.external_email = sqla_student.external_email
-        student.local_phone_number = sqla_student.local_phone_number
-        student.gender = sqla_student.gender
-        student.cumulative_gpa = sqla_student.cumulative_gpa
-        student.total_credits = sqla_student.total_credits
-        student.total_uw_credits = sqla_student.total_uw_credits
         student.campus_code = sqla_student.campus_code
         student.campus_desc = sqla_student.campus_desc
         student.class_code = sqla_student.class_code
         student.class_desc = sqla_student.class_desc
-        student.resident_code = sqla_student.resident_code
-        student.resident_desc = sqla_student.resident_desc
+        student.cumulative_gpa = sqla_student.cumulative_gpa
+        student.directory_release_ind = sqla_student.directory_release_ind
+        student.disability_ind = sqla_student.disability_ind
+        student.enroll_status_code = sqla_student.enroll_status_code
+        student.exemption_code = sqla_student.exemption_code
+        student.exemption_desc = sqla_student.exemption_desc
+        student.external_email = sqla_student.external_email
+        student.first_generation_4yr_ind = \
+            sqla_student.first_generation_4yr_ind
+        student.first_generation_ind = sqla_student.first_generation_ind
+        student.gender = sqla_student.gender
+        student.high_school_gpa = sqla_student.high_school_gpa
+        student.high_school_graduation_date = \
+            sqla_student.high_school_graduation_date
+        student.hold_office_name_combined = \
+            sqla_student.hold_office_name_combined
+        student.hold_reason_desc_combined = \
+            sqla_student.hold_reason_desc_combined
+        student.honors_program_code = sqla_student.honors_program_code
+        student.honors_program_ind = sqla_student.honors_program_ind
+        student.jr_col_gpa = sqla_student.jr_col_gpa
+        student.last_enrolled_yr_qtr_desc = \
+            sqla_student.last_enrolled_yr_qtr_desc
+        student.last_enrolled_yr_qtr_id = sqla_student.last_enrolled_yr_qtr_id
+        student.local_addr_4digit_zip = sqla_student.local_addr_4digit_zip
+        student.local_addr_5digit_zip = sqla_student.local_addr_5digit_zip
+        student.local_addr_city = sqla_student.local_addr_city
+        student.local_addr_country = sqla_student.local_addr_country
+        student.local_addr_line1 = sqla_student.local_addr_line1
+        student.local_addr_line2 = sqla_student.local_addr_line2
+        student.local_addr_postal_code = sqla_student.local_addr_postal_code
+        student.local_addr_state = sqla_student.local_addr_state
+        student.local_phone_number = sqla_student.local_phone_number
+        student.new_continuing_returning_code = \
+            sqla_student.new_continuing_returning_code
+        student.new_continuing_returning_desc = \
+            sqla_student.new_continuing_returning_desc
+        student.perm_addr_4digit_zip = sqla_student.perm_addr_4digit_zip
+        student.perm_addr_5digit_zip = sqla_student.perm_addr_5digit_zip
+        student.perm_addr_city = sqla_student.perm_addr_city
+        student.perm_addr_country = sqla_student.perm_addr_country
         student.perm_addr_line1 = sqla_student.perm_addr_line1
         student.perm_addr_line2 = sqla_student.perm_addr_line2
-        student.perm_addr_city = sqla_student.perm_addr_city
-        student.perm_addr_state = sqla_student.perm_addr_state
-        student.perm_addr_5digit_zip = sqla_student.perm_addr_5digit_zip
-        student.perm_addr_4digit_zip = sqla_student.perm_addr_4digit_zip
-        student.perm_addr_country = sqla_student.perm_addr_country
         student.perm_addr_postal_code = sqla_student.perm_addr_postal_code
+        student.perm_addr_state = sqla_student.perm_addr_state
+        student.previous_institution_name = \
+            sqla_student.previous_institution_name
+        student.previous_institution_type = \
+            sqla_student.previous_institution_type
+        student.previous_institution_type_desc = \
+            sqla_student.previous_institution_type_desc
+        student.record_load_dttm = sqla_student.record_load_dttm
+        student.record_update_dttm = sqla_student.record_update_dttm
+        student.reg_first_yr_qtr_desc = sqla_student.reg_first_yr_qtr_desc
+        student.reg_first_yr_qtr_id = sqla_student.reg_first_yr_qtr_id
         student.registered_in_quarter = sqla_student.registered_in_quarter
+        student.registration_hold_ind = sqla_student.registration_hold_ind
+        student.resident_code = sqla_student.resident_code
+        student.resident_desc = sqla_student.resident_desc
+        student.special_program_code = sqla_student.special_program_code
+        student.special_program_desc = sqla_student.special_program_desc
+        student.sr_col_gpa = sqla_student.sr_col_gpa
+        student.student_email = sqla_student.student_email
+        student.total_credits = sqla_student.total_credits
+        student.total_deductible_credits = \
+            sqla_student.total_deductible_credits
+        student.total_extension_credits = sqla_student.total_extension_credits
+        student.total_grade_attempted = sqla_student.total_grade_attempted
+        student.total_grade_points = sqla_student.total_grade_points
+        student.total_lower_div_transfer_credits = \
+            sqla_student.total_lower_div_transfer_credits
+        student.total_non_graded_credits = \
+            sqla_student.total_non_graded_credits
+        student.total_registered_credits = \
+            sqla_student.total_registered_credits
+        student.total_transfer_credits = \
+            sqla_student.total_transfer_credits
+        student.total_uw_credits = sqla_student.total_uw_credits
+        student.total_upper_div_transfer_credits = \
+            sqla_student.total_upper_div_transfer_credits
+        student.veteran_benefit_code = sqla_student.veteran_benefit_code
+        student.veteran_benefit_desc = sqla_student.veteran_benefit_desc
+        student.veteran_desc = sqla_student.veteran_desc
+
+        # map academic term
+        student.academic_term = self._map_term(sqla_student.academic_term)
+
+        student.admitted_for_yr_qtr_desc = \
+            sqla_student.admitted_for_yr_qtr_desc
+        student.admitted_for_yr_qtr_id = sqla_student.admitted_for_yr_qtr_id
 
         # map majors
         student.majors = []
         for major in sqla_student.major:
             major = self._map_major(major)
             student.majors.append(major)
+
+        # map pending majors
+        student.pending_majors = []
+        for major in sqla_student.pending_major:
+            major = self._map_major(major)
+            student.pending_majors.append(major)
+
+        # map requested majors
+        student.requested_majors = []
+        for major in sqla_student.requested_major:
+            major = self._map_major(major)
+            student.requested_majors.append(major)
 
         # map intended majors
         student.intended_majors = []
@@ -210,6 +303,12 @@ class UWPersonClient(AbstractUWPersonClient):
         for transcript in sqla_student.transcript:
             transcript = self._map_transcript(transcript)
             student.transcripts.append(transcript)
+
+        # map transfers
+        student.transfers = []
+        for transfer in sqla_student.transfer:
+            transfer = self._map_transfer(transfer)
+            student.transfers.append(transfer)
 
         return student
 
@@ -247,9 +346,39 @@ class UWPersonClient(AbstractUWPersonClient):
     def _map_major(self, sqla_major):
         major = Major()
         major.major_abbr_code = sqla_major.major_abbr_code
-        major.major_full_code = sqla_major.major_full_code
+        major.major_pathway = sqla_major.major_pathway
+        major.major_branch = sqla_major.major_branch
         major.major_name = sqla_major.major_name
+        major.major_full_name = sqla_major.major_full_name
         major.major_short_name = sqla_major.major_short_name
+        major.major_desc = sqla_major.major_desc
+        major.major_home_url = sqla_major.major_home_url
+        major.major_dept = sqla_major.major_dept
+        major.major_last_yr = sqla_major.major_last_yr
+        major.major_last_qtr = sqla_major.major_last_qtr
+        major.major_first_yr = sqla_major.major_first_yr
+        major.major_first_qtr = sqla_major.major_first_qtr
+        major.major_cip_code = sqla_major.major_cip_code
+        major.major_undergrad = sqla_major.major_undergrad
+        major.major_graduate = sqla_major.major_graduate
+        major.major_professional = sqla_major.major_professional
+        major.major_non_degree = sqla_major.major_non_degree
+        major.major_minor = sqla_major.major_minor
+        major.major_not_termin = sqla_major.major_not_termin
+        major.major_ug_certif = sqla_major.major_ug_certif
+        major.major_grad_certif = sqla_major.major_grad_certif
+        major.major_evening = sqla_major.major_evening
+        major.major_ss_std_act = sqla_major.major_ss_std_act
+        major.major_ss_inelig = sqla_major.major_ss_inelig
+        major.major_osfa_inelig = sqla_major.major_osfa_inelig
+        major.major_dist_learn = sqla_major.major_dist_learn
+        major.major_concur_cc = sqla_major.major_concur_cc
+        major.major_measles_ex = sqla_major.major_measles_ex
+        major.major_premaj = sqla_major.major_premaj
+        major.major_premaj_ext = sqla_major.major_premaj_ext
+        major.major_nonmatric = sqla_major.major_nonmatric
+        major.major_gnm = sqla_major.major_gnm
+        major.college = sqla_major.college
         return major
 
     def _map_transcript(self, sqla_transcript):
@@ -267,6 +396,13 @@ class UWPersonClient(AbstractUWPersonClient):
             float(sqla_transcript.qtr_grade_points)
         transcript.qtr_graded_attmp = \
             float(sqla_transcript.qtr_graded_attmp)
+        transcript.qtr_nongrd_earned = sqla_transcript.qtr_nongrd_earned
+        transcript.qtr_deductible = sqla_transcript.qtr_deductible
+        transcript.over_qtr_grade_pt = sqla_transcript.over_qtr_grade_pt
+        transcript.over_qtr_grade_at = sqla_transcript.over_qtr_grade_at
+        transcript.over_qtr_nongrd = sqla_transcript.over_qtr_nongrd
+        transcript.over_qtr_deduct = sqla_transcript.over_qtr_deduct
+        transcript.qtr_comment = sqla_transcript.qtr_comment
         transcript.honors_program = sqla_transcript.honors_program
         transcript.special_program = sqla_transcript.special_program
         transcript.scholarship_type = sqla_transcript.scholarship_type
@@ -276,10 +412,37 @@ class UWPersonClient(AbstractUWPersonClient):
         transcript.num_ind_study = sqla_transcript.num_ind_study
         transcript.num_courses = sqla_transcript.num_courses
         transcript.enroll_status = sqla_transcript.enroll_status
-        transcript.tenth_day_credits = \
-            float(sqla_transcript.tenth_day_credits)
+        transcript.tenth_day_credits = float(sqla_transcript.tenth_day_credits)
         transcript.tr_en_stat_dt = sqla_transcript.tr_en_stat_dt
         return transcript
+
+    def _map_transfer(self, sqla_transfer):
+        transfer = Transfer()
+        transfer.institution_code = sqla_transfer.institution_code
+        transfer.year_ending = sqla_transfer.year_ending
+        transfer.year_beginning = sqla_transfer.year_beginning
+        transfer.transfer_gpa = sqla_transfer.transfer_gpa
+        transfer.trans_updt_dt = sqla_transfer.trans_updt_dt
+        transfer.trans_updt_id = sqla_transfer.trans_updt_id
+        transfer.degree_earned = sqla_transfer.degree_earned
+        transfer.degree_earned_yr = sqla_transfer.degree_earned_yr
+        transfer.degree_earned_mo = sqla_transfer.degree_earned_mo
+        transfer.credential_lvl = sqla_transfer.credential_lvl
+        transfer.credential_yr = sqla_transfer.credential_yr
+        transfer.transfer_comment = sqla_transfer.transfer_comment
+        transfer.institution_name = sqla_transfer.institution_name
+        transfer.inst_addr_line_1 = sqla_transfer.inst_addr_line_1
+        transfer.inst_addr_line_2 = sqla_transfer.inst_addr_line_2
+        transfer.inst_city = sqla_transfer.inst_city
+        transfer.inst_state = sqla_transfer.inst_state
+        transfer.inst_zip_5 = sqla_transfer.inst_zip_5
+        transfer.inst_zip_filler = sqla_transfer.inst_zip_filler
+        transfer.inst_country = sqla_transfer.inst_country
+        transfer.inst_postal_cd = sqla_transfer.inst_postal_cd
+        transfer.inst_record_stat = sqla_transfer.inst_record_stat
+        transfer.two_year = sqla_transfer.two_year
+        transfer.wa_cc = sqla_transfer.wa_cc
+        return transfer
 
     def _map_term(self, sqla_term):
         term = Term()
