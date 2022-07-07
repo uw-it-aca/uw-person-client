@@ -65,6 +65,8 @@ class AbstractBase():
                     obj_cls = Adviser
                 elif key == "transcripts":
                     obj_cls = Transcript
+                elif key == "transfers":
+                    obj_cls = Transfer
                 elif key == "sports":
                     obj_cls = Sport
                 items = []
@@ -94,6 +96,10 @@ class Employee(AbstractBase):
 
 
 class Transcript(AbstractBase):
+    pass
+
+
+class Transfer(AbstractBase):
     pass
 
 
