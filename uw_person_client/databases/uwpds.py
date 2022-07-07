@@ -55,6 +55,24 @@ class UWPDS(Postgres):
                    primary_key=True)
         )
 
+        student_to_requested_major = Table(
+            'student_to_requested_major',
+            UWPDS.Base.metadata,
+            Column('student_id', ForeignKey('student.id', ondelete="CASCADE"),
+                   primary_key=True),
+            Column('major_id', ForeignKey('major.id', ondelete="CASCADE"),
+                   primary_key=True)
+        )
+
+        student_to_pending_major = Table(
+            'student_to_pending_major',
+            UWPDS.Base.metadata,
+            Column('student_id', ForeignKey('student.id', ondelete="CASCADE"),
+                   primary_key=True),
+            Column('major_id', ForeignKey('major.id', ondelete="CASCADE"),
+                   primary_key=True)
+        )
+
         Table(
             'historical_person',
             UWPDS.Base.metadata,
@@ -76,11 +94,24 @@ class UWPDS(Postgres):
             major = relationship("major",
                                  secondary=student_to_major,
                                  cascade="all, delete")
+            requested_major = relationship(
+                "major",
+                secondary=student_to_requested_major,
+                cascade="all, delete")
+            pending_major = relationship("major",
+                                         secondary=student_to_pending_major,
+                                         cascade="all, delete")
             intended_major = relationship("major",
                                           secondary=student_to_intended_major,
                                           cascade="all, delete")
             transcript = relationship(
                 "Transcript", back_populates="student", uselist=True)
+            transfer = relationship(
+                "transfer", back_populates="student", uselist=True)
+            academic_term_id = Column(
+                'academic_term_id', ForeignKey('term.id', ondelete="CASCADE"))
+            academic_term = \
+                relationship("term", foreign_keys=[academic_term_id])
 
         class Employee(UWPDS.Base):
             __tablename__ = 'employee'
@@ -106,6 +137,7 @@ class UWPDS(Postgres):
         self.PriorUWRegID = UWPDS.Base.classes.prior_uwregids
         self.Student = Student
         self.Transcript = Transcript
+        self.Transfer = UWPDS.Base.classes.transfer
         self.Employee = Employee
         self.Adviser = UWPDS.Base.classes.adviser
         self.StudentToAdviser = student_to_adviser

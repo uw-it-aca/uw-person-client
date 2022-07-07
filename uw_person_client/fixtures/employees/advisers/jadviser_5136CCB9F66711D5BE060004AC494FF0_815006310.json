@@ -5,7 +5,7 @@
   "employee": {
     "adviser": {
       "advising_email": "jadviser@uw.edu",
-      "advising_phone_number": "(206) 345-2334",
+      "advising_phone_number": "+1 206 345-2334",
       "advising_program": "OMAD Advising",
       "advising_pronouns": null,
       "booking_url": "https://go.oncehub.com/jadviser",

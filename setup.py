@@ -29,7 +29,7 @@ setup(
     install_requires=['commonconf',
                       'mock',
                       'psycopg2-binary',
-                      'SQLAlchemy==1.0.14',
+                      'SQLAlchemy~=1.4',
                      ],
     license='Apache License, Version 2.0',
     description=('A library for connecting to and querying the '
