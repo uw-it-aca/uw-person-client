@@ -131,13 +131,23 @@ class UWPDS(Postgres):
 
         UWPDS.Base.prepare(self.engine, reflect=True)
 
+        # person classes
         self.Person = UWPDS.Base.classes.person
         self.HistoricalPerson = UWPDS.Base.classes.historical_person
         self.PriorUWNetID = UWPDS.Base.classes.prior_uwnetids
         self.PriorUWRegID = UWPDS.Base.classes.prior_uwregids
-        self.Student = Student
-        self.Transcript = Transcript
-        self.Transfer = UWPDS.Base.classes.transfer
+        # employee classes
         self.Employee = Employee
         self.Adviser = UWPDS.Base.classes.adviser
+        # student classes
+        self.Student = Student
+        self.Major = UWPDS.Base.classes.major
+        self.Sport = UWPDS.Base.classes.sport
+        self.StudentToSport = student_to_sport
+        self.StudentToMajor = student_to_major
+        self.StudentToIntendedMajor = student_to_intended_major
+        self.StudentToRequestedMajor = student_to_requested_major
         self.StudentToAdviser = student_to_adviser
+        self.Transcript = Transcript
+        self.Transfer = UWPDS.Base.classes.transfer
+        self.Term = UWPDS.Base.classes.term
