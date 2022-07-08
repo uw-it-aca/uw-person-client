@@ -43,6 +43,11 @@ class MockedUWPersonClientTest(TestCase):
         persons = client.get_persons(page=1, page_size=2)
         self.assertEqual(len(persons), 2)
 
+    def test_get_registered_students(self):
+        client = MockedUWPersonClient()
+        persons = client.get_registered_students()
+        self.assertEqual(len(persons), 2)
+
     def test_get_active_students(self):
         client = MockedUWPersonClient()
         persons = client.get_active_students()

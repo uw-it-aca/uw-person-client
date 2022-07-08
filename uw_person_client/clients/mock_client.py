@@ -53,6 +53,11 @@ class MockedUWPersonClient(AbstractUWPersonClient):
             page=page,
             page_size=page_size)
 
+    def get_registered_students(self):
+        persons = self._read_person_files('**/students/**.json')
+        return [person for person in persons if
+                person.student.enroll_status_code == '12']
+
     def get_active_students(self, page=None, page_size=None):
         return self._paginate(
             self._read_person_files('**/students/**.json'),
