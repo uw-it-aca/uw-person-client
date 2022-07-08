@@ -16,6 +16,9 @@ class AbstractUWPersonClient():
     def get_persons(self, page=None, page_size=None):
         raise NotImplementedError()
 
+    def get_registered_students(self):
+        raise NotImplementedError()
+
     def get_active_students(self, page=None, page_size=None):
         raise NotImplementedError()
 

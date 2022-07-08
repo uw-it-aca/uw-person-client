@@ -18,82 +18,92 @@ class UWPersonClient(AbstractUWPersonClient):
     def __init__(self):
         self.DB = UWPDS()
 
-    def get_person_by_uwnetid(self, uwnetid):
+    def get_person_by_uwnetid(self, uwnetid, **kwargs):
         sqla_person = self.DB.session.query(self.DB.HistoricalPerson).filter(
             self.DB.HistoricalPerson.prior_uwnetid == uwnetid).first()
         if not sqla_person:
             raise PersonNotFoundException()
-        return self._map_person(sqla_person)
+        return self._map_person(sqla_person, **kwargs)
 
-    def get_person_by_uwregid(self, uwregid):
+    def get_person_by_uwregid(self, uwregid, **kwargs):
         sqla_person = self.DB.session.query(self.DB.HistoricalPerson).filter(
             self.DB.HistoricalPerson.prior_uwregid == uwregid).first()
         if not sqla_person:
             raise PersonNotFoundException()
-        return self._map_person(sqla_person)
+        return self._map_person(sqla_person, **kwargs)
 
-    def get_person_by_student_number(self, student_number):
+    def get_person_by_student_number(self, student_number, **kwargs):
         sqla_person = self.DB.session.query(self.DB.Person).join(
             self.DB.Student).filter(
             self.DB.Student.student_number == student_number).one_or_none()
         if not sqla_person:
             raise PersonNotFoundException()
-        return self._map_person(sqla_person)
+        return self._map_person(sqla_person, **kwargs)
 
-    def get_persons(self, page=None, page_size=None):
+    def get_persons(self, page=None, page_size=None, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person)
         return self._get_page(sqla_persons,
                               self._map_person,
                               page=page,
-                              page_size=page_size)
+                              page_size=page_size,
+                              **kwargs)
 
-    def get_active_students(self, page=None, page_size=None):
+    def get_registered_students(self, **kwargs):
+        sqla_persons = self.DB.session.query(self.DB.Person).join(
+            self.DB.Student).filter(
+                self.DB.Student.enroll_status_code == '12'  # registered
+        )
+        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
+
+    def get_active_students(self, page=None, page_size=None, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).filter(
             self.DB.Person._is_active_student == True)  # noqa
         return self._get_page(sqla_persons,
                               self._map_person,
                               page=page,
-                              page_size=page_size)
+                              page_size=page_size,
+                              **kwargs)
 
-    def get_active_employees(self, page=None, page_size=None):
+    def get_active_employees(self, page=None, page_size=None, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).filter(
             self.DB.Person._is_active_employee == True)  # noqa
         return self._get_page(sqla_persons,
                               self._map_person,
                               page=page,
-                              page_size=page_size)
+                              page_size=page_size,
+                              **kwargs)
 
-    def get_advisers(self, advising_program=None):
+    def get_advisers(self, advising_program=None, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).join(
             self.DB.Employee).join(self.DB.Adviser)
         if advising_program:
             sqla_persons = sqla_persons.filter(
                 self.DB.Adviser.advising_program == advising_program)
-        return [self._map_person(item)for item in sqla_persons.all()]
+        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
-    def get_persons_by_adviser_netid(self, uwnetid):
+    def get_persons_by_adviser_netid(self, uwnetid, **kwargs):
         sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
             self.DB.Employee).join(self.DB.Person).filter(
             self.DB.Person.uwnetid == uwnetid).one()
         sqla_persons = self.DB.session.query(self.DB.Person).join(
             self.DB.Student).join(self.DB.StudentToAdviser).join(
             self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
-        return [self._map_person(item)for item in sqla_persons.all()]
+        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
-    def get_persons_by_adviser_regid(self, uwregid):
+    def get_persons_by_adviser_regid(self, uwregid, **kwargs):
         sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
             self.DB.Employee).join(self.DB.Person).filter(
             self.DB.Person.uwregid == uwregid).one()
         sqla_persons = self.DB.session.query(self.DB.Person).join(
             self.DB.Student).join(self.DB.StudentToAdviser).join(
             self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
-        return [self._map_person(item)for item in sqla_persons.all()]
+        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
     """
     Private Methods
     """
 
-    def _get_page(self, query, mapper, page=None, page_size=None):
+    def _get_page(self, query, mapper, page=None, page_size=None, **kwargs):
         """
         Returns results for a single page of data. If page and page_size are
         not specified, all results are returned
@@ -102,10 +112,19 @@ class UWPersonClient(AbstractUWPersonClient):
             # limit results to page
             query = query.limit(page_size).offset(
                 (page - 1) * page_size)
-        return [mapper(item)for item in query.all()]
+        return [mapper(item, **kwargs)for item in query.all()]
 
-    def _map_person(self, sqla_person, include_employee=True,
-                    include_student=True):
+    def _map_person(self, sqla_person,
+                    include_employee=True,
+                    include_student=True,
+                    include_student_transcripts=True,
+                    include_student_transfers=True,
+                    include_student_sports=True,
+                    include_student_advisers=True,
+                    include_student_majors=True,
+                    include_student_intended_majors=True,
+                    include_student_pending_majors=True,
+                    include_student_requested_majors=True):
         person = Person()
         person.uwnetid = sqla_person.uwnetid
         person.uwregid = sqla_person.uwregid
@@ -132,7 +151,16 @@ class UWPersonClient(AbstractUWPersonClient):
             try:
                 sqla_student = self.DB.session.query(self.DB.Student).filter(
                     self.DB.Student.person_id == sqla_person.id).one()
-                person.student = self._map_student(sqla_student)
+                person.student = self._map_student(
+                    sqla_student,
+                    include_student_transcripts=include_student_transcripts,
+                    include_student_transfers=include_student_transfers,
+                    include_student_sports=include_student_sports,
+                    include_student_advisers=include_student_advisers,
+                    include_student_majors=include_student_majors,
+                    include_student_intended_majors=include_student_intended_majors,  # noqa
+                    include_student_pending_majors=include_student_pending_majors,  # noqa
+                    include_student_requested_majors=include_student_requested_majors)  # noqa
             except NoResultFound:
                 pass
 
@@ -146,7 +174,15 @@ class UWPersonClient(AbstractUWPersonClient):
 
         return person
 
-    def _map_student(self, sqla_student):
+    def _map_student(self, sqla_student,
+                     include_student_transcripts=True,
+                     include_student_transfers=True,
+                     include_student_sports=True,
+                     include_student_advisers=True,
+                     include_student_majors=True,
+                     include_student_intended_majors=True,
+                     include_student_pending_majors=True,
+                     include_student_requested_majors=True):
         student = Student()
         student.system_key = sqla_student.system_key
         student.student_number = sqla_student.student_number
@@ -261,54 +297,62 @@ class UWPersonClient(AbstractUWPersonClient):
             sqla_student.admitted_for_yr_qtr_desc
         student.admitted_for_yr_qtr_id = sqla_student.admitted_for_yr_qtr_id
 
-        # map majors
-        student.majors = []
-        for major in sqla_student.major:
-            major = self._map_major(major)
-            student.majors.append(major)
+        if include_student_majors:
+            # map majors
+            student.majors = []
+            for major in sqla_student.major:
+                major = self._map_major(major)
+                student.majors.append(major)
 
-        # map pending majors
-        student.pending_majors = []
-        for major in sqla_student.pending_major:
-            major = self._map_major(major)
-            student.pending_majors.append(major)
+        if include_student_pending_majors:
+            # map pending majors
+            student.pending_majors = []
+            for major in sqla_student.pending_major:
+                major = self._map_major(major)
+                student.pending_majors.append(major)
 
-        # map requested majors
-        student.requested_majors = []
-        for major in sqla_student.requested_major:
-            major = self._map_major(major)
-            student.requested_majors.append(major)
+        if include_student_requested_majors:
+            # map requested majors
+            student.requested_majors = []
+            for major in sqla_student.requested_major:
+                major = self._map_major(major)
+                student.requested_majors.append(major)
 
-        # map intended majors
-        student.intended_majors = []
-        for major in sqla_student.intended_major:
-            major = self._map_major(major)
-            student.intended_majors.append(major)
+        if include_student_intended_majors:
+            # map intended majors
+            student.intended_majors = []
+            for major in sqla_student.intended_major:
+                major = self._map_major(major)
+                student.intended_majors.append(major)
 
-        # map sports
-        student.sports = []
-        for sport in sqla_student.sport:
-            sport = self._map_sport(sport)
-            student.sports.append(sport)
+        if include_student_sports:
+            # map sports
+            student.sports = []
+            for sport in sqla_student.sport:
+                sport = self._map_sport(sport)
+                student.sports.append(sport)
 
-        # map advisers
-        student.advisers = []
-        for adviser in sqla_student.adviser:
-            adviser_person = self._map_person(adviser.employee.person,
-                                              include_student=False)
-            student.advisers.append(adviser_person)
+        if include_student_advisers:
+            # map advisers
+            student.advisers = []
+            for adviser in sqla_student.adviser:
+                adviser_person = self._map_person(adviser.employee.person,
+                                                  include_student=False)
+                student.advisers.append(adviser_person)
 
-        # map transcripts
-        student.transcripts = []
-        for transcript in sqla_student.transcript:
-            transcript = self._map_transcript(transcript)
-            student.transcripts.append(transcript)
+        if include_student_transcripts:
+            # map transcripts
+            student.transcripts = []
+            for transcript in sqla_student.transcript:
+                transcript = self._map_transcript(transcript)
+                student.transcripts.append(transcript)
 
-        # map transfers
-        student.transfers = []
-        for transfer in sqla_student.transfer:
-            transfer = self._map_transfer(transfer)
-            student.transfers.append(transfer)
+        if include_student_transfers:
+            # map transfers
+            student.transfers = []
+            for transfer in sqla_student.transfer:
+                transfer = self._map_transfer(transfer)
+                student.transfers.append(transfer)
 
         return student
 
