@@ -97,50 +97,57 @@ class UWPDS(Postgres):
             __tablename__ = 'student'
             sport = relationship("sport",
                                  secondary=student_to_sport,
-                                 cascade="all, delete")
+                                 viewonly=True)
             adviser = relationship("adviser",
                                    secondary=student_to_adviser,
-                                   cascade="all, delete")
+                                   viewonly=True)
             major = relationship("major",
                                  secondary=student_to_major,
-                                 cascade="all, delete")
+                                 viewonly=True)
             requested_major = relationship(
                 "major",
                 secondary=student_to_requested_major,
-                cascade="all, delete")
+                viewonly=True)
             pending_major = relationship("major",
                                          secondary=student_to_pending_major,
-                                         cascade="all, delete")
+                                         viewonly=True)
             intended_major = relationship("major",
                                           secondary=student_to_intended_major,
-                                          cascade="all, delete")
+                                          viewonly=True)
             ethnicities = relationship("ethnicity",
                                        secondary=student_to_ethnicity,
-                                       cascade="all, delete")
+                                       viewonly=True)
             transcript = relationship(
-                "Transcript", back_populates="student", uselist=True)
+                "Transcript", back_populates="student", uselist=True,
+                viewonly=True)
             transfer = relationship(
-                "transfer", back_populates="student", uselist=True)
+                "transfer", back_populates="student", uselist=True,
+                viewonly=True)
             academic_term_id = Column(
                 'academic_term_id', ForeignKey('term.id', ondelete="CASCADE"))
             academic_term = \
-                relationship("term", foreign_keys=[academic_term_id])
+                relationship("term", foreign_keys=[academic_term_id],
+                             viewonly=True)
 
         class Employee(UWPDS.Base):
             __tablename__ = 'employee'
             adviser = relationship(
-                "adviser", back_populates="employee", uselist=False)
+                "adviser", back_populates="employee", uselist=False,
+                viewonly=True)
 
         class Transcript(UWPDS.Base):
             __tablename__ = 'transcript'
             tran_term_id = Column('tran_term_id',
                                   ForeignKey('term.id', ondelete="CASCADE"))
-            tran_term = relationship("term", foreign_keys=[tran_term_id])
+            tran_term = relationship("term",
+                                     foreign_keys=[tran_term_id],
+                                     viewonly=True)
             leave_ends_term_id = Column('leave_ends_term_id',
                                         ForeignKey('term.id',
                                                    ondelete="CASCADE"))
             leave_ends_term = relationship("term",
-                                           foreign_keys=[leave_ends_term_id])
+                                           foreign_keys=[leave_ends_term_id],
+                                           viewonly=True)
 
         UWPDS.Base.prepare(self.engine, reflect=True)
 
