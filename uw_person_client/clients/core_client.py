@@ -6,7 +6,7 @@ from uw_person_client.clients import AbstractUWPersonClient
 from uw_person_client.databases.uwpds import UWPDS
 from uw_person_client.exceptions import PersonNotFoundException
 from uw_person_client.components import Person, Student, Employee, \
-    Transcript, Major, Sport, Adviser, Term, Transfer
+    Transcript, Major, Sport, Adviser, Term, Transfer, Ethnicity
 
 
 class UWPersonClient(AbstractUWPersonClient):
@@ -184,14 +184,9 @@ class UWPersonClient(AbstractUWPersonClient):
                      include_student_pending_majors=True,
                      include_student_requested_majors=True):
         student = Student()
+
         student.system_key = sqla_student.system_key
         student.student_number = sqla_student.student_number
-        student.assigned_ethnic_code = \
-            sqla_student.assigned_ethnic_code
-        student.assigned_ethnic_desc = \
-            sqla_student.assigned_ethnic_desc
-        student.assigned_ethnic_group_desc = \
-            sqla_student.assigned_ethnic_group_desc
         student.application_status_code = sqla_student.application_status_code
         student.application_status_desc = sqla_student.application_status_desc
         student.application_type_code = sqla_student.application_type_code
@@ -201,14 +196,22 @@ class UWPersonClient(AbstractUWPersonClient):
         student.applied_to_graduate_yr_qtr_id = \
             sqla_student.applied_to_graduate_yr_qtr_id
         student.asuwind = sqla_student.asuwind
+        student.birth_city = sqla_student.birth_city
+        student.birth_country = sqla_student.birth_country
+        student.birth_state = sqla_student.birth_state
         student.birthdate = sqla_student.birthdate
         student.campus_code = sqla_student.campus_code
         student.campus_desc = sqla_student.campus_desc
+        student.child_of_alumni = sqla_student.child_of_alumni
+        student.citizen_country = sqla_student.citizen_country
         student.class_code = sqla_student.class_code
         student.class_desc = sqla_student.class_desc
         student.cumulative_gpa = sqla_student.cumulative_gpa
         student.directory_release_ind = sqla_student.directory_release_ind
         student.disability_ind = sqla_student.disability_ind
+        student.emergency_email = sqla_student.emergency_email
+        student.emergency_name = sqla_student.emergency_name
+        student.emergency_phone = sqla_student.emergency_phone
         student.enroll_status_code = sqla_student.enroll_status_code
         student.exemption_code = sqla_student.exemption_code
         student.exemption_desc = sqla_student.exemption_desc
@@ -226,6 +229,8 @@ class UWPersonClient(AbstractUWPersonClient):
             sqla_student.hold_reason_desc_combined
         student.honors_program_code = sqla_student.honors_program_code
         student.honors_program_ind = sqla_student.honors_program_ind
+        student.iss_perm_resident_country = \
+            sqla_student.iss_perm_resident_country
         student.jr_col_gpa = sqla_student.jr_col_gpa
         student.last_enrolled_yr_qtr_desc = \
             sqla_student.last_enrolled_yr_qtr_desc
@@ -243,6 +248,7 @@ class UWPersonClient(AbstractUWPersonClient):
             sqla_student.new_continuing_returning_code
         student.new_continuing_returning_desc = \
             sqla_student.new_continuing_returning_desc
+        student.parent_name = sqla_student.parent_name
         student.perm_addr_4digit_zip = sqla_student.perm_addr_4digit_zip
         student.perm_addr_5digit_zip = sqla_student.perm_addr_5digit_zip
         student.perm_addr_city = sqla_student.perm_addr_city
@@ -289,6 +295,7 @@ class UWPersonClient(AbstractUWPersonClient):
         student.veteran_benefit_code = sqla_student.veteran_benefit_code
         student.veteran_benefit_desc = sqla_student.veteran_benefit_desc
         student.veteran_desc = sqla_student.veteran_desc
+        student.visa_type = sqla_student.visa_type
 
         # map academic term
         student.academic_term = self._map_term(sqla_student.academic_term)
@@ -296,6 +303,12 @@ class UWPersonClient(AbstractUWPersonClient):
         student.admitted_for_yr_qtr_desc = \
             sqla_student.admitted_for_yr_qtr_desc
         student.admitted_for_yr_qtr_id = sqla_student.admitted_for_yr_qtr_id
+
+        # map ethnicity
+        student.ethnicities = []
+        for ethnicity in sqla_student.ethnicities:
+            ethnicity = self._map_ethnicity(ethnicity)
+            student.ethnicities.append(ethnicity)
 
         if include_student_majors:
             # map majors
@@ -386,6 +399,14 @@ class UWPersonClient(AbstractUWPersonClient):
         sport = Sport()
         sport.sport_code = sqla_sport.sport_code
         return sport
+
+    def _map_ethnicity(self, sqla_ethnicity):
+        ethnicity = Ethnicity()
+        ethnicity.assigned_ethnic_code = sqla_ethnicity.assigned_ethnic_code
+        ethnicity.assigned_ethnic_desc = sqla_ethnicity.assigned_ethnic_desc
+        ethnicity.assigned_ethnic_group_desc = \
+            sqla_ethnicity.assigned_ethnic_group_desc
+        return ethnicity
 
     def _map_major(self, sqla_major):
         major = Major()
