@@ -73,6 +73,16 @@ class UWPDS(Postgres):
                    primary_key=True)
         )
 
+        student_to_ethnicity = Table(
+            'student_to_ethnicity',
+            UWPDS.Base.metadata,
+            Column('student_id', ForeignKey('student.id', ondelete="CASCADE"),
+                   primary_key=True),
+            Column('ethnicity_id', ForeignKey('ethnicity.id',
+                                              ondelete="CASCADE"),
+                   primary_key=True)
+        )
+
         Table(
             'historical_person',
             UWPDS.Base.metadata,
@@ -104,6 +114,9 @@ class UWPDS(Postgres):
             intended_major = relationship("major",
                                           secondary=student_to_intended_major,
                                           cascade="all, delete")
+            ethnicities = relationship("ethnicity",
+                                       secondary=student_to_ethnicity,
+                                       cascade="all, delete")
             transcript = relationship(
                 "Transcript", back_populates="student", uselist=True)
             transfer = relationship(
@@ -141,6 +154,7 @@ class UWPDS(Postgres):
         self.Adviser = UWPDS.Base.classes.adviser
         # student classes
         self.Student = Student
+        self.Ethnicity = UWPDS.Base.classes.ethnicity
         self.Major = UWPDS.Base.classes.major
         self.Sport = UWPDS.Base.classes.sport
         self.StudentToSport = student_to_sport

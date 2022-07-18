@@ -117,3 +117,7 @@ class Adviser(AbstractBase):
 
 class Term(AbstractBase):
     pass
+
+
+class Ethnicity(AbstractBase):
+    pass
