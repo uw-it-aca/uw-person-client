@@ -62,19 +62,31 @@
     "application_type_desc": "FRESHMAN",
     "applied_to_graduate_yr_qtr_desc": null,
     "applied_to_graduate_yr_qtr_id": "NaN",
-    "assigned_ethnic_code": "800",
-    "assigned_ethnic_desc": "WHITE",
-    "assigned_ethnic_group_desc": "Caucasian",
     "asuwind": false,
+    "birth_city": "Seattle",
+    "birth_country": "USA",
+    "birth_state": "Washington",
     "birthdate": "2001-11-20",
     "campus_code": "0",
     "campus_desc": "Seattle",
+    "child_of_alumni": false,
+    "citizen_country": "USA",
     "class_code": "2",
     "class_desc": "Sophomore",
     "cumulative_gpa": "3.84",
     "directory_release_ind": true,
     "disability_ind": true,
+    "emergency_email": "",
+    "emergency_name": "",
+    "emergency_phone": "",
     "enroll_status_code": "12",
+    "ethnicities": [
+      {
+        "assigned_ethnic_code": "800",
+        "assigned_ethnic_desc": "WHITE",
+        "assigned_ethnic_group_desc": "Caucasian"
+      }
+    ],
     "exemption_code": "0",
     "exemption_desc": "NONE",
     "external_email": "javerage@gmail.com",
@@ -161,6 +173,7 @@
         "major_undergrad": true
       }
     ],
+    "iss_perm_resident_country": "",
     "jr_col_gpa": "0.00",
     "last_enrolled_yr_qtr_desc": "Spring 2022",
     "last_enrolled_yr_qtr_id": "20222",
@@ -213,6 +226,7 @@
     ],
     "new_continuing_returning_code": "0",
     "new_continuing_returning_desc": "CONTINUING",
+    "parent_name": "Average,Joe",
     "pending_majors": [
       {
         "college": null,
@@ -429,7 +443,8 @@
     ],
     "veteran_benefit_code": "0",
     "veteran_benefit_desc": null,
-    "veteran_desc": "NOT A VET"
+    "veteran_desc": "NOT A VET",
+    "visa_type": "F1"
   },
   "surname": "Average",
   "uwnetid": "javerage",
