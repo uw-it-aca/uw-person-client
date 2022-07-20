@@ -40,6 +40,14 @@ class UWPersonClient(AbstractUWPersonClient):
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
 
+    def get_person_by_system_key(self, system_key, **kwargs):
+        sqla_person = self.DB.session.query(self.DB.Person).join(
+            self.DB.Student).filter(
+            self.DB.Student.system_key == system_key).one_or_none()
+        if not sqla_person:
+            raise PersonNotFoundException()
+        return self._map_person(sqla_person, **kwargs)
+
     def get_persons(self, page=None, page_size=None, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person)
         return self._get_page(sqla_persons,
@@ -48,12 +56,16 @@ class UWPersonClient(AbstractUWPersonClient):
                               page_size=page_size,
                               **kwargs)
 
-    def get_registered_students(self, **kwargs):
+    def get_registered_students(self, page=None, page_size=None, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).join(
             self.DB.Student).filter(
                 self.DB.Student.enroll_status_code == '12'  # registered
         )
-        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
+        return self._get_page(sqla_persons,
+                              self._map_person,
+                              page=page,
+                              page_size=page_size,
+                              **kwargs)
 
     def get_active_students(self, page=None, page_size=None, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).filter(
