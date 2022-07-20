@@ -47,16 +47,23 @@ class MockedUWPersonClient(AbstractUWPersonClient):
     def get_person_by_student_number(self, student_number):
         return self._read_person_file(f'**/*{student_number}*.json')
 
+    def get_person_by_system_key(self, system_key, **kwargs):
+        return self._read_person_file(f'**/*{system_key}*.json')
+
     def get_persons(self, page=None, page_size=None):
         return self._paginate(
             self._read_person_files('**/**.json'),
             page=page,
             page_size=page_size)
 
-    def get_registered_students(self):
+    def get_registered_students(self, page=None, page_size=None):
         persons = self._read_person_files('**/students/**.json')
-        return [person for person in persons if
-                person.student.enroll_status_code == '12']
+        registered_persons = [person for person in persons if
+                              person.student.enroll_status_code == '12']
+        return self._paginate(
+            registered_persons,
+            page=page,
+            page_size=page_size)
 
     def get_active_students(self, page=None, page_size=None):
         return self._paginate(
