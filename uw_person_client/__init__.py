@@ -3,11 +3,6 @@
 
 import logging
 import os
-from conf.settings import AppSettings as settings  # noqa
-from commonconf.backends import use_configuration_backend
-
-# setup app settings
-use_configuration_backend('conf.settings.AppSettings')
 
 # setup logging
 logging.basicConfig(
