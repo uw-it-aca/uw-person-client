@@ -30,11 +30,6 @@ class UWPDS(Postgres):
         self.Major = UWPDS.Base.classes.major
         self.Sport = UWPDS.Base.classes.sport
         self.StudentToSport = UWPDS.Base.classes.student_to_sport
-        self.StudentToMajor = UWPDS.Base.classes.student_to_major
-        self.StudentToIntendedMajor = \
-            UWPDS.Base.classes.student_to_intended_major
-        self.StudentToRequestedMajor = \
-            UWPDS.Base.classes.student_to_requested_major
         self.StudentToAdviser = UWPDS.Base.classes.student_to_adviser
         self.Transcript = UWPDS.Base.classes.transcript
         self.Transfer = UWPDS.Base.classes.transfer
@@ -50,34 +45,6 @@ class UWPDS(Postgres):
 
         student_to_adviser = Table(
             'student_to_adviser',
-            UWPDS.Base.metadata,
-            autoload=True,
-            autoload_with=self.engine
-        )
-
-        student_to_major = Table(
-            'student_to_major',
-            UWPDS.Base.metadata,
-            autoload=True,
-            autoload_with=self.engine
-        )
-
-        student_to_intended_major = Table(
-            'student_to_intended_major',
-            UWPDS.Base.metadata,
-            autoload=True,
-            autoload_with=self.engine
-        )
-
-        student_to_requested_major = Table(
-            'student_to_requested_major',
-            UWPDS.Base.metadata,
-            autoload=True,
-            autoload_with=self.engine
-        )
-
-        student_to_pending_major = Table(
-            'student_to_pending_major',
             UWPDS.Base.metadata,
             autoload=True,
             autoload_with=self.engine
@@ -109,19 +76,39 @@ class UWPDS(Postgres):
             adviser = relationship("adviser",
                                    secondary=student_to_adviser,
                                    viewonly=True)
-            major = relationship("major",
-                                 secondary=student_to_major,
-                                 viewonly=True)
-            requested_major = relationship(
-                "major",
-                secondary=student_to_requested_major,
-                viewonly=True)
-            pending_major = relationship("major",
-                                         secondary=student_to_pending_major,
-                                         viewonly=True)
-            intended_major = relationship("major",
-                                          secondary=student_to_intended_major,
-                                          viewonly=True)
+            # majors
+            major_1_id = Column('major_1_id',
+                                ForeignKey('major.id', ondelete="CASCADE"))
+            major_1 = relationship("major", foreign_keys=[major_1_id],
+                                   viewonly=True)
+            major_2_id = Column('major_2_id',
+                                ForeignKey('major.id', ondelete="CASCADE"))
+            major_2 = relationship("major", foreign_keys=[major_2_id],
+                                   viewonly=True)
+            major_3_id = Column('major_3_id',
+                                ForeignKey('major.id', ondelete="CASCADE"))
+            major_3 = relationship("major", foreign_keys=[major_3_id],
+                                   viewonly=True)
+            # pending majors
+            pending_major_1_id = Column(
+                'pending_major_1_id',
+                ForeignKey('major.id', ondelete="CASCADE"))
+            pending_major_1 = \
+                relationship("major", foreign_keys=[pending_major_1_id],
+                             viewonly=True)
+            pending_major_2_id = Column(
+                'pending_major_2_id',
+                ForeignKey('major.id', ondelete="CASCADE"))
+            pending_major_2 = \
+                relationship("major", foreign_keys=[pending_major_2_id],
+                             viewonly=True)
+            pending_major_3_id = Column(
+                'pending_major_3_id',
+                ForeignKey('major.id', ondelete="CASCADE"))
+            pending_major_3 = \
+                relationship("major", foreign_keys=[pending_major_3_id],
+                             viewonly=True)
+
             ethnicities = relationship("ethnicity",
                                        secondary=student_to_ethnicity,
                                        viewonly=True)
@@ -165,10 +152,4 @@ class UWPDS(Postgres):
         UWPDS.Base.classes.transcript = Transcript
         UWPDS.Base.classes.student_to_sport = student_to_sport
         UWPDS.Base.classes.student_to_adviser = student_to_adviser
-        UWPDS.Base.classes.student_to_major = student_to_major
-        UWPDS.Base.classes.student_to_intended_major = \
-            student_to_intended_major
-        UWPDS.Base.classes.student_to_requested_major = \
-            student_to_requested_major
-        UWPDS.Base.classes.student_to_pending_major = student_to_pending_major
         UWPDS.Base.classes.student_to_ethnicity = student_to_ethnicity
