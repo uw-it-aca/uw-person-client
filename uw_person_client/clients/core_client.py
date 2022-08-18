@@ -134,9 +134,7 @@ class UWPersonClient(AbstractUWPersonClient):
                     include_student_sports=True,
                     include_student_advisers=True,
                     include_student_majors=True,
-                    include_student_intended_majors=True,
-                    include_student_pending_majors=True,
-                    include_student_requested_majors=True):
+                    include_student_pending_majors=True):
         person = Person()
         person.uwnetid = sqla_person.uwnetid
         person.uwregid = sqla_person.uwregid
@@ -170,9 +168,8 @@ class UWPersonClient(AbstractUWPersonClient):
                     include_student_sports=include_student_sports,
                     include_student_advisers=include_student_advisers,
                     include_student_majors=include_student_majors,
-                    include_student_intended_majors=include_student_intended_majors,  # noqa
                     include_student_pending_majors=include_student_pending_majors,  # noqa
-                    include_student_requested_majors=include_student_requested_majors)  # noqa
+                )
             except NoResultFound:
                 pass
 
@@ -192,9 +189,7 @@ class UWPersonClient(AbstractUWPersonClient):
                      include_student_sports=True,
                      include_student_advisers=True,
                      include_student_majors=True,
-                     include_student_intended_majors=True,
-                     include_student_pending_majors=True,
-                     include_student_requested_majors=True):
+                     include_student_pending_majors=True):
         student = Student()
 
         student.system_key = sqla_student.system_key
@@ -324,31 +319,36 @@ class UWPersonClient(AbstractUWPersonClient):
 
         if include_student_majors:
             # map majors
-            student.majors = []
-            for major in sqla_student.major:
-                major = self._map_major(major)
-                student.majors.append(major)
+            majors = []
+            if sqla_student.major_1:
+                majors.append(self._map_major(sqla_student.major_1))
+            if sqla_student.major_2:
+                majors.append(self._map_major(sqla_student.major_2))
+            if sqla_student.major_3:
+                majors.append(self._map_major(sqla_student.major_3))
+            student.majors = majors
 
         if include_student_pending_majors:
             # map pending majors
-            student.pending_majors = []
-            for major in sqla_student.pending_major:
-                major = self._map_major(major)
-                student.pending_majors.append(major)
+            pending_majors = []
+            if sqla_student.pending_major_1:
+                pending_majors.append(
+                    self._map_major(sqla_student.pending_major_1))
+            if sqla_student.pending_major_2:
+                pending_majors.append(
+                    self._map_major(sqla_student.pending_major_2))
+            if sqla_student.pending_major_3:
+                pending_majors.append(
+                    self._map_major(sqla_student.pending_major_3))
+            student.pending_majors = pending_majors
 
-        if include_student_requested_majors:
-            # map requested majors
-            student.requested_majors = []
-            for major in sqla_student.requested_major:
-                major = self._map_major(major)
-                student.requested_majors.append(major)
+        student.requested_major1_code = sqla_student.requested_major1_code
+        student.requested_major2_code = sqla_student.requested_major2_code
+        student.requested_major3_code = sqla_student.requested_major2_code
 
-        if include_student_intended_majors:
-            # map intended majors
-            student.intended_majors = []
-            for major in sqla_student.intended_major:
-                major = self._map_major(major)
-                student.intended_majors.append(major)
+        student.intended_major1_code = sqla_student.intended_major1_code
+        student.intended_major2_code = sqla_student.intended_major2_code
+        student.intended_major3_code = sqla_student.intended_major3_code
 
         if include_student_sports:
             # map sports
