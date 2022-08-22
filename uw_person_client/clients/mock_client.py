@@ -10,27 +10,49 @@ from uw_person_client.exceptions import PersonNotFoundException
 
 
 class MockedUWPersonClient(AbstractUWPersonClient):
+    paths = []
 
-    def _glob_fixture_file(self, search_value):
-        abspath = os.path.abspath(
+    @classmethod
+    def register_mock_path(self, path):
+        if path not in MockedUWPersonClient.paths:
+            MockedUWPersonClient.paths.append(path)
+
+    def get_registered_paths(self):
+        return MockedUWPersonClient.paths
+
+    def _get_mock_paths(self):
+        default_path = os.path.abspath(
             os.path.join(os.path.dirname(__file__), '../fixtures/'))
-        path = os.path.join(abspath, search_value)
-        return glob.glob(path, recursive=True)
+        return self.get_registered_paths() + [default_path]
 
     def _read_person_file(self, search_value):
-        try:
-            file_name = self._glob_fixture_file(search_value)[0]
-        except IndexError:
-            raise PersonNotFoundException()
-        data = json.load(open(file_name))
-        return Person().from_dict(data)
+        """Return first matching mocked person record
+        """
+        for path in self._get_mock_paths():
+            files = glob.glob(os.path.join(path, search_value), recursive=True)
+            try:
+                return self._load_person_from_file(files[0])
+            except IndexError:
+                pass
+
+        raise PersonNotFoundException()
 
     def _read_person_files(self, search_value):
-        file_names = self._glob_fixture_file(search_value)
-        persons = []
-        for file_name in file_names:
-            persons.append(self._read_person_file(file_name))
-        return persons
+        """Return all matching mocked person records
+        First matched uwnetid in record wins
+        """
+        persons = {}
+        for path in self._get_mock_paths():
+            for file_name in glob.glob(
+                    os.path.join(path, search_value), recursive=True):
+                person = self._load_person_from_file(file_name)
+                if person.uwnetid not in persons:
+                    persons[person.uwnetid] = person
+
+        return list(persons.values())
+
+    def _load_person_from_file(files, filename):
+        return Person().from_dict(json.load(open(filename)))
 
     def _paginate(self, values, page=None, page_size=None):
         if page is not None and page_size is not None:
