@@ -19,21 +19,21 @@ class UWPersonClient(AbstractUWPersonClient):
         self.DB = UWPDS()
 
     def get_person_by_uwnetid(self, uwnetid, **kwargs):
-        sqla_person = self.DB.session.query(self.DB.HistoricalPerson).filter(
+        sqla_person = self._get_safe_query(self.DB.HistoricalPerson).filter(
             self.DB.HistoricalPerson.prior_uwnetid == uwnetid).first()
         if not sqla_person:
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
 
     def get_person_by_uwregid(self, uwregid, **kwargs):
-        sqla_person = self.DB.session.query(self.DB.HistoricalPerson).filter(
+        sqla_person = self._get_safe_query(self.DB.HistoricalPerson).filter(
             self.DB.HistoricalPerson.prior_uwregid == uwregid).first()
         if not sqla_person:
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
 
     def get_person_by_student_number(self, student_number, **kwargs):
-        sqla_person = self.DB.session.query(self.DB.Person).join(
+        sqla_person = self._get_safe_query(self.DB.Person).join(
             self.DB.Student).filter(
             self.DB.Student.student_number == student_number).one_or_none()
         if not sqla_person:
@@ -41,7 +41,7 @@ class UWPersonClient(AbstractUWPersonClient):
         return self._map_person(sqla_person, **kwargs)
 
     def get_person_by_system_key(self, system_key, **kwargs):
-        sqla_person = self.DB.session.query(self.DB.Person).join(
+        sqla_person = self._get_safe_query(self.DB.Person).join(
             self.DB.Student).filter(
             self.DB.Student.system_key == system_key).one_or_none()
         if not sqla_person:
@@ -49,7 +49,7 @@ class UWPersonClient(AbstractUWPersonClient):
         return self._map_person(sqla_person, **kwargs)
 
     def get_persons(self, page=None, page_size=None, **kwargs):
-        sqla_persons = self.DB.session.query(self.DB.Person)
+        sqla_persons = self._get_safe_query(self.DB.Person)
         return self._get_page(sqla_persons,
                               self._map_person,
                               page=page,
@@ -57,7 +57,7 @@ class UWPersonClient(AbstractUWPersonClient):
                               **kwargs)
 
     def get_registered_students(self, page=None, page_size=None, **kwargs):
-        sqla_persons = self.DB.session.query(self.DB.Person).join(
+        sqla_persons = self._get_safe_query(self.DB.Person).join(
             self.DB.Student).filter(
                 self.DB.Student.enroll_status_code == '12'  # registered
         )
@@ -68,7 +68,7 @@ class UWPersonClient(AbstractUWPersonClient):
                               **kwargs)
 
     def get_active_students(self, page=None, page_size=None, **kwargs):
-        sqla_persons = self.DB.session.query(self.DB.Person).filter(
+        sqla_persons = self._get_safe_query(self.DB.Person).filter(
             self.DB.Person._is_active_student == True)  # noqa
         return self._get_page(sqla_persons,
                               self._map_person,
@@ -77,7 +77,7 @@ class UWPersonClient(AbstractUWPersonClient):
                               **kwargs)
 
     def get_active_employees(self, page=None, page_size=None, **kwargs):
-        sqla_persons = self.DB.session.query(self.DB.Person).filter(
+        sqla_persons = self._get_safe_query(self.DB.Person).filter(
             self.DB.Person._is_active_employee == True)  # noqa
         return self._get_page(sqla_persons,
                               self._map_person,
@@ -86,7 +86,7 @@ class UWPersonClient(AbstractUWPersonClient):
                               **kwargs)
 
     def get_advisers(self, advising_program=None, **kwargs):
-        sqla_persons = self.DB.session.query(self.DB.Person).join(
+        sqla_persons = self._get_safe_query(self.DB.Person).join(
             self.DB.Employee).join(self.DB.Adviser)
         if advising_program:
             sqla_persons = sqla_persons.filter(
@@ -94,19 +94,19 @@ class UWPersonClient(AbstractUWPersonClient):
         return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
     def get_persons_by_adviser_netid(self, uwnetid, **kwargs):
-        sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
+        sqla_adviser = self._get_safe_query(self.DB.Adviser).join(
             self.DB.Employee).join(self.DB.Person).filter(
             self.DB.Person.uwnetid == uwnetid).one()
-        sqla_persons = self.DB.session.query(self.DB.Person).join(
+        sqla_persons = self._get_safe_query(self.DB.Person).join(
             self.DB.Student).join(self.DB.StudentToAdviser).join(
             self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
         return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
     def get_persons_by_adviser_regid(self, uwregid, **kwargs):
-        sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
+        sqla_adviser = self._get_safe_query(self.DB.Adviser).join(
             self.DB.Employee).join(self.DB.Person).filter(
             self.DB.Person.uwregid == uwregid).one()
-        sqla_persons = self.DB.session.query(self.DB.Person).join(
+        sqla_persons = self._get_safe_query(self.DB.Person).join(
             self.DB.Student).join(self.DB.StudentToAdviser).join(
             self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
         return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
@@ -114,6 +114,16 @@ class UWPersonClient(AbstractUWPersonClient):
     """
     Private Methods
     """
+
+    def _get_safe_query(self, query):
+        """
+        Returns a query with at least one row. If no rows are found, raises
+        a PersonNotFoundException
+        """
+        sqla_persons = self.DB.session.query(query)
+        if sqla_persons.count() == 0:
+            raise PersonNotFoundException()
+        return sqla_persons
 
     def _get_page(self, query, mapper, page=None, page_size=None, **kwargs):
         """
