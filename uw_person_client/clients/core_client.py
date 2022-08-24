@@ -4,7 +4,8 @@
 from sqlalchemy.orm.exc import NoResultFound
 from uw_person_client.clients import AbstractUWPersonClient
 from uw_person_client.databases.uwpds import UWPDS
-from uw_person_client.exceptions import PersonNotFoundException
+from uw_person_client.exceptions import PersonNotFoundException, \
+    AdviserNotFoundException
 from uw_person_client.components import Person, Student, Employee, \
     Transcript, Major, Sport, Adviser, Term, Transfer, Ethnicity
 
@@ -86,7 +87,7 @@ class UWPersonClient(AbstractUWPersonClient):
                 self.DB.Student).join(self.DB.StudentToAdviser).join(
                 self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
         except NoResultFound:
-            raise PersonNotFoundException()
+            raise AdviserNotFoundException()
         return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
     def get_persons_by_adviser_regid(self, uwregid, **kwargs):
@@ -98,7 +99,7 @@ class UWPersonClient(AbstractUWPersonClient):
                 self.DB.Student).join(self.DB.StudentToAdviser).join(
                 self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
         except NoResultFound:
-            raise PersonNotFoundException()
+            raise AdviserNotFoundException()
         return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
     """
