@@ -94,21 +94,27 @@ class UWPersonClient(AbstractUWPersonClient):
         return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
     def get_persons_by_adviser_netid(self, uwnetid, **kwargs):
-        sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
-            self.DB.Employee).join(self.DB.Person).filter(
-            self.DB.Person.uwnetid == uwnetid).one()
-        sqla_persons = self.DB.session.query(self.DB.Person).join(
-            self.DB.Student).join(self.DB.StudentToAdviser).join(
-            self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
+        try:
+            sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
+                self.DB.Employee).join(self.DB.Person).filter(
+                self.DB.Person.uwnetid == uwnetid).one()
+            sqla_persons = self.DB.session.query(self.DB.Person).join(
+                self.DB.Student).join(self.DB.StudentToAdviser).join(
+                self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
+        except NoResultFound:
+            raise PersonNotFoundException()
         return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
     def get_persons_by_adviser_regid(self, uwregid, **kwargs):
-        sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
-            self.DB.Employee).join(self.DB.Person).filter(
-            self.DB.Person.uwregid == uwregid).one()
-        sqla_persons = self.DB.session.query(self.DB.Person).join(
-            self.DB.Student).join(self.DB.StudentToAdviser).join(
-            self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
+        try:
+            sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
+                self.DB.Employee).join(self.DB.Person).filter(
+                self.DB.Person.uwregid == uwregid).one()
+            sqla_persons = self.DB.session.query(self.DB.Person).join(
+                self.DB.Student).join(self.DB.StudentToAdviser).join(
+                self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
+        except NoResultFound:
+            raise PersonNotFoundException()
         return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
     """
