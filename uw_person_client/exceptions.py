@@ -4,3 +4,7 @@
 
 class PersonNotFoundException(Exception):
     pass
+
+
+class AdviserNotFoundException(Exception):
+    pass

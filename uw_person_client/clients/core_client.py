@@ -4,7 +4,8 @@
 from sqlalchemy.orm.exc import NoResultFound
 from uw_person_client.clients import AbstractUWPersonClient
 from uw_person_client.databases.uwpds import UWPDS
-from uw_person_client.exceptions import PersonNotFoundException
+from uw_person_client.exceptions import PersonNotFoundException, \
+    AdviserNotFoundException
 from uw_person_client.components import Person, Student, Employee, \
     Transcript, Major, Sport, Adviser, Term, Transfer, Ethnicity
 
@@ -48,42 +49,26 @@ class UWPersonClient(AbstractUWPersonClient):
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
 
-    def get_persons(self, page=None, page_size=None, **kwargs):
+    def get_persons(self, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person)
-        return self._get_page(sqla_persons,
-                              self._map_person,
-                              page=page,
-                              page_size=page_size,
-                              **kwargs)
+        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
-    def get_registered_students(self, page=None, page_size=None, **kwargs):
+    def get_registered_students(self, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).join(
             self.DB.Student).filter(
                 self.DB.Student.enroll_status_code == '12'  # registered
         )
-        return self._get_page(sqla_persons,
-                              self._map_person,
-                              page=page,
-                              page_size=page_size,
-                              **kwargs)
+        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
-    def get_active_students(self, page=None, page_size=None, **kwargs):
+    def get_active_students(self, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).filter(
             self.DB.Person._is_active_student == True)  # noqa
-        return self._get_page(sqla_persons,
-                              self._map_person,
-                              page=page,
-                              page_size=page_size,
-                              **kwargs)
+        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
-    def get_active_employees(self, page=None, page_size=None, **kwargs):
+    def get_active_employees(self, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).filter(
             self.DB.Person._is_active_employee == True)  # noqa
-        return self._get_page(sqla_persons,
-                              self._map_person,
-                              page=page,
-                              page_size=page_size,
-                              **kwargs)
+        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
     def get_advisers(self, advising_program=None, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).join(
@@ -94,18 +79,24 @@ class UWPersonClient(AbstractUWPersonClient):
         return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
     def get_persons_by_adviser_netid(self, uwnetid, **kwargs):
-        sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
-            self.DB.Employee).join(self.DB.Person).filter(
-            self.DB.Person.uwnetid == uwnetid).one()
+        try:
+            sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
+                self.DB.Employee).join(self.DB.Person).filter(
+                self.DB.Person.uwnetid == uwnetid).one()
+        except NoResultFound:
+            raise AdviserNotFoundException()
         sqla_persons = self.DB.session.query(self.DB.Person).join(
             self.DB.Student).join(self.DB.StudentToAdviser).join(
             self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
         return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
 
     def get_persons_by_adviser_regid(self, uwregid, **kwargs):
-        sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
-            self.DB.Employee).join(self.DB.Person).filter(
-            self.DB.Person.uwregid == uwregid).one()
+        try:
+            sqla_adviser = self.DB.session.query(self.DB.Adviser).join(
+                self.DB.Employee).join(self.DB.Person).filter(
+                self.DB.Person.uwregid == uwregid).one()
+        except NoResultFound:
+            raise AdviserNotFoundException()
         sqla_persons = self.DB.session.query(self.DB.Person).join(
             self.DB.Student).join(self.DB.StudentToAdviser).join(
             self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
@@ -114,17 +105,6 @@ class UWPersonClient(AbstractUWPersonClient):
     """
     Private Methods
     """
-
-    def _get_page(self, query, mapper, page=None, page_size=None, **kwargs):
-        """
-        Returns results for a single page of data. If page and page_size are
-        not specified, all results are returned
-        """
-        if page is not None and page_size is not None:
-            # limit results to page
-            query = query.limit(page_size).offset(
-                (page - 1) * page_size)
-        return [mapper(item, **kwargs)for item in query.all()]
 
     def _map_person(self, sqla_person,
                     include_employee=True,
