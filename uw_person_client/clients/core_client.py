@@ -22,14 +22,14 @@ class UWPersonClient(AbstractUWPersonClient):
     def get_person_by_uwnetid(self, uwnetid, **kwargs):
         sqla_person = self.DB.session.query(self.DB.HistoricalPerson).filter(
             self.DB.HistoricalPerson.prior_uwnetid == uwnetid).first()
-        if not sqla_person:
+        if sqla_person is None:
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
 
     def get_person_by_uwregid(self, uwregid, **kwargs):
         sqla_person = self.DB.session.query(self.DB.HistoricalPerson).filter(
             self.DB.HistoricalPerson.prior_uwregid == uwregid).first()
-        if not sqla_person:
+        if sqla_person is None:
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
 
@@ -37,7 +37,7 @@ class UWPersonClient(AbstractUWPersonClient):
         sqla_person = self.DB.session.query(self.DB.Person).join(
             self.DB.Student).filter(
             self.DB.Student.student_number == student_number).one_or_none()
-        if not sqla_person:
+        if sqla_person is None:
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
 
@@ -45,7 +45,7 @@ class UWPersonClient(AbstractUWPersonClient):
         sqla_person = self.DB.session.query(self.DB.Person).join(
             self.DB.Student).filter(
             self.DB.Student.system_key == system_key).one_or_none()
-        if not sqla_person:
+        if sqla_person is None:
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
 
