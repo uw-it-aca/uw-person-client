@@ -11,12 +11,6 @@ from sqlalchemy.orm.exc import NoResultFound
 
 class UWPersonClientTest(TestCase):
 
-    def setUp(self):
-        self.test_return = [1, 2, 3]
-        self.mock_first = Mock()
-        first_attrs = {'first.return_value': self.test_return}
-        self.mock_first.configure_mock(**first_attrs)
-
     @patch('uw_person_client.clients.core_client.UWPDS')
     def test_empty_get_person_by_uwnetid(self, mock_PDS):
         empty_query = None
