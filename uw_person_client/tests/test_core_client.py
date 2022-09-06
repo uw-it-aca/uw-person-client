@@ -40,7 +40,8 @@ class UWPersonClientTest(TestCase):
     @patch('uw_person_client.clients.core_client.UWPDS')
     def test_empty_get_person_by_uwnetid(self, mock_PDS):
         empty_query = None
-        mock_query = self._create_mock_query(empty_query, filters=1, first=True)
+        mock_query = self._create_mock_query(empty_query, filters=1,
+                                             first=True)
 
         mock_PDS.return_value = mock_query
         client = UWPersonClient()
@@ -66,7 +67,8 @@ class UWPersonClientTest(TestCase):
     @patch('uw_person_client.clients.core_client.UWPDS')
     def test_get_person_by_uwregid_not_found(self, mock_PDS):
         empty_query = None
-        mock_query = self._create_mock_query(empty_query, filters=1, first=True)
+        mock_query = self._create_mock_query(empty_query, filters=1,
+                                             first=True)
 
         mock_PDS.return_value = mock_query
         client = UWPersonClient()
@@ -92,7 +94,8 @@ class UWPersonClientTest(TestCase):
     @patch('uw_person_client.clients.core_client.UWPDS')
     def test_get_person_by_student_number_not_found(self, mock_PDS):
         empty_query = None
-        mock_query = self._create_mock_query(empty_query, joins=1, filters=1, one_or_none=True)
+        mock_query = self._create_mock_query(empty_query, joins=1, filters=1,
+                                             one_or_none=True)
 
         mock_PDS.return_value = mock_query
         client = UWPersonClient()
@@ -102,7 +105,8 @@ class UWPersonClientTest(TestCase):
     @patch('uw_person_client.clients.core_client.UWPDS')
     def test_get_person_by_student_number(self, mock_PDS):
         query = MagicMock()
-        mock_query = self._create_mock_query(query, joins=1, filters=1, one_or_none=True)
+        mock_query = self._create_mock_query(query, joins=1, filters=1,
+                                             one_or_none=True)
 
         mock_PDS.return_value = mock_query
         client = UWPersonClient()
@@ -118,7 +122,8 @@ class UWPersonClientTest(TestCase):
     @patch('uw_person_client.clients.core_client.UWPDS')
     def test_get_person_by_system_key_not_found(self, mock_PDS):
         empty_query = None
-        mock_query = self._create_mock_query(empty_query, joins=1, filters=1, one_or_none=True)
+        mock_query = self._create_mock_query(empty_query, joins=1, filters=1,
+                                             one_or_none=True)
 
         mock_PDS.return_value = mock_query
         client = UWPersonClient()
@@ -128,7 +133,8 @@ class UWPersonClientTest(TestCase):
     @patch('uw_person_client.clients.core_client.UWPDS')
     def test_get_person_by_system_key(self, mock_PDS):
         query = MagicMock()
-        mock_query = self._create_mock_query(query, joins=1, filters=1, one_or_none=True)
+        mock_query = self._create_mock_query(query, joins=1, filters=1,
+                                             one_or_none=True)
 
         mock_PDS.return_value = mock_query
         client = UWPersonClient()
@@ -164,7 +170,8 @@ class UWPersonClientTest(TestCase):
     def test_get_registered_students(self, mock_PDS, mock_map_person):
         query = [MagicMock(), MagicMock()]
         calls = [call(q) for q in query]
-        mock_query = self._create_mock_query(query, joins=1, filters=1, all=True)
+        mock_query = self._create_mock_query(query, joins=1, filters=1,
+                                             all=True)
 
         mock_PDS.return_value = mock_query
         client = UWPersonClient()
