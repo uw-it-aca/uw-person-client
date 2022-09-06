@@ -143,13 +143,12 @@ class UWPersonClientTest(TestCase):
                           mock_map_person(mock_person2)])
 
     @patch.object(UWPersonClient, '_map_person', return_value=None)
-    @patch('uw_person_client.clients.core_client.UWPDS')
-    def test_get_registered_students(self, mock_PDS, mock_map_person):
+    def test_get_registered_students(self, mock_map_person):
         client = self.get_mock_person_client()
         mock_person1, mock_person2 = MagicMock(), MagicMock()
         client.DB.session.query.return_value.join.return_value.filter.\
-            return_value.all=MagicMock(
-            return_value=[mock_person1, mock_person2])
+            return_value.all = MagicMock(
+                return_value=[mock_person1, mock_person2])
         return_value = client.get_registered_students()
         # assertions
         client.DB.session.query.assert_called_once_with(client.DB.Person)
@@ -163,190 +162,156 @@ class UWPersonClientTest(TestCase):
                           mock_map_person(mock_person2)])
 
     @patch.object(UWPersonClient, '_map_person', return_value=None)
-    @patch('uw_person_client.clients.core_client.UWPDS')
-    def test_get_active_students(self, mock_PDS, mock_map_person):
-        query = [Mock(), Mock()]
-        calls = [call(q) for q in query]
-
-        mock_all = Mock()
-        all_attrs = {'all.return_value': query}
-        mock_all.configure_mock(**all_attrs)
-
-        mock_filter = Mock()
-        filter_attrs = {'filter.return_value': mock_all}
-        mock_filter.configure_mock(**filter_attrs)
-
-        mock_query = Mock()
-        query_attrs = {'session.query.return_value': mock_filter}
-        mock_query.configure_mock(**query_attrs)
-
-        mock_PDS.return_value = mock_query
-        client = UWPersonClient()
-        client.get_active_students()
-        mock_map_person.assert_has_calls(calls)
+    def test_get_active_students(self, mock_map_person):
+        client = self.get_mock_person_client()
+        mock_person1, mock_person2 = MagicMock(), MagicMock()
+        client.DB.session.query.return_value.filter.return_value.\
+            all = MagicMock(return_value=[mock_person1, mock_person2])
+        return_value = client.get_active_students()
+        # assertions
+        client.DB.session.query.assert_called_once_with(client.DB.Person)
+        client.DB.session.query.return_value.filter.assert_called_once_with(
+            client.DB.Person._is_active_student == True)  # noqa
+        self.assertEqual(return_value,
+                         [mock_map_person(mock_person1),
+                          mock_map_person(mock_person2)])
 
     @patch.object(UWPersonClient, '_map_person', return_value=None)
-    @patch('uw_person_client.clients.core_client.UWPDS')
-    def test_get_active_employees(self, mock_PDS, mock_map_person):
-        query = [Mock(), Mock()]
-        calls = [call(q) for q in query]
-
-        mock_all = Mock()
-        all_attrs = {'all.return_value': query}
-        mock_all.configure_mock(**all_attrs)
-
-        mock_filter = Mock()
-        filter_attrs = {'filter.return_value': mock_all}
-        mock_filter.configure_mock(**filter_attrs)
-
-        mock_query = Mock()
-        query_attrs = {'session.query.return_value': mock_filter}
-        mock_query.configure_mock(**query_attrs)
-
-        mock_PDS.return_value = mock_query
-        client = UWPersonClient()
-        client.get_active_employees()
-        mock_map_person.assert_has_calls(calls)
+    def test_get_active_employees(self, mock_map_person):
+        client = self.get_mock_person_client()
+        mock_person1, mock_person2 = MagicMock(), MagicMock()
+        client.DB.session.query.return_value.filter.return_value.\
+            all = MagicMock(return_value=[mock_person1, mock_person2])
+        return_value = client.get_active_employees()
+        # assertions
+        client.DB.session.query.assert_called_once_with(client.DB.Person)
+        client.DB.session.query.return_value.filter.assert_called_once_with(
+            client.DB.Person._is_active_employee == True)  # noqa
+        self.assertEqual(return_value,
+                         [mock_map_person(mock_person1),
+                          mock_map_person(mock_person2)])
 
     @patch.object(UWPersonClient, '_map_person', return_value=None)
-    @patch('uw_person_client.clients.core_client.UWPDS')
-    def test_get_advisers(self, mock_PDS, mock_map_person):
-        query = [Mock(), Mock()]
-        calls = [call(q) for q in query]
-
-        mock_all = Mock()
-        all_attrs = {'all.return_value': query}
-        mock_all.configure_mock(**all_attrs)
-
-        mock_join = Mock()
-        join_attrs = {'join.return_value': mock_all}
-        mock_join.configure_mock(**join_attrs)
-
-        mock_join2 = Mock()
-        join2_attrs = {'join.return_value': mock_join}
-        mock_join2.configure_mock(**join2_attrs)
-
-        mock_query = Mock()
-        query_attrs = {'session.query.return_value': mock_join2}
-        mock_query.configure_mock(**query_attrs)
-
-        mock_PDS.return_value = mock_query
-        client = UWPersonClient()
-        client.get_advisers()
-        mock_map_person.assert_has_calls(calls)
+    def test_get_advisers(self, mock_map_person):
+        client = self.get_mock_person_client()
+        mock_person1, mock_person2 = MagicMock(), MagicMock()
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.all = MagicMock(
+                return_value=[mock_person1, mock_person2])
+        return_value = client.get_advisers()
+        # assertions
+        client.DB.session.query.assert_called_once_with(client.DB.Person)
+        client.DB.session.query.return_value.join.assert_called_once_with(
+            client.DB.Employee)
+        client.DB.session.query.return_value.join.return_value.join.\
+            assert_called_once_with(client.DB.Adviser)
+        self.assertEqual(return_value,
+                         [mock_map_person(mock_person1),
+                          mock_map_person(mock_person2)])
 
     @patch.object(UWPersonClient, '_map_person', return_value=None)
-    @patch('uw_person_client.clients.core_client.UWPDS')
-    def test_get_advisers_with_program(self, mock_PDS, mock_map_person):
-        query = [Mock(), Mock()]
-        calls = [call(q) for q in query]
+    def test_get_advisers_with_program(self, mock_map_person):
+        client = self.get_mock_person_client()
+        mock_person1, mock_person2 = MagicMock(), MagicMock()
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.filter.return_value.all = MagicMock(
+                return_value=[mock_person1, mock_person2])
+        return_value = client.get_advisers(advising_program='test')
+        # assertions
+        client.DB.session.query.assert_called_once_with(client.DB.Person)
+        client.DB.session.query.return_value.join.assert_called_once_with(
+            client.DB.Employee)
+        client.DB.session.query.return_value.join.return_value.join.\
+            assert_called_once_with(client.DB.Adviser)
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.filter.assert_called_once_with(
+                client.DB.Person._is_active_employee == True)  # noqa
+        self.assertEqual(return_value,
+                         [mock_map_person(mock_person1),
+                          mock_map_person(mock_person2)])
 
-        mock_all = Mock()
-        all_attrs = {'all.return_value': query}
-        mock_all.configure_mock(**all_attrs)
-
-        mock_filter = Mock()
-        filter_attrs = {'filter.return_value': mock_all,
-                        'join.return_value': mock_filter}
-        mock_filter.configure_mock(**filter_attrs)
-
-        mock_join = Mock()
-        join_attrs = {'join.return_value': mock_filter}
-        mock_join.configure_mock(**join_attrs)
-
-        mock_query = Mock()
-        query_attrs = {'session.query.return_value': mock_join}
-        mock_query.configure_mock(**query_attrs)
-
-        mock_PDS.return_value = mock_query
-        client = UWPersonClient()
-        client.get_advisers(advising_program='test')
-        mock_map_person.assert_has_calls(calls)
-
-    @patch('uw_person_client.clients.core_client.UWPDS')
-    def test_get_persons_by_adviser_netid_not_found(self, mock_PDS):
-        mock_query = Mock()
-        query_attrs = {'session.query.side_effect': NoResultFound}
-        mock_query.configure_mock(**query_attrs)
-
-        mock_PDS.return_value = mock_query
-        client = UWPersonClient()
-        self.assertRaises(AdviserNotFoundException,
-                          client.get_persons_by_adviser_netid, 'test')
+    def test_get_persons_by_adviser_netid_not_found(self):
+        client = self.get_mock_person_client()
+        client.DB.session.query = MagicMock(side_effect=NoResultFound)
+        with self.assertRaises(AdviserNotFoundException):
+            client.get_persons_by_adviser_netid('test')
 
     @patch.object(UWPersonClient, '_map_person', return_value=None)
-    @patch('uw_person_client.clients.core_client.UWPDS')
-    def test_get_persons_by_adviser_netid(self, mock_PDS, mock_map_person):
-        adviser_mock = Mock()
-        mock_id = PropertyMock(return_value=1)
-        type(adviser_mock).adviser_id = mock_id
+    def test_get_persons_by_adviser_netid(self, mock_map_person):
+        client = self.get_mock_person_client()
+        mock_adviser = MagicMock()
+        mock_person1, mock_person2 = MagicMock(), MagicMock()
+        mock_netid = 'netid'
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.filter.return_value.one = MagicMock(
+                return_value=mock_adviser)
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.join.return_value.filter.return_value.all = MagicMock(
+                return_value=[mock_person1, mock_person2])
+        return_value = client.get_persons_by_adviser_netid(mock_netid)
+        # assertions
+        client.DB.session.query.assert_any_call(client.DB.Person)
+        client.DB.session.query.assert_any_call(client.DB.Adviser)
+        client.DB.session.query.return_value.join.assert_any_call(
+            client.DB.Employee)
+        client.DB.session.query.return_value.join.assert_any_call(
+            client.DB.Student)
+        client.DB.session.query.return_value.join.return_value.join.\
+            assert_any_call(client.DB.Person)
+        client.DB.session.query.return_value.join.return_value.join.\
+            assert_any_call(client.DB.StudentToAdviser)
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.filter.assert_called_once_with(
+                client.DB.Person.uwnetid == mock_netid)
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.join.assert_called_once_with(
+                client.DB.Adviser)
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.join.return_value.filter.assert_called_once_with(
+                client.DB.Adviser.id == mock_adviser.id)
+        self.assertEqual(return_value,
+                         [mock_map_person(mock_person1),
+                          mock_map_person(mock_person2)])
 
-        query = [Mock(), Mock()]
-        calls = [call(q) for q in query]
-
-        mock_all = Mock()
-        all_attrs = {'all.return_value': query,
-                     'one.return_value': adviser_mock}
-        mock_all.configure_mock(**all_attrs)
-
-        mock_filter = Mock()
-        filter_attrs = {'filter.return_value': mock_all,
-                        'join.return_value': mock_filter}
-        mock_filter.configure_mock(**filter_attrs)
-
-        mock_join = Mock()
-        join_attrs = {'join.return_value': mock_filter}
-        mock_join.configure_mock(**join_attrs)
-
-        mock_query = Mock()
-        query_attrs = {'session.query.return_value': mock_join}
-        mock_query.configure_mock(**query_attrs)
-
-        mock_PDS.return_value = mock_query
-        client = UWPersonClient()
-        client.get_persons_by_adviser_netid('test')
-        mock_map_person.assert_has_calls(calls)
-
-    @patch('uw_person_client.clients.core_client.UWPDS')
-    def test_get_persons_by_adviser_regid_not_found(self, mock_PDS):
-        mock_query = Mock()
-        query_attrs = {'session.query.side_effect': NoResultFound}
-        mock_query.configure_mock(**query_attrs)
-
-        mock_PDS.return_value = mock_query
-        client = UWPersonClient()
-        self.assertRaises(AdviserNotFoundException,
-                          client.get_persons_by_adviser_regid, 'test')
+    def test_get_persons_by_adviser_regid_not_found(self):
+        client = self.get_mock_person_client()
+        client.DB.session.query = MagicMock(side_effect=NoResultFound)
+        with self.assertRaises(AdviserNotFoundException):
+            client.get_persons_by_adviser_regid('test')
 
     @patch.object(UWPersonClient, '_map_person', return_value=None)
-    @patch('uw_person_client.clients.core_client.UWPDS')
-    def test_get_persons_by_adviser_regid(self, mock_PDS, mock_map_person):
-        adviser_mock = Mock()
-        mock_id = PropertyMock(return_value=1)
-        type(adviser_mock).adviser_id = mock_id
-
-        query = [Mock(), Mock()]
-        calls = [call(q) for q in query]
-
-        mock_all = Mock()
-        all_attrs = {'all.return_value': query,
-                     'one.return_value': adviser_mock}
-        mock_all.configure_mock(**all_attrs)
-
-        mock_filter = Mock()
-        filter_attrs = {'filter.return_value': mock_all,
-                        'join.return_value': mock_filter}
-        mock_filter.configure_mock(**filter_attrs)
-
-        mock_join = Mock()
-        join_attrs = {'join.return_value': mock_filter}
-        mock_join.configure_mock(**join_attrs)
-
-        mock_query = Mock()
-        query_attrs = {'session.query.return_value': mock_join}
-        mock_query.configure_mock(**query_attrs)
-
-        mock_PDS.return_value = mock_query
-        client = UWPersonClient()
-        client.get_persons_by_adviser_regid('test')
-        mock_map_person.assert_has_calls(calls)
+    def test_get_persons_by_adviser_regid(self, mock_map_person):
+        client = self.get_mock_person_client()
+        mock_adviser = MagicMock()
+        mock_person1, mock_person2 = MagicMock(), MagicMock()
+        mock_regid = 'regid'
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.filter.return_value.one = MagicMock(
+                return_value=mock_adviser)
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.join.return_value.filter.return_value.all = MagicMock(
+                return_value=[mock_person1, mock_person2])
+        return_value = client.get_persons_by_adviser_regid(mock_regid)
+        # assertions
+        client.DB.session.query.assert_any_call(client.DB.Person)
+        client.DB.session.query.assert_any_call(client.DB.Adviser)
+        client.DB.session.query.return_value.join.assert_any_call(
+            client.DB.Employee)
+        client.DB.session.query.return_value.join.assert_any_call(
+            client.DB.Student)
+        client.DB.session.query.return_value.join.return_value.join.\
+            assert_any_call(client.DB.Person)
+        client.DB.session.query.return_value.join.return_value.join.\
+            assert_any_call(client.DB.StudentToAdviser)
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.filter.assert_called_once_with(
+                client.DB.Person.uwregid == mock_regid)
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.join.assert_called_once_with(
+                client.DB.Adviser)
+        client.DB.session.query.return_value.join.return_value.join.\
+            return_value.join.return_value.filter.assert_called_once_with(
+                client.DB.Adviser.id == mock_adviser.id)
+        self.assertEqual(return_value,
+                         [mock_map_person(mock_person1),
+                          mock_map_person(mock_person2)])
