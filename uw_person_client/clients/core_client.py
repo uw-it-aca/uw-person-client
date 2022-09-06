@@ -58,17 +58,20 @@ class UWPersonClient(AbstractUWPersonClient):
             self.DB.Student).filter(
                 self.DB.Student.enroll_status_code == '12'  # registered
         )
-        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
+        return [self._map_person(item, **kwargs)
+                for item in sqla_persons.all()]
 
     def get_active_students(self, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).filter(
             self.DB.Person._is_active_student == True)  # noqa
-        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
+        return [self._map_person(item, **kwargs)
+                for item in sqla_persons.all()]
 
     def get_active_employees(self, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).filter(
             self.DB.Person._is_active_employee == True)  # noqa
-        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
+        return [self._map_person(item, **kwargs)
+                for item in sqla_persons.all()]
 
     def get_advisers(self, advising_program=None, **kwargs):
         sqla_persons = self.DB.session.query(self.DB.Person).join(
@@ -76,7 +79,8 @@ class UWPersonClient(AbstractUWPersonClient):
         if advising_program:
             sqla_persons = sqla_persons.filter(
                 self.DB.Adviser.advising_program == advising_program)
-        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
+        return [self._map_person(item, **kwargs)
+                for item in sqla_persons.all()]
 
     def get_persons_by_adviser_netid(self, uwnetid, **kwargs):
         try:
@@ -88,7 +92,8 @@ class UWPersonClient(AbstractUWPersonClient):
         sqla_persons = self.DB.session.query(self.DB.Person).join(
             self.DB.Student).join(self.DB.StudentToAdviser).join(
             self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
-        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
+        return [self._map_person(item, **kwargs)
+                for item in sqla_persons.all()]
 
     def get_persons_by_adviser_regid(self, uwregid, **kwargs):
         try:
@@ -100,7 +105,8 @@ class UWPersonClient(AbstractUWPersonClient):
         sqla_persons = self.DB.session.query(self.DB.Person).join(
             self.DB.Student).join(self.DB.StudentToAdviser).join(
             self.DB.Adviser).filter(self.DB.Adviser.id == sqla_adviser.id)
-        return [self._map_person(item, **kwargs)for item in sqla_persons.all()]
+        return [self._map_person(item, **kwargs)
+                for item in sqla_persons.all()]
 
     """
     Private Methods
