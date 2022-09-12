@@ -12,31 +12,6 @@ from sqlalchemy.orm.exc import NoResultFound
 
 class UWPersonClientTest(TestCase):
 
-    def _get_query_string(self, joins=0, filters=0, first=False, all=False,
-                          one=False, one_or_none=False):
-        query_string = "session.query.return_value"
-        for i in range(joins):
-            query_string += ".join.return_value"
-        for i in range(filters):
-            query_string += ".filter.return_value"
-        if first:
-            query_string += ".first.return_value"
-        if all:
-            query_string += ".all.return_value"
-        if one:
-            query_string += ".one.return_value"
-        if one_or_none:
-            query_string += ".one_or_none.return_value"
-        return query_string
-
-    def _create_mock_query(self, result, **kwargs):
-        mock_query = MagicMock()
-
-        query_string = self._get_query_string(**kwargs)
-        query_attrs = {query_string: result}
-        mock_query.configure_mock(**query_attrs)
-        return mock_query
-
     @patch('uw_person_client.clients.core_client.UWPDS')
     def get_mock_person_client(self, mock_uwpds):
         client = UWPersonClient()
