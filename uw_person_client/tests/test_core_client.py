@@ -217,7 +217,8 @@ class UWPersonClientTest(TestCase):
         client.DB.session.query.return_value.join.return_value.join.\
             return_value.filter.return_value.all = MagicMock(
                 return_value=[mock_person1, mock_person2])
-        return_value = client.get_advisers(advising_program='test')
+        advising_program = 'test'
+        return_value = client.get_advisers(advising_program=advising_program)
         # assertions
         client.DB.session.query.assert_called_once_with(client.DB.Person)
         client.DB.session.query.return_value.join.assert_called_once_with(
@@ -226,7 +227,7 @@ class UWPersonClientTest(TestCase):
             assert_called_once_with(client.DB.Adviser)
         client.DB.session.query.return_value.join.return_value.join.\
             return_value.filter.assert_called_once_with(
-                client.DB.Person._is_active_employee == True)  # noqa
+                client.DB.Adviser.advising_program == advising_program)
         self.assertEqual(return_value,
                          [mock_map_person(mock_person1),
                           mock_map_person(mock_person2)])
@@ -242,7 +243,7 @@ class UWPersonClientTest(TestCase):
         client = self.get_mock_person_client()
         mock_adviser = MagicMock()
         mock_person1, mock_person2 = MagicMock(), MagicMock()
-        mock_netid = 'netid'
+        mock_netid = MagicMock()
         client.DB.session.query.return_value.join.return_value.join.\
             return_value.filter.return_value.one = MagicMock(
                 return_value=mock_adviser)
@@ -285,7 +286,7 @@ class UWPersonClientTest(TestCase):
         client = self.get_mock_person_client()
         mock_adviser = MagicMock()
         mock_person1, mock_person2 = MagicMock(), MagicMock()
-        mock_regid = 'regid'
+        mock_regid = MagicMock()
         client.DB.session.query.return_value.join.return_value.join.\
             return_value.filter.return_value.one = MagicMock(
                 return_value=mock_adviser)
@@ -319,6 +320,21 @@ class UWPersonClientTest(TestCase):
 
     def test_map_person(self):
         client = self.get_mock_person_client()
-        mock_person1 = MagicMock()
-        return_value = client._map_person(mock_person1)
-        self.assertIsInstance(return_value, Person)
+        mock_person = MagicMock()
+        mock_person.uwnetid = 'netid'
+        mock_person.uwregid = 'regid'
+        mock_person.first_name = 'first'
+        client.DB.session.query.return_value.filter.return_value.one.\
+            return_value = mock_person.student_or_employee
+        person = client._map_person(mock_person)
+        # assertions
+        self.assertIsInstance(person, Person)
+        self.assertEqual(person.uwnetid, mock_person.uwnetid)
+        self.assertEqual(person.uwregid, mock_person.uwregid)
+        self.assertEqual(person.first_name, mock_person.first_name)
+        self.assertEqual(person.student.student_number,
+                         mock_person.student_or_employee.student_number)
+        self.assertEqual(person.employee.employee_number,
+                         mock_person.student_or_employee.employee_number)
+        client.DB.session.query.assert_any_call(client.DB.Student)
+        client.DB.session.query.assert_any_call(client.DB.Employee)
