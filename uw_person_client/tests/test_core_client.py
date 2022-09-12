@@ -2,10 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from unittest import TestCase
-from unittest.mock import PropertyMock, call, patch, Mock, MagicMock
+from unittest.mock import patch, MagicMock
 from uw_person_client.exceptions import AdviserNotFoundException, \
     PersonNotFoundException
 from uw_person_client.clients.core_client import UWPersonClient
+from uw_person_client.components import Person
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -315,3 +316,9 @@ class UWPersonClientTest(TestCase):
         self.assertEqual(return_value,
                          [mock_map_person(mock_person1),
                           mock_map_person(mock_person2)])
+
+    def test_map_person(self):
+        client = self.get_mock_person_client()
+        mock_person1 = MagicMock()
+        return_value = client._map_person(mock_person1)
+        self.assertIsInstance(return_value, Person)
