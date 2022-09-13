@@ -114,7 +114,8 @@ class UWPersonClient(AbstractUWPersonClient):
                     include_student_sports=True,
                     include_student_advisers=True,
                     include_student_majors=True,
-                    include_student_pending_majors=True):
+                    include_student_pending_majors=True,
+                    include_student_requested_majors=True):
         person = Person()
         person.uwnetid = sqla_person.uwnetid
         person.uwregid = sqla_person.uwregid
@@ -149,6 +150,7 @@ class UWPersonClient(AbstractUWPersonClient):
                     include_student_advisers=include_student_advisers,
                     include_student_majors=include_student_majors,
                     include_student_pending_majors=include_student_pending_majors,  # noqa
+                    include_student_requested_majors=include_student_requested_majors  # noqa
                 )
             except NoResultFound:
                 pass
@@ -169,7 +171,8 @@ class UWPersonClient(AbstractUWPersonClient):
                      include_student_sports=True,
                      include_student_advisers=True,
                      include_student_majors=True,
-                     include_student_pending_majors=True):
+                     include_student_pending_majors=True,
+                     include_student_requested_majors=True):
         student = Student()
 
         student.system_key = sqla_student.system_key
@@ -322,9 +325,19 @@ class UWPersonClient(AbstractUWPersonClient):
                     self._map_major(sqla_student.pending_major_3))
             student.pending_majors = pending_majors
 
-        student.requested_major1_code = sqla_student.requested_major1_code
-        student.requested_major2_code = sqla_student.requested_major2_code
-        student.requested_major3_code = sqla_student.requested_major2_code
+        if include_student_requested_majors:
+            # map requested majors
+            requested_majors = []
+            if sqla_student.requested_major_1:
+                requested_majors.append(
+                    self._map_major(sqla_student.requested_major_1))
+            if sqla_student.requested_major_2:
+                requested_majors.append(
+                    self._map_major(sqla_student.requested_major_2))
+            if sqla_student.requested_major_3:
+                requested_majors.append(
+                    self._map_major(sqla_student.requested_major_3))
+            student.requested_majors = requested_majors
 
         student.intended_major1_code = sqla_student.intended_major1_code
         student.intended_major2_code = sqla_student.intended_major2_code
