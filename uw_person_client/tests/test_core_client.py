@@ -6,7 +6,8 @@ from unittest.mock import patch, MagicMock
 from uw_person_client.exceptions import AdviserNotFoundException, \
     PersonNotFoundException
 from uw_person_client.clients.core_client import UWPersonClient
-from uw_person_client.components import Adviser, Employee, Ethnicity, Major, Person, Sport, Student, Term, Transcript, Transfer
+from uw_person_client.components import Adviser, Employee, Ethnicity, Major, \
+    Person, Sport, Student, Term, Transcript, Transfer
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -483,7 +484,7 @@ class UWPersonClientTest(TestCase):
         # assertions
         self.assertIsInstance(student, Student)
         for key in ['ethnicities', 'adviser', 'sport', 'transcript',
-                    'transfer']:    
+                    'transfer']:
             del mock_dict[key]
         self.assertDictContainsSubset(mock_dict, student.to_dict())
         mock_map_term.assert_called()
@@ -507,7 +508,7 @@ class UWPersonClientTest(TestCase):
 
         mock_dict = self._mock_to_dict(mock_employee)
         employee = client._map_employee(mock_employee)
-        
+
         # assertions
         self.assertIsInstance(employee, Employee)
         self.assertEqual(mock_employee.title, employee.primary_title)
@@ -529,7 +530,7 @@ class UWPersonClientTest(TestCase):
 
         mock_dict = self._mock_to_dict(mock_adviser)
         adviser = client._map_adviser(mock_adviser)
-        
+
         # assertions
         self.assertIsInstance(adviser, Adviser)
         self.assertDictContainsSubset(mock_dict, adviser.to_dict())
@@ -541,7 +542,7 @@ class UWPersonClientTest(TestCase):
 
         mock_dict = self._mock_to_dict(mock_sport)
         sport = client._map_sport(mock_sport)
-        
+
         # assertions
         self.assertIsInstance(sport, Sport)
         self.assertDictContainsSubset(mock_dict, sport.to_dict())
@@ -555,7 +556,7 @@ class UWPersonClientTest(TestCase):
 
         mock_dict = self._mock_to_dict(mock_ethnicity)
         ethnicity = client._map_ethnicity(mock_ethnicity)
-        
+
         # assertions
         self.assertIsInstance(ethnicity, Ethnicity)
         self.assertDictContainsSubset(mock_dict, ethnicity.to_dict())
@@ -600,7 +601,7 @@ class UWPersonClientTest(TestCase):
 
         mock_dict = self._mock_to_dict(mock_major)
         major = client._map_major(mock_major)
-        
+
         # assertions
         self.assertIsInstance(major, Major)
         self.assertDictContainsSubset(mock_dict, major.to_dict())
@@ -639,7 +640,7 @@ class UWPersonClientTest(TestCase):
 
         mock_dict = self._mock_to_dict(mock_transcript)
         transcript = client._map_transcript(mock_transcript)
-        
+
         # assertions
         self.assertIsInstance(transcript, Transcript)
         self.assertEqual(mock_map_term.return_value, transcript.tran_term)
@@ -688,7 +689,7 @@ class UWPersonClientTest(TestCase):
 
         mock_dict = self._mock_to_dict(mock_transfer)
         transfer = client._map_transfer(mock_transfer)
-        
+
         # assertions
         self.assertIsInstance(transfer, Transfer)
         self.assertDictContainsSubset(mock_dict, transfer.to_dict())
@@ -701,7 +702,7 @@ class UWPersonClientTest(TestCase):
 
         mock_dict = self._mock_to_dict(mock_term)
         term = client._map_term(mock_term)
-        
+
         # assertions
         self.assertIsInstance(term, Term)
         self.assertDictContainsSubset(mock_dict, term.to_dict())
