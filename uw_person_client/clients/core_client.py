@@ -331,7 +331,7 @@ class UWPersonClient(AbstractUWPersonClient):
 
         student.requested_major1_code = sqla_student.requested_major1_code
         student.requested_major2_code = sqla_student.requested_major2_code
-        student.requested_major3_code = sqla_student.requested_major2_code
+        student.requested_major3_code = sqla_student.requested_major3_code
 
         student.intended_major1_code = sqla_student.intended_major1_code
         student.intended_major2_code = sqla_student.intended_major2_code
