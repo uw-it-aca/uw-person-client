@@ -59,7 +59,7 @@ class AbstractBase():
                     new_obj = Term()
                     obj.leave_ends_term = new_obj.from_dict(value, obj=new_obj)
             elif isinstance(value, list):
-                if "majors" in key:
+                if key == "majors" or key == "pending_majors":
                     obj_cls = Major
                 elif key == "advisers":
                     obj_cls = Adviser
