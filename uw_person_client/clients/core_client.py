@@ -4,10 +4,11 @@
 from sqlalchemy.orm.exc import NoResultFound
 from uw_person_client.clients import AbstractUWPersonClient
 from uw_person_client.databases.uwpds import UWPDS
-from uw_person_client.exceptions import PersonNotFoundException, \
-    AdviserNotFoundException
-from uw_person_client.components import Person, Student, Employee, \
-    Transcript, Major, Sport, Adviser, Term, Transfer, Ethnicity
+from uw_person_client.exceptions import (
+    PersonNotFoundException, AdviserNotFoundException)
+from uw_person_client.components import (
+    Person, Student, Employee, Transcript, Major, Sport, Adviser, Term,
+    Transfer)
 
 
 class UWPersonClient(AbstractUWPersonClient):
@@ -189,6 +190,10 @@ class UWPersonClient(AbstractUWPersonClient):
             sqla_student.applied_to_graduate_yr_qtr_desc
         student.applied_to_graduate_yr_qtr_id = \
             sqla_student.applied_to_graduate_yr_qtr_id
+        student.assigned_ethnic_code = sqla_student.assigned_ethnic_code
+        student.assigned_ethnic_desc = sqla_student.assigned_ethnic_desc
+        student.assigned_ethnic_group_desc = \
+            sqla_student.assigned_ethnic_group_desc
         student.asuwind = sqla_student.asuwind
         student.birth_city = sqla_student.birth_city
         student.birth_country = sqla_student.birth_country
@@ -298,12 +303,6 @@ class UWPersonClient(AbstractUWPersonClient):
             sqla_student.admitted_for_yr_qtr_desc
         student.admitted_for_yr_qtr_id = sqla_student.admitted_for_yr_qtr_id
 
-        # map ethnicity
-        student.ethnicities = []
-        for ethnicity in sqla_student.ethnicities:
-            ethnicity = self._map_ethnicity(ethnicity)
-            student.ethnicities.append(ethnicity)
-
         if include_student_majors:
             # map majors
             majors = []
@@ -398,14 +397,6 @@ class UWPersonClient(AbstractUWPersonClient):
         sport = Sport()
         sport.sport_code = sqla_sport.sport_code
         return sport
-
-    def _map_ethnicity(self, sqla_ethnicity):
-        ethnicity = Ethnicity()
-        ethnicity.assigned_ethnic_code = sqla_ethnicity.assigned_ethnic_code
-        ethnicity.assigned_ethnic_desc = sqla_ethnicity.assigned_ethnic_desc
-        ethnicity.assigned_ethnic_group_desc = \
-            sqla_ethnicity.assigned_ethnic_group_desc
-        return ethnicity
 
     def _map_major(self, sqla_major):
         major = Major()

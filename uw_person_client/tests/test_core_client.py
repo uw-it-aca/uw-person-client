@@ -3,11 +3,12 @@
 
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
-from uw_person_client.exceptions import AdviserNotFoundException, \
-    PersonNotFoundException
+from uw_person_client.exceptions import (
+    AdviserNotFoundException, PersonNotFoundException)
 from uw_person_client.clients.core_client import UWPersonClient
-from uw_person_client.components import Adviser, Employee, Ethnicity, Major, \
-    Person, Sport, Student, Term, Transcript, Transfer
+from uw_person_client.components import (
+    Adviser, Employee, Major, Person, Sport, Student, Term, Transcript,
+    Transfer)
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -369,15 +370,13 @@ class UWPersonClientTest(TestCase):
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_person')
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_major')
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_term')
-    @patch('uw_person_client.clients.core_client.UWPersonClient.'
-           '_map_ethnicity')
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_sport')
     @patch('uw_person_client.clients.core_client.UWPersonClient.'
            '_map_transcript')
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_transfer')
     def test_map_student(self, mock_map_transfer, mock_map_transcript,
-                         mock_map_sport, mock_map_ethnicity, mock_map_term,
-                         mock_map_major, mock_map_person):
+                         mock_map_sport, mock_map_term, mock_map_major,
+                         mock_map_person):
         client = self.get_mock_person_client()
         mock_student = MagicMock()
         mock_student.system_key = MagicMock()
@@ -388,6 +387,9 @@ class UWPersonClientTest(TestCase):
         mock_student.application_type_desc = MagicMock()
         mock_student.applied_to_graduate_yr_qtr_desc = MagicMock()
         mock_student.applied_to_graduate_yr_qtr_id = MagicMock()
+        mock_student.assigned_ethnic_code = MagicMock()
+        mock_student.assigned_ethnic_desc = MagicMock()
+        mock_student.assigned_ethnic_group_desc = MagicMock()
         mock_student.asuwind = MagicMock()
         mock_student.birth_city = MagicMock()
         mock_student.birth_country = MagicMock()
@@ -472,7 +474,6 @@ class UWPersonClientTest(TestCase):
         mock_student.veteran_benefit_desc = MagicMock()
         mock_student.veteran_desc = MagicMock()
         mock_student.visa_type = MagicMock()
-        mock_student.ethnicities = [MagicMock(), MagicMock()]
         mock_student.sport = [MagicMock(), MagicMock()]
         mock_student.adviser = [MagicMock(), MagicMock()]
         mock_student.transcript = [MagicMock(), MagicMock()]
@@ -483,12 +484,10 @@ class UWPersonClientTest(TestCase):
         student = client._map_student(mock_student)
         # assertions
         self.assertIsInstance(student, Student)
-        for key in ['ethnicities', 'adviser', 'sport', 'transcript',
-                    'transfer']:
+        for key in ['adviser', 'sport', 'transcript', 'transfer']:
             del mock_dict[key]
         self.assertDictContainsSubset(mock_dict, student.to_dict())
         mock_map_term.assert_called()
-        mock_map_ethnicity.assert_called()
         mock_map_sport.assert_called()
         mock_map_major.assert_called()
         mock_map_person.assert_called()
@@ -546,20 +545,6 @@ class UWPersonClientTest(TestCase):
         # assertions
         self.assertIsInstance(sport, Sport)
         self.assertDictContainsSubset(mock_dict, sport.to_dict())
-
-    def test_map_ethnicity(self):
-        client = self.get_mock_person_client()
-        mock_ethnicity = MagicMock()
-        mock_ethnicity.assigned_ethnic_code = MagicMock()
-        mock_ethnicity.assigned_ethnic_desc = MagicMock()
-        mock_ethnicity.assigned_ethnic_group_desc = MagicMock()
-
-        mock_dict = self._mock_to_dict(mock_ethnicity)
-        ethnicity = client._map_ethnicity(mock_ethnicity)
-
-        # assertions
-        self.assertIsInstance(ethnicity, Ethnicity)
-        self.assertDictContainsSubset(mock_dict, ethnicity.to_dict())
 
     def test_map_major(self):
         client = self.get_mock_person_client()
