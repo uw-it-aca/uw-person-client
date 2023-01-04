@@ -60,6 +60,9 @@
     "application_type_desc": "2YR TRANSFER",
     "applied_to_graduate_yr_qtr_desc": "Autumn 2015",
     "applied_to_graduate_yr_qtr_id": "20154.0",
+    "assigned_ethnic_code": "987",
+    "assigned_ethnic_desc": "NOT INDICATED",
+    "assigned_ethnic_group_desc": "Not Indicated",
     "asuwind": true,
     "birth_city": "Bothell",
     "birth_country": "USA",
@@ -78,13 +81,6 @@
     "emergency_name": "",
     "emergency_phone": "",
     "enroll_status_code": "12",
-    "ethnicities": [
-      {
-        "assigned_ethnic_code": "987",
-        "assigned_ethnic_desc": "NOT INDICATED",
-        "assigned_ethnic_group_desc": "Not Indicated"
-      }
-    ],
     "exemption_code": "0",
     "exemption_desc": "NONE",
     "external_email": "jbothell@uw.edw",

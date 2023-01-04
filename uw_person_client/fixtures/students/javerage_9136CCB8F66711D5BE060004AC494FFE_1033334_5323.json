@@ -62,6 +62,9 @@
     "application_type_desc": "FRESHMAN",
     "applied_to_graduate_yr_qtr_desc": null,
     "applied_to_graduate_yr_qtr_id": "NaN",
+    "assigned_ethnic_code": "800",
+    "assigned_ethnic_desc": "WHITE",
+    "assigned_ethnic_group_desc": "Caucasian",
     "asuwind": false,
     "birth_city": "Seattle",
     "birth_country": "USA",
@@ -80,13 +83,6 @@
     "emergency_name": "",
     "emergency_phone": "",
     "enroll_status_code": "12",
-    "ethnicities": [
-      {
-        "assigned_ethnic_code": "800",
-        "assigned_ethnic_desc": "WHITE",
-        "assigned_ethnic_group_desc": "Caucasian"
-      }
-    ],
     "exemption_code": "0",
     "exemption_desc": "NONE",
     "external_email": "javerage@gmail.com",
