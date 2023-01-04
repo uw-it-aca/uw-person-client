@@ -3,9 +3,11 @@
 #
 # Preconditions:
 #
-#  1) Application contains a setup.py file
+#  1) Application test suite is kicked off by APP_NAME/test.py
 #
-#  2) Application repo has access to the required secret
+#  2) Application contains a setup.py file
+#
+#  3) Application repo has access to the required secret
 #     at https://github.com/organizations/uw-it-aca/settings/secrets:
 #
 #     PYPI_API_TOKEN
@@ -14,19 +16,15 @@
 #
 #  1) Set APP_NAME to the name of the package name/directory.
 #
-#  2) Set CONF_PATH to a path containing a urls.py and/or settings.py file
-#     used by the test suite, if any
-#
-#  3) Verify that the lists of branches for push/pull_request is appropriate,
+#  2) Verify that the lists of branches for push/pull_request is appropriate,
 #     and add other branch names if needed.
-#
-#  4) Update the matrix of django versions to test, if necessary.
 #
 ---
 name: tests
 
 env:
   APP_NAME: uw_person_client
+
 on:
   push:
     branches: [main, master, qa, develop]
@@ -39,33 +37,33 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
-          python-version: 3.6
+          python-version: '3.8'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install commonconf nose2 coverage coveralls==2.2.0
 
       - name: Run Python Linters
         uses: uw-it-aca/actions/python-linters@main
         with:
           app_name: ${APP_NAME}
 
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e .
-          pip install nose2 commonconf coverage coveralls==2.2.0
       - name: Run Tests
-        env:
-          LIVE_TESTS: 1
         run: |
           python -m compileall ${APP_NAME}/
           coverage run ${APP_NAME}/test.py -v
+
       - name: Report Test Coverage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -77,16 +75,16 @@ jobs:
 
     needs: test
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: '3.8'
 
       - name: Publish to PyPi
         uses: uw-it-aca/actions/publish-pypi@main

@@ -26,7 +26,6 @@ class UWPDS(Postgres):
         self.Adviser = UWPDS.Base.classes.adviser
         # student classes
         self.Student = UWPDS.Base.classes.student
-        self.Ethnicity = UWPDS.Base.classes.ethnicity
         self.Major = UWPDS.Base.classes.major
         self.Sport = UWPDS.Base.classes.sport
         self.StudentToSport = UWPDS.Base.classes.student_to_sport
@@ -45,13 +44,6 @@ class UWPDS(Postgres):
 
         student_to_adviser = Table(
             'student_to_adviser',
-            UWPDS.Base.metadata,
-            autoload=True,
-            autoload_with=self.engine
-        )
-
-        student_to_ethnicity = Table(
-            'student_to_ethnicity',
             UWPDS.Base.metadata,
             autoload=True,
             autoload_with=self.engine
@@ -108,10 +100,6 @@ class UWPDS(Postgres):
             pending_major_3 = \
                 relationship("major", foreign_keys=[pending_major_3_id],
                              viewonly=True)
-
-            ethnicities = relationship("ethnicity",
-                                       secondary=student_to_ethnicity,
-                                       viewonly=True)
             transcript = relationship(
                 "Transcript", back_populates="student", uselist=True,
                 viewonly=True)
@@ -152,4 +140,3 @@ class UWPDS(Postgres):
         UWPDS.Base.classes.transcript = Transcript
         UWPDS.Base.classes.student_to_sport = student_to_sport
         UWPDS.Base.classes.student_to_adviser = student_to_adviser
-        UWPDS.Base.classes.student_to_ethnicity = student_to_ethnicity
