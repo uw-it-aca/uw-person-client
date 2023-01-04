@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-
 class AbstractUWPersonClient():
 
     def get_person_by_uwnetid(self, uwnetid):
