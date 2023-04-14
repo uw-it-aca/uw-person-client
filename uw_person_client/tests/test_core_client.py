@@ -32,10 +32,9 @@ class UWPersonClientTest(TestCase):
 
         return_value = client.get_person_by_uwnetid(mock_netid, arg1='arg1')
         # assertions
-        client.DB.session.query.assert_called_once_with(
-            client.DB.HistoricalPerson)
+        client.DB.session.query.assert_called_once_with(client.DB.Person)
         client.DB.session.query.return_value.filter.assert_called_once_with(
-            client.DB.HistoricalPerson.prior_uwnetid == mock_netid)
+            client.DB.Person.uwnetid == mock_netid)
         client.DB.session.query.return_value.filter.return_value.first.\
             assert_called_once()
         self.assertEqual(
@@ -58,10 +57,9 @@ class UWPersonClientTest(TestCase):
 
         return_value = client.get_person_by_uwregid(mock_regid, arg1='arg1')
         # assertions
-        client.DB.session.query.assert_called_once_with(
-            client.DB.HistoricalPerson)
+        client.DB.session.query.assert_called_once_with(client.DB.Person)
         client.DB.session.query.return_value.filter.assert_called_once_with(
-            client.DB.HistoricalPerson.prior_uwregid == mock_regid)
+            client.DB.Person.uwregid == mock_regid)
         client.DB.session.query.return_value.filter.return_value.first.\
             assert_called_once()
         self.assertEqual(
