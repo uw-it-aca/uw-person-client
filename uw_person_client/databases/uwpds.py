@@ -47,7 +47,6 @@ class UWPDS(Postgres):
             autoload_with=self.engine
         )
 
-
         class Student(UWPDS.Base):
             __tablename__ = "student"
             __table_args__ = {'extend_existing': True}
