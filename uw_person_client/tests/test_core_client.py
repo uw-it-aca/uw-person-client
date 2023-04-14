@@ -22,11 +22,12 @@ class UWPersonClientTest(TestCase):
         return client
 
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_person')
-    def test_get_person_by_uwnetid(self, mock_map_person):
+    @patch('uw_person_client.clients.core_client.or_')
+    def test_get_person_by_uwnetid(self, mock_or, mock_map_person):
         client = self.get_mock_person_client()
         # person exists
         mock_person = MagicMock()
-        mock_netid = 'test',
+        mock_netid = 'test'
         client.DB.session.query.return_value.filter.return_value.first = \
             MagicMock(return_value=mock_person)
 
@@ -34,24 +35,25 @@ class UWPersonClientTest(TestCase):
         # assertions
         client.DB.session.query.assert_called_once_with(client.DB.Person)
         client.DB.session.query.return_value.filter.assert_called_once_with(
-            client.DB.Person.uwnetid == mock_netid)
-        client.DB.session.query.return_value.filter.return_value.first.\
+            mock_or)
+        client.DB.session.query.return_value.filter.return_value.one_or_none.\
             assert_called_once()
         self.assertEqual(
             return_value, mock_map_person(mock_person, arg1='arg1'))
 
         # no person found
-        client.DB.session.query.return_value.filter.return_value.first = \
+        client.DB.session.query.return_value.filter.return_value.one_or_none =\
             MagicMock(return_value=None)
         with self.assertRaises(PersonNotFoundException):
             client.get_person_by_uwnetid(mock_netid)
 
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_person')
-    def test_get_person_by_uwregid(self, mock_map_person):
+    @patch('uw_person_client.clients.core_client.or_')
+    def test_get_person_by_uwregid(self, mock_or, mock_map_person):
         client = self.get_mock_person_client()
         # person exists
         mock_person = MagicMock()
-        mock_regid = 'test',
+        mock_regid = 'test'
         client.DB.session.query.return_value.filter.return_value.first = \
             MagicMock(return_value=mock_person)
 
@@ -59,14 +61,14 @@ class UWPersonClientTest(TestCase):
         # assertions
         client.DB.session.query.assert_called_once_with(client.DB.Person)
         client.DB.session.query.return_value.filter.assert_called_once_with(
-            client.DB.Person.uwregid == mock_regid)
-        client.DB.session.query.return_value.filter.return_value.first.\
+            mock_or)
+        client.DB.session.query.return_value.filter.return_value.one_or_none.\
             assert_called_once()
         self.assertEqual(
             return_value, mock_map_person(mock_person, arg1='arg1'))
 
         # no person found
-        client.DB.session.query.return_value.filter.return_value.first = \
+        client.DB.session.query.return_value.filter.return_value.one_or_none =\
             MagicMock(return_value=None)
         with self.assertRaises(PersonNotFoundException):
             client.get_person_by_uwregid(mock_regid)
