@@ -19,9 +19,6 @@ class UWPDS(Postgres):
             self.initialize_relationships()
         # person classes
         self.Person = UWPDS.Base.classes.person
-        self.HistoricalPerson = UWPDS.Base.classes.historical_person
-        self.PriorUWNetID = UWPDS.Base.classes.prior_uwnetids
-        self.PriorUWRegID = UWPDS.Base.classes.prior_uwregids
         # employee classes
         self.Employee = UWPDS.Base.classes.employee
         self.Adviser = UWPDS.Base.classes.adviser
@@ -46,16 +43,6 @@ class UWPDS(Postgres):
         student_to_adviser = Table(
             'student_to_adviser',
             UWPDS.Base.metadata,
-            autoload=True,
-            autoload_with=self.engine
-        )
-
-        Table(
-            'historical_person',
-            UWPDS.Base.metadata,
-            Column('prior_uwnetid', TEXT(), primary_key=True),
-            Column('prior_uwregid', TEXT(), primary_key=True),
-            Column('id', Integer(), primary_key=True),
             autoload=True,
             autoload_with=self.engine
         )
