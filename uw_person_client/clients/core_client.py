@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
+from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 from uw_person_client.clients import AbstractUWPersonClient
 from uw_person_client.databases.uwpds import UWPDS
@@ -22,15 +23,19 @@ class UWPersonClient(AbstractUWPersonClient):
         self.DB = UWPDS()
 
     def get_person_by_uwnetid(self, uwnetid, **kwargs):
-        sqla_person = self.DB.session.query(self.DB.HistoricalPerson).filter(
-            self.DB.HistoricalPerson.prior_uwnetid == uwnetid).first()
+        sqla_person = self.DB.session.query(self.DB.Person).filter(
+            or_(self.DB.Person.uwnetid == uwnetid,
+                self.DB.Person.prior_uwnetids.any(uwnetid))
+        ).one_or_none()
         if sqla_person is None:
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
 
     def get_person_by_uwregid(self, uwregid, **kwargs):
-        sqla_person = self.DB.session.query(self.DB.HistoricalPerson).filter(
-            self.DB.HistoricalPerson.prior_uwregid == uwregid).first()
+        sqla_person = self.DB.session.query(self.DB.Person).filter(
+            or_(self.DB.Person.uwregid == uwregid,
+                self.DB.Person.prior_uwregids.any(uwregid))
+        ).one_or_none()
         if sqla_person is None:
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
@@ -127,20 +132,15 @@ class UWPersonClient(AbstractUWPersonClient):
         person = Person()
         person.uwnetid = sqla_person.uwnetid
         person.uwregid = sqla_person.uwregid
-        prior_uwnetids = self.DB.session.query(self.DB.PriorUWNetID).filter(
-            self.DB.PriorUWNetID.person_id == sqla_person.id).all()
-        person.prior_uwnetids = [pni.uwnetid for pni in prior_uwnetids]
-        prior_uwregids = self.DB.session.query(self.DB.PriorUWRegID).filter(
-            self.DB.PriorUWRegID.person_id == sqla_person.id).all()
-        person.prior_uwregids = [pri.uwregid for pri in prior_uwregids]
+        person.prior_uwnetids = sqla_person.prior_uwnetids
+        person.prior_uwregids = sqla_person.prior_uwregids
         person.pronouns = sqla_person.pronouns
         person.full_name = sqla_person.full_name
         person.display_name = sqla_person.display_name
         person.first_name = sqla_person.first_name
         person.surname = sqla_person.surname
         person.preferred_first_name = sqla_person.preferred_first_name
-        person.preferred_middle_name = \
-            sqla_person.preferred_middle_name
+        person.preferred_middle_name = sqla_person.preferred_middle_name
         person.preferred_surname = sqla_person.preferred_surname
         person.whitepages_publish = sqla_person.whitepages_publish
         person.active_student = sqla_person._is_active_student
