@@ -83,6 +83,8 @@
     "emergency_name": "",
     "emergency_phone": "",
     "enroll_status_code": "12",
+    "enroll_status_request_code": "R",
+    "enroll_status_desc": "REGISTERED",
     "exemption_code": "0",
     "exemption_desc": "NONE",
     "external_email": "javerage@gmail.com",
@@ -235,7 +237,6 @@
         "class_code": 1,
         "enroll_status": 12,
         "exemption_code": 0,
-        "grad_status": 0,
         "honors_program": 0,
         "leave_ends_term": {
           "quarter": 0,
