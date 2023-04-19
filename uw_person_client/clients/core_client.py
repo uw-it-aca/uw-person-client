@@ -213,6 +213,9 @@ class UWPersonClient(AbstractUWPersonClient):
         student.emergency_name = sqla_student.emergency_name
         student.emergency_phone = sqla_student.emergency_phone
         student.enroll_status_code = sqla_student.enroll_status_code
+        student.enroll_status_request_code = \
+            sqla_student.enroll_status_request_code
+        student.enroll_status_desc = sqla_student.enroll_status_desc
         student.exemption_code = sqla_student.exemption_code
         student.exemption_desc = sqla_student.exemption_desc
         student.external_email = sqla_student.external_email
@@ -464,7 +467,6 @@ class UWPersonClient(AbstractUWPersonClient):
         transcript.scholarship_type = sqla_transcript.scholarship_type
         transcript.yearly_honor_type = sqla_transcript.yearly_honor_type
         transcript.exemption_code = sqla_transcript.exemption_code
-        transcript.grad_status = sqla_transcript.grad_status
         transcript.num_ind_study = sqla_transcript.num_ind_study
         transcript.num_courses = sqla_transcript.num_courses
         transcript.enroll_status = sqla_transcript.enroll_status
