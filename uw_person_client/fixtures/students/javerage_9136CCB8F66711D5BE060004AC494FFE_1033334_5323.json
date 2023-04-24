@@ -236,6 +236,8 @@
       {
         "class_code": 1,
         "enroll_status": 12,
+        "enroll_status_request_code": "REG",
+        "enroll_status_desc": "REGISTERED",
         "exemption_code": 0,
         "honors_program": 0,
         "leave_ends_term": {
@@ -256,9 +258,13 @@
         "resident": 3,
         "resident_cat": "",
         "scholarship_type": 0,
+        "scholarship_abbr": "",
+        "scholarship_desc": "",
         "special_program": 0,
+        "special_program_desc": "",
         "tenth_day_credits": 5.0,
         "tr_en_stat_dt": "2013-07-17 00:00:00",
+        "add_to_cum": 1,
         "tran_term": {
           "quarter": 3,
           "year": 2013

@@ -464,14 +464,21 @@ class UWPersonClient(AbstractUWPersonClient):
         transcript.qtr_comment = sqla_transcript.qtr_comment
         transcript.honors_program = sqla_transcript.honors_program
         transcript.special_program = sqla_transcript.special_program
+        transcript.special_program_desc = sqla_transcript.special_program_desc
         transcript.scholarship_type = sqla_transcript.scholarship_type
+        transcript.scholarship_abbr = sqla_transcript.scholarship_abbr
+        transcript.scholarship_desc = sqla_transcript.scholarship_desc
         transcript.yearly_honor_type = sqla_transcript.yearly_honor_type
         transcript.exemption_code = sqla_transcript.exemption_code
         transcript.num_ind_study = sqla_transcript.num_ind_study
         transcript.num_courses = sqla_transcript.num_courses
         transcript.enroll_status = sqla_transcript.enroll_status
+        transcript.enroll_status_request_code = \
+            sqla_transcript.enroll_status_request_code
+        transcript.enroll_status_desc = sqla_transcript.enroll_status_desc
         transcript.tenth_day_credits = float(sqla_transcript.tenth_day_credits)
         transcript.tr_en_stat_dt = sqla_transcript.tr_en_stat_dt
+        transcript.add_to_cum = sqla_transcript.add_to_cum
         return transcript
 
     def _map_transfer(self, sqla_transfer):
