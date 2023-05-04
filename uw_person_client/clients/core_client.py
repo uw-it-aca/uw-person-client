@@ -371,7 +371,7 @@ class UWPersonClient(AbstractUWPersonClient):
         if include_student_holds:
             # map holds
             student.holds = []
-            for hold in sqla_student.hold:
+            for hold in sqla_student.student_hold:
                 hold = self._map_hold(hold)
                 student.holds.append(hold)
 
