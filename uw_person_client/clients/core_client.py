@@ -510,12 +510,12 @@ class UWPersonClient(AbstractUWPersonClient):
 
     def _map_hold(self, sqla_hold):
         hold = Hold()
-        hold.seq = sqla_transfer.seq
-        hold.hold_dt = sqla_transfer.hold_dt
-        hold.office = sqla_transfer.hold_office
-        hold.office_desc = sqla_transfer.hold_office_desc
-        hold.reason = sqla_transfer.hold_reason
-        hold.type = sqla_transfer.hold_type
+        hold.seq = sqla_hold.seq
+        hold.hold_dt = sqla_hold.hold_dt
+        hold.office = sqla_hold.hold_office
+        hold.office_desc = sqla_hold.hold_office_desc
+        hold.reason = sqla_hold.hold_reason
+        hold.type = sqla_hjold.hold_type
         hold.type_desc = hold.TYPE_DESCRIPTIONS[hold.type]
         return hold
 
