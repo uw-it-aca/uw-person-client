@@ -30,7 +30,7 @@ class UWPDS(Postgres):
         self.StudentToAdviser = UWPDS.Base.classes.student_to_adviser
         self.Transcript = UWPDS.Base.classes.transcript
         self.Transfer = UWPDS.Base.classes.transfer
-        self.Hold = UWPDS.Base.classes.hold
+        self.Hold = UWPDS.Base.classes.student_hold
         self.Term = UWPDS.Base.classes.term
 
     def initialize_relationships(self):
@@ -90,12 +90,12 @@ class UWPDS(Postgres):
                 relationship("major", foreign_keys=[pending_major_3_id],
                              viewonly=True)
             transcript = relationship(
-                "transcript", back_populates="student", uselist=True,
+                "Transcript", back_populates="student", uselist=True,
                 viewonly=True)
             transfer = relationship(
                 "transfer", back_populates="student", uselist=True,
                 viewonly=True)
-            hold = relationship(
+            student_hold = relationship(
                 "student_hold", back_populates="student", uselist=True,
                 order_by="student_hold.seq", viewonly=True)
             academic_term_id = Column(
