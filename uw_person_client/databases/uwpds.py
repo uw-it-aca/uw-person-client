@@ -90,7 +90,7 @@ class UWPDS(Postgres):
                 relationship("major", foreign_keys=[pending_major_3_id],
                              viewonly=True)
             transcript = relationship(
-                "transcript", back_populates="student", uselist=True,
+                "Transcript", back_populates="student", uselist=True,
                 viewonly=True)
             transfer = relationship(
                 "transfer", back_populates="student", uselist=True,
