@@ -10,7 +10,7 @@ from uw_person_client.exceptions import (
     PersonNotFoundException, AdviserNotFoundException)
 from uw_person_client.components import (
     Person, Student, Employee, Transcript, Major, Sport, Adviser, Term,
-    Transfer)
+    Transfer, Hold)
 
 
 class UWPersonClient(AbstractUWPersonClient):
@@ -128,7 +128,8 @@ class UWPersonClient(AbstractUWPersonClient):
                     include_student_sports=True,
                     include_student_advisers=True,
                     include_student_majors=True,
-                    include_student_pending_majors=True):
+                    include_student_pending_majors=True,
+                    include_student_holds=True):
         person = Person()
         person.uwnetid = sqla_person.uwnetid
         person.uwregid = sqla_person.uwregid
@@ -158,6 +159,7 @@ class UWPersonClient(AbstractUWPersonClient):
                     include_student_advisers=include_student_advisers,
                     include_student_majors=include_student_majors,
                     include_student_pending_majors=include_student_pending_majors,  # noqa
+                    include_student_holds=include_student_holds,
                 )
             except NoResultFound:
                 pass
@@ -178,7 +180,8 @@ class UWPersonClient(AbstractUWPersonClient):
                      include_student_sports=True,
                      include_student_advisers=True,
                      include_student_majors=True,
-                     include_student_pending_majors=True):
+                     include_student_pending_majors=True,
+                     include_student_holds=True):
         student = Student()
 
         student.system_key = sqla_student.system_key
@@ -226,10 +229,6 @@ class UWPersonClient(AbstractUWPersonClient):
         student.high_school_gpa = sqla_student.high_school_gpa
         student.high_school_graduation_date = \
             sqla_student.high_school_graduation_date
-        student.hold_office_name_combined = \
-            sqla_student.hold_office_name_combined
-        student.hold_reason_desc_combined = \
-            sqla_student.hold_reason_desc_combined
         student.honors_program_code = sqla_student.honors_program_code
         student.honors_program_ind = sqla_student.honors_program_ind
         student.iss_perm_resident_country = \
@@ -369,6 +368,13 @@ class UWPersonClient(AbstractUWPersonClient):
                 transfer = self._map_transfer(transfer)
                 student.transfers.append(transfer)
 
+        if include_student_holds:
+            # map holds
+            student.holds = []
+            for hold in sqla_student.hold:
+                hold = self._map_hold(hold)
+                student.holds.append(hold)
+
         return student
 
     def _map_employee(self, sqla_employee):
@@ -501,6 +507,17 @@ class UWPersonClient(AbstractUWPersonClient):
         transfer.two_year = sqla_transfer.two_year
         transfer.wa_cc = sqla_transfer.wa_cc
         return transfer
+
+    def _map_hold(self, sqla_hold):
+        hold = Hold()
+        hold.seq = sqla_transfer.seq
+        hold.hold_dt = sqla_transfer.hold_dt
+        hold.office = sqla_transfer.hold_office
+        hold.office_desc = sqla_transfer.hold_office_desc
+        hold.reason = sqla_transfer.hold_reason
+        hold.type = sqla_transfer.hold_type
+        hold.type_desc = hold.TYPE_DESCRIPTIONS[hold.type]
+        return hold
 
     def _map_term(self, sqla_term):
         term = Term()

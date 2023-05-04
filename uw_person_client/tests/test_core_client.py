@@ -9,7 +9,7 @@ from uw_person_client.exceptions import (
 from uw_person_client.clients.core_client import UWPersonClient
 from uw_person_client.components import (
     Adviser, Employee, Major, Person, Sport, Student, Term, Transcript,
-    Transfer)
+    Transfer, Hold)
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -415,8 +415,6 @@ class UWPersonClientTest(TestCase):
         mock_student.gender = MagicMock()
         mock_student.high_school_gpa = MagicMock()
         mock_student.high_school_graduation_date = MagicMock()
-        mock_student.hold_office_name_combined = MagicMock()
-        mock_student.hold_reason_desc_combined = MagicMock()
         mock_student.honors_program_code = MagicMock()
         mock_student.honors_program_ind = MagicMock()
         mock_student.iss_perm_resident_country = MagicMock()
@@ -676,6 +674,23 @@ class UWPersonClientTest(TestCase):
         # assertions
         self.assertIsInstance(transfer, Transfer)
         self.assertDictContainsSubset(mock_dict, transfer.to_dict())
+
+    def test_map_hold(self):
+        client = self.get_mock_person_client()
+        mock_hold = MagicMock()
+        mock_hold.seq = MagicMock()
+        mock_hold.hold_dt = MagicMock()
+        mock_hold.hold_office = MagicMock()
+        mock_hold.hold_office_desc = MagicMock()
+        mock_hold.hold_reason = MagicMock()
+        mock_hold.hold_type = MagicMock()
+
+        mock_dict = self._mock_to_dict(mock_hold)
+        hold = client._map_hold(mock_hold)
+
+        # assertions
+        self.assertIsInstance(hold, Hold)
+        self.assertDictContainsSubset(mock_dict, hold.to_dict())
 
     def test_map_term(self):
         client = self.get_mock_person_client()

@@ -70,6 +70,8 @@ class AbstractBase():
                     obj_cls = Transfer
                 elif key == "sports":
                     obj_cls = Sport
+                elif key == "holds":
+                    obj_cls = Hold
                 items = []
                 for list_value in value:
                     if isinstance(list_value, dict):
@@ -102,6 +104,14 @@ class Transcript(AbstractBase):
 
 class Transfer(AbstractBase):
     pass
+
+
+class Hold(AbstractBase):
+    TYPE_DESCRIPTIONS = {
+        1: "REGISTRATION HOLD",
+        2: "TRANSCRIPT HOLD",
+        3: "REGISTRATION AND TRANSCRIPT HOLD"
+    }
 
 
 class Major(AbstractBase):

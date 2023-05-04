@@ -91,8 +91,6 @@
     "gender": "M",
     "high_school_gpa": "3.30",
     "high_school_graduation_date": null,
-    "hold_office_name_combined": null,
-    "hold_reason_desc_combined": null,
     "honors_program_code": "0",
     "honors_program_ind": "N",
     "intended_major1_code": "SIS",
@@ -257,6 +255,7 @@
         "year_ending": 1995
       }
     ],
+    "holds": [],
     "veteran_benefit_code": "33",
     "veteran_benefit_desc": "CHAPTER 33",
     "veteran_desc": "DISCHRGD VET",
