@@ -516,7 +516,7 @@ class UWPersonClient(AbstractUWPersonClient):
         hold.office_desc = sqla_hold.hold_office_desc
         hold.reason = sqla_hold.hold_reason
         hold.type = sqla_hold.hold_type
-        hold.type_desc = hold.TYPE_DESCRIPTIONS[hold.type]
+        hold.type_desc = Hold.TYPE_DESCRIPTIONS.get(sqla_hold.hold_type)
         return hold
 
     def _map_term(self, sqla_term):
