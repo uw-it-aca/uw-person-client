@@ -515,7 +515,7 @@ class UWPersonClient(AbstractUWPersonClient):
         hold.office = sqla_hold.hold_office
         hold.office_desc = sqla_hold.hold_office_desc
         hold.reason = sqla_hold.hold_reason
-        hold.type = sqla_hjold.hold_type
+        hold.type = sqla_hold.hold_type
         hold.type_desc = hold.TYPE_DESCRIPTIONS[hold.type]
         return hold
 
