@@ -93,8 +93,6 @@
     "gender": "M",
     "high_school_gpa": "3.67",
     "high_school_graduation_date": "2012-06-01",
-    "hold_office_name_combined": null,
-    "hold_reason_desc_combined": null,
     "honors_program_code": "0",
     "honors_program_ind": "N",
     "intended_major1_code": "ECON",
@@ -301,6 +299,26 @@
         "year_beginning": 2012,
         "year_ending": 2013
       }
+    ],
+    "holds": [
+        {
+            "seq": 2,
+            "hold_dt": "2015-09-25 00:00:00",
+            "office": "SASSA10120",
+            "office_desc": "STUDENT ACCOUNTS",
+            "reason": "1.00",
+            "type": 1,
+            "type_desc": "REGISTRAITON HOLD"
+        },
+        {
+            "seq": 1,
+            "hold_dt": "2015-10-07 00:00:00",
+            "office": "UWEXT",
+            "office_desc": "UW CONTINUUM COLLEGE",
+            "reason": "UWC2 12345 INV000000 $250",
+            "type": 1,
+            "type_desc": "REGISTRAITON HOLD"
+        }
     ],
     "veteran_benefit_code": "0",
     "veteran_benefit_desc": null,
