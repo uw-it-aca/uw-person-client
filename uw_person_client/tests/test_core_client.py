@@ -692,7 +692,8 @@ class UWPersonClientTest(TestCase):
         self.assertIsInstance(hold, Hold)
         self.assertDictContainsSubset(mock_dict, hold.to_dict())
 
-    def test_map_degree(self):
+    @patch('uw_person_client.clients.core_client.UWPersonClient._map_term')
+    def test_map_degree(self, mock_map_term):
         client = self.get_mock_person_client()
         mock_degree = MagicMock()
         mock_degree.degree_term = MagicMock()
@@ -716,6 +717,8 @@ class UWPersonClientTest(TestCase):
 
         # assertions
         self.assertIsInstance(degree, Degree)
+        self.assertEqual(mock_map_term.return_value, degree.degree_term)
+        del mock_dict['degree_term']
         self.assertDictContainsSubset(mock_dict, degree.to_dict())
 
     def test_map_term(self):
