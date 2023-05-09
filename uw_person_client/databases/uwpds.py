@@ -31,6 +31,7 @@ class UWPDS(Postgres):
         self.Transcript = UWPDS.Base.classes.transcript
         self.Transfer = UWPDS.Base.classes.transfer
         self.Hold = UWPDS.Base.classes.student_hold
+        self.Degree = UWPDS.Base.classes.degree
         self.Term = UWPDS.Base.classes.term
 
     def initialize_relationships(self):
@@ -94,6 +95,9 @@ class UWPDS(Postgres):
                 viewonly=True)
             transfer = relationship(
                 "transfer", back_populates="student", uselist=True,
+                viewonly=True)
+            degree = relationship(
+                "degree", back_populates="student", uselist=True,
                 viewonly=True)
             student_hold = relationship(
                 "student_hold", back_populates="student", uselist=True,
