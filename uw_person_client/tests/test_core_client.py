@@ -9,7 +9,7 @@ from uw_person_client.exceptions import (
 from uw_person_client.clients.core_client import UWPersonClient
 from uw_person_client.components import (
     Adviser, Employee, Major, Person, Sport, Student, Term, Transcript,
-    Transfer, Hold)
+    Transfer, Hold, Degree)
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -691,6 +691,35 @@ class UWPersonClientTest(TestCase):
         # assertions
         self.assertIsInstance(hold, Hold)
         self.assertDictContainsSubset(mock_dict, hold.to_dict())
+
+    @patch('uw_person_client.clients.core_client.UWPersonClient._map_term')
+    def test_map_degree(self, mock_map_term):
+        client = self.get_mock_person_client()
+        mock_degree = MagicMock()
+        mock_degree.degree_term = MagicMock()
+        mock_degree.campus_code = MagicMock()
+        mock_degree.degree_abbr_code = MagicMock()
+        mock_degree.degree_pathway_num = MagicMock()
+        mock_degree.degree_level_code = MagicMock()
+        mock_degree.degree_level_desc = MagicMock()
+        mock_degree.degree_type_code = MagicMock()
+        mock_degree.degree_level_type_desc = MagicMock()
+        mock_degree.degree_desc = MagicMock()
+        mock_degree.degree_uw_credits = MagicMock()
+        mock_degree.degree_transfer_credits = MagicMock()
+        mock_degree.degree_extension_credits = MagicMock()
+        mock_degree.degree_gpa = MagicMock()
+        mock_degree.fin_org_key = MagicMock()
+        mock_degree.primary_fin_org_key = MagicMock()
+
+        mock_dict = self._mock_to_dict(mock_degree)
+        degree = client._map_degree(mock_degree)
+
+        # assertions
+        self.assertIsInstance(degree, Degree)
+        self.assertEqual(mock_map_term.return_value, degree.degree_term)
+        del mock_dict['degree_term']
+        self.assertDictContainsSubset(mock_dict, degree.to_dict())
 
     def test_map_term(self):
         client = self.get_mock_person_client()

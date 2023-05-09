@@ -114,6 +114,10 @@ class Hold(AbstractBase):
     }
 
 
+class Degree(AbstractBase):
+    pass
+
+
 class Major(AbstractBase):
     pass
 

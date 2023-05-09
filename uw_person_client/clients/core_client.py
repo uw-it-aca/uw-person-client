@@ -10,7 +10,7 @@ from uw_person_client.exceptions import (
     PersonNotFoundException, AdviserNotFoundException)
 from uw_person_client.components import (
     Person, Student, Employee, Transcript, Major, Sport, Adviser, Term,
-    Transfer, Hold)
+    Transfer, Hold, Degree)
 
 
 class UWPersonClient(AbstractUWPersonClient):
@@ -129,7 +129,8 @@ class UWPersonClient(AbstractUWPersonClient):
                     include_student_advisers=True,
                     include_student_majors=True,
                     include_student_pending_majors=True,
-                    include_student_holds=True):
+                    include_student_holds=True,
+                    include_student_degrees=True):
         person = Person()
         person.uwnetid = sqla_person.uwnetid
         person.uwregid = sqla_person.uwregid
@@ -160,6 +161,7 @@ class UWPersonClient(AbstractUWPersonClient):
                     include_student_majors=include_student_majors,
                     include_student_pending_majors=include_student_pending_majors,  # noqa
                     include_student_holds=include_student_holds,
+                    include_student_degrees=include_student_degrees,
                 )
             except NoResultFound:
                 pass
@@ -181,7 +183,8 @@ class UWPersonClient(AbstractUWPersonClient):
                      include_student_advisers=True,
                      include_student_majors=True,
                      include_student_pending_majors=True,
-                     include_student_holds=True):
+                     include_student_holds=True,
+                     include_student_degrees=True):
         student = Student()
 
         student.system_key = sqla_student.system_key
@@ -375,6 +378,13 @@ class UWPersonClient(AbstractUWPersonClient):
                 hold = self._map_hold(hold)
                 student.holds.append(hold)
 
+        if include_student_degrees:
+            # map degrees
+            student.degrees = []
+            for degree in sqla_student.student_degree:
+                degree = self._map_degree(degree)
+                student.degrees.append(degree)
+
         return student
 
     def _map_employee(self, sqla_employee):
@@ -525,6 +535,25 @@ class UWPersonClient(AbstractUWPersonClient):
         hold.hold_type = sqla_hold.hold_type
         hold.hold_type_desc = Hold.TYPE_DESCRIPTIONS.get(sqla_hold.hold_type)
         return hold
+
+    def _map_degree(self, sqla_degree):
+        degree = Degree()
+        degree.degree_term = self._map_term(sqla_degree.degree_term)
+        degree.campus_code = sqla_degree.campus_code
+        degree.degree_abbr_code = sqla_degree.degree_abbr_code
+        degree.degree_pathway_num = sqla_degree.degree_pathway_num
+        degree.degree_level_code = sqla_degree.degree_level_code
+        degree.degree_level_desc = sqla_degree.degree_level_desc
+        degree.degree_type_code = sqla_degree.degree_type_code
+        degree.degree_level_type_desc = sqla_degree.degree_level_type_desc
+        degree.degree_desc = sqla_degree.degree_desc
+        degree.degree_uw_credits = sqla_degree.degree_uw_credits
+        degree.degree_transfer_credits = sqla_degree.degree_transfer_credits
+        degree.degree_extension_credits = sqla_degree.degree_extension_credits
+        degree.degree_gpa = sqla_degree.degree_gpa
+        degree.fin_org_key = sqla_degree.fin_org_key
+        degree.primary_fin_org_key = sqla_degree.primary_fin_org_key
+        return degree
 
     def _map_term(self, sqla_term):
         term = Term()
