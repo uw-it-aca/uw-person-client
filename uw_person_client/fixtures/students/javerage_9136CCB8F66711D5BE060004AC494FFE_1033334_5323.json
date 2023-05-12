@@ -334,20 +334,20 @@
         {
             "seq": 2,
             "hold_dt": "2015-09-25 00:00:00",
-            "office": "SASSA10120",
-            "office_desc": "STUDENT ACCOUNTS",
-            "reason": "1.00",
-            "type": 1,
-            "type_desc": "REGISTRAITON HOLD"
+            "hold_office": "SASSA10120",
+            "hold_office_desc": "STUDENT ACCOUNTS",
+            "hold_reason": "1.00",
+            "hold_type": 1,
+            "hold_type_desc": "REGISTRAITON HOLD"
         },
         {
             "seq": 1,
             "hold_dt": "2015-10-07 00:00:00",
-            "office": "UWEXT",
-            "office_desc": "UW CONTINUUM COLLEGE",
-            "reason": "UWC2 12345 INV000000 $250",
-            "type": 1,
-            "type_desc": "REGISTRAITON HOLD"
+            "hold_office": "UWEXT",
+            "hold_office_desc": "UW CONTINUUM COLLEGE",
+            "hold_reason": "UWC2 12345 INV000000 $250",
+            "hold_type": 1,
+            "hold_type_desc": "REGISTRAITON HOLD"
         }
     ],
     "veteran_benefit_code": "0",
