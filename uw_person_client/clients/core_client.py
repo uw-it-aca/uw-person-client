@@ -381,7 +381,7 @@ class UWPersonClient(AbstractUWPersonClient):
         if include_student_degrees:
             # map degrees
             student.degrees = []
-            for degree in sqla_student.student_degree:
+            for degree in sqla_student.degree:
                 degree = self._map_degree(degree)
                 student.degrees.append(degree)
 
