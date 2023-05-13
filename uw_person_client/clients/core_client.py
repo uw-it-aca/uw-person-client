@@ -197,10 +197,6 @@ class UWPersonClient(AbstractUWPersonClient):
             sqla_student.applied_to_graduate_yr_qtr_desc
         student.applied_to_graduate_yr_qtr_id = \
             sqla_student.applied_to_graduate_yr_qtr_id
-        student.assigned_ethnic_code = sqla_student.assigned_ethnic_code
-        student.assigned_ethnic_desc = sqla_student.assigned_ethnic_desc
-        student.assigned_ethnic_group_desc = \
-            sqla_student.assigned_ethnic_group_desc
         student.asuwind = sqla_student.asuwind
         student.birth_city = sqla_student.birth_city
         student.birth_country = sqla_student.birth_country
@@ -222,6 +218,10 @@ class UWPersonClient(AbstractUWPersonClient):
         student.enroll_status_request_code = \
             sqla_student.enroll_status_request_code
         student.enroll_status_desc = sqla_student.enroll_status_desc
+        student.ethnic_code = sqla_student.ethnic_code
+        student.ethnic_desc = sqla_student.ethnic_desc
+        student.ethnic_long_desc = sqla_student.ethnic_long_desc
+        student.ethnic_group_code = sqla_student.ethnic_group_code
         student.exemption_code = sqla_student.exemption_code
         student.exemption_desc = sqla_student.exemption_desc
         student.external_email = sqla_student.external_email
@@ -232,6 +232,10 @@ class UWPersonClient(AbstractUWPersonClient):
         student.high_school_gpa = sqla_student.high_school_gpa
         student.high_school_graduation_date = \
             sqla_student.high_school_graduation_date
+        student.hispanic_code = sqla_student.hispanic_code
+        student.hispanic_desc = sqla_student.hispanic_desc
+        student.hispanic_long_desc = sqla_student.hispanic_long_desc
+        student.hispanic_group_code = sqla_student.hispanic_group_code
         student.honors_program_code = sqla_student.honors_program_code
         student.honors_program_ind = sqla_student.honors_program_ind
         student.iss_perm_resident_country = \
