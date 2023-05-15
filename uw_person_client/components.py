@@ -91,7 +91,16 @@ class Person(AbstractBase):
 
 
 class Student(AbstractBase):
-    pass
+    ETHNIC_GROUP_DESCRIPTIONS = {
+        "1": "African American",
+        "2": "American Indian",
+        "3": "White",
+        "4": "Hispanic/Latino",
+        "5": "Asian American",
+        "6": "Hawaiian/Pacific Islander",
+        "7": "Not Indicated",
+        "99": "International",
+    }
 
 
 class Employee(AbstractBase):
