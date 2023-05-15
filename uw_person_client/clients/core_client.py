@@ -222,6 +222,8 @@ class UWPersonClient(AbstractUWPersonClient):
         student.ethnic_desc = sqla_student.ethnic_desc
         student.ethnic_long_desc = sqla_student.ethnic_long_desc
         student.ethnic_group_code = sqla_student.ethnic_group_code
+        student.ethnic_group_desc = Student.ETHNIC_GROUP_DESCRIPTIONS.get(
+            sqla_student.ethnic_group_code)
         student.exemption_code = sqla_student.exemption_code
         student.exemption_desc = sqla_student.exemption_desc
         student.external_email = sqla_student.external_email
@@ -236,6 +238,8 @@ class UWPersonClient(AbstractUWPersonClient):
         student.hispanic_desc = sqla_student.hispanic_desc
         student.hispanic_long_desc = sqla_student.hispanic_long_desc
         student.hispanic_group_code = sqla_student.hispanic_group_code
+        student.hispanic_group_desc = Student.ETHNIC_GROUP_DESCRIPTIONS.get(
+            sqla_student.hispanic_group_code)
         student.honors_program_code = sqla_student.honors_program_code
         student.honors_program_ind = sqla_student.honors_program_ind
         student.iss_perm_resident_country = \
