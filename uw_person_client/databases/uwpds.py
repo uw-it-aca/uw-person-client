@@ -139,7 +139,6 @@ class UWPDS(Postgres):
                                        foreign_keys=[degree_term_id],
                                        viewonly=True)
 
-
         UWPDS.Base.prepare(self.engine, reflect=True)
         UWPDS.Base.classes.student = Student
         UWPDS.Base.classes.employee = Employee
