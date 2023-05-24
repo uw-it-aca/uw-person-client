@@ -97,7 +97,7 @@ class UWPDS(Postgres):
                 "transfer", back_populates="student", uselist=True,
                 viewonly=True)
             degree = relationship(
-                "degree", back_populates="student", uselist=True,
+                "Degree", back_populates="student", uselist=True,
                 viewonly=True)
             student_hold = relationship(
                 "student_hold", back_populates="student", uselist=True,
@@ -130,9 +130,20 @@ class UWPDS(Postgres):
                                            foreign_keys=[leave_ends_term_id],
                                            viewonly=True)
 
+        class Degree(UWPDS.Base):
+            __tablename__ = "degree"
+            __table_args__ = {'extend_existing': True}
+            degree_term_id = Column('degree_term_id',
+                                    ForeignKey('term.id', ondelete="CASCADE"))
+            degree_term = relationship("term",
+                                       foreign_keys=[degree_term_id],
+                                       viewonly=True)
+
+
         UWPDS.Base.prepare(self.engine, reflect=True)
         UWPDS.Base.classes.student = Student
         UWPDS.Base.classes.employee = Employee
         UWPDS.Base.classes.transcript = Transcript
+        UWPDS.Base.classes.degree = Degree
         UWPDS.Base.classes.student_to_sport = student_to_sport
         UWPDS.Base.classes.student_to_adviser = student_to_adviser
