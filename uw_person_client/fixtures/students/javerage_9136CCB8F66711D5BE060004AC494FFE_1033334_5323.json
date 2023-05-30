@@ -15,7 +15,8 @@
   "student": {
     "academic_term": {
       "quarter": 3,
-      "year": 2013
+      "year": 2013,
+      "quarter_name": "Summer"
     },
     "admitted_for_yr_qtr_desc": "Summer 2013",
     "admitted_for_yr_qtr_id": "20132",
@@ -78,7 +79,8 @@
       {
         "degree_term": {
           "quarter": 2,
-          "year": 2015
+          "year": 2015,
+          "quarter_name": "Spring"
         },
         "campus_code": "0",
         "degree_abbr_code": "STAT",
@@ -277,7 +279,8 @@
         "honors_program": 0,
         "leave_ends_term": {
           "quarter": 0,
-          "year": 0
+          "year": 0,
+          "quarter_name": ""
         },
         "num_courses": 1,
         "num_ind_study": 0,
@@ -302,7 +305,8 @@
         "add_to_cum": 1,
         "tran_term": {
           "quarter": 3,
-          "year": 2013
+          "year": 2013,
+          "quarter_name": "Summer"
         },
         "veteran": 0,
         "veteran_benefit": 0,

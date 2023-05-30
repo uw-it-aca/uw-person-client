@@ -140,4 +140,4 @@ class Adviser(AbstractBase):
 
 
 class Term(AbstractBase):
-    pass
+    TERM_NAMES = {1: "Winter", 2: "Spring", 3: "Summer", 4: "Autumn"}
