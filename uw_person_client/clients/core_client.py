@@ -567,4 +567,5 @@ class UWPersonClient(AbstractUWPersonClient):
         term = Term()
         term.year = sqla_term.year
         term.quarter = sqla_term.quarter
+        term.quarter_name = Term.TERM_NAMES.get(sqla_term.quarter, "")
         return term
