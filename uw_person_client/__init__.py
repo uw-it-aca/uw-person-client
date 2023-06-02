@@ -12,7 +12,9 @@ logging.basicConfig(
         logging.StreamHandler()
     ])
 
-if os.environ.get("UW_PERSON_CLIENT_ENV") == "PROD":
+appenv = os.getenv("UW_PERSON_CLIENT_ENV", os.getenv("AXDD_PERSON_CLIENT_ENV"))
+
+if appenv == "PROD":
     from uw_person_client.clients.core_client import UWPersonClient
 else:
     from uw_person_client.clients.mock_client import (
