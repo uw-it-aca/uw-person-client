@@ -346,8 +346,8 @@
         {
             "seq": 2,
             "hold_dt": "2015-09-25 00:00:00",
-            "hold_office": "SASSA10120",
-            "hold_office_desc": "STUDENT ACCOUNTS",
+            "hold_office": "EOP",
+            "hold_office_desc": "EDUCATIONAL OPPTNY PROGR",
             "hold_reason": "1.00",
             "hold_type": 1,
             "hold_type_desc": "REGISTRAITON HOLD"
