@@ -75,6 +75,7 @@
     "class_code": "2",
     "class_desc": "Sophomore",
     "cumulative_gpa": "3.84",
+    "deceased_date": null,
     "degrees": [
       {
         "degree_term": {
