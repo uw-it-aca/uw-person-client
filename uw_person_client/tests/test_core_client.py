@@ -396,6 +396,7 @@ class UWPersonClientTest(TestCase):
         mock_student.class_code = MagicMock()
         mock_student.class_desc = MagicMock()
         mock_student.cumulative_gpa = MagicMock()
+        mock_student.deceased_date = MagicMock()
         mock_student.directory_release_ind = MagicMock()
         mock_student.disability_ind = MagicMock()
         mock_student.emergency_email = MagicMock()

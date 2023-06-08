@@ -209,6 +209,7 @@ class UWPersonClient(AbstractUWPersonClient):
         student.class_code = sqla_student.class_code
         student.class_desc = sqla_student.class_desc
         student.cumulative_gpa = sqla_student.cumulative_gpa
+        student.deceased_date = sqla_student.deceased_date
         student.directory_release_ind = sqla_student.directory_release_ind
         student.disability_ind = sqla_student.disability_ind
         student.emergency_email = sqla_student.emergency_email
