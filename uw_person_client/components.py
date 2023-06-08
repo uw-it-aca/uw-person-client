@@ -121,6 +121,9 @@ class Hold(AbstractBase):
         2: "TRANSCRIPT HOLD",
         3: "REGISTRATION AND TRANSCRIPT HOLD"
     }
+    OFFICE_DESCRIPTIONS = {
+        "EOP": "EDUCATIONAL OPPTNY PROGR"
+    }
 
 
 class Degree(AbstractBase):
