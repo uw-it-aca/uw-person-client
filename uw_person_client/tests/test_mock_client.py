@@ -39,11 +39,11 @@ class MockedUWPersonClientTest(TestCase):
 
     def test_get_person_by_system_key(self):
         client = MockedUWPersonClient()
-        person = client.get_person_by_system_key("5323")
+        person = client.get_person_by_system_key("532353230")
         self.assertEqual(person.uwnetid, "javerage")
         self.assertEqual(person.uwregid, "9136CCB8F66711D5BE060004AC494FFE")
         self.assertEqual(person.student.student_number, "1033334")
-        self.assertEqual(person.student.system_key, "5323")
+        self.assertEqual(person.student.system_key, "532353230")
         with self.assertRaises(PersonNotFoundException):
             client.get_person_by_system_key("foo")
 
