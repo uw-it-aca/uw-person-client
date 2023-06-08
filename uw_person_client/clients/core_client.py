@@ -476,10 +476,8 @@ class UWPersonClient(AbstractUWPersonClient):
         transcript.veteran = sqla_transcript.veteran
         transcript.veteran_benefit = sqla_transcript.veteran_benefit
         transcript.class_code = sqla_transcript.class_code
-        transcript.qtr_grade_points = \
-            float(sqla_transcript.qtr_grade_points)
-        transcript.qtr_graded_attmp = \
-            float(sqla_transcript.qtr_graded_attmp)
+        transcript.qtr_grade_points = float(sqla_transcript.qtr_grade_points)
+        transcript.qtr_graded_attmp = float(sqla_transcript.qtr_graded_attmp)
         transcript.qtr_nongrd_earned = sqla_transcript.qtr_nongrd_earned
         transcript.qtr_deductible = sqla_transcript.qtr_deductible
         transcript.over_qtr_grade_pt = sqla_transcript.over_qtr_grade_pt
@@ -539,10 +537,12 @@ class UWPersonClient(AbstractUWPersonClient):
         hold.seq = sqla_hold.seq
         hold.hold_dt = sqla_hold.hold_dt
         hold.hold_office = sqla_hold.hold_office
-        hold.hold_office_desc = sqla_hold.hold_office_desc
+        hold.hold_office_desc = Hold.OFFICE_DESCRIPTIONS.get(
+            sqla_hold.hold_office, sqla_hold.hold_office_desc)
         hold.hold_reason = sqla_hold.hold_reason
         hold.hold_type = sqla_hold.hold_type
-        hold.hold_type_desc = Hold.TYPE_DESCRIPTIONS.get(sqla_hold.hold_type)
+        hold.hold_type_desc = Hold.TYPE_DESCRIPTIONS.get(
+            sqla_hold.hold_type, sqla_hold.hold_type_desc)
         return hold
 
     def _map_degree(self, sqla_degree):
