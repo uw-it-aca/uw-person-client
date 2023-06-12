@@ -84,20 +84,26 @@
           "quarter_name": "Spring"
         },
         "campus_code": "0",
+        "degree_college_code": "C",
+        "degree_college_name": "College of Arts & Sciences",
         "degree_abbr_code": "STAT",
         "degree_pathway_num": "0",
-        "degree_desc": "0",
+        "degree_desc": "Statistics",
         "degree_level_code": "0",
         "degree_level_desc": "Bachelor",
         "degree_type_code": "5",
         "degree_level_type_desc": "Bachelor Of Science",
-        "degree_term": "",
+        "degree_status_code": "9",
+        "degree_status_desc": "AWARDED",
+        "degree_date": "2022-06-15",
+        "degree_grad_honor": 3,
+        "degree_grad_honor_desc": "CUM LAUDE",
         "degree_uw_credits": "170.0",
         "degree_transfer_credits": "0.0",
         "degree_extension_credits": "65.0",
         "degree_gpa": "3.75",
-        "fin_org_key": "95832",
-        "primary_fin_org_key": "Y"
+        "degree_index": 1,
+        "degree_major_index": 1
       }
     ],
     "directory_release_ind": true,
@@ -147,8 +153,10 @@
     "majors": [
       {
         "college": "C",
+        "college_full_name": "College of Arts & Sciences",
         "major_abbr_code": "PSOCS",
         "major_branch": 0,
+        "major_campus_name": "Seattle",
         "major_cip_code": 240101,
         "major_concur_cc": false,
         "major_dept": "256",
@@ -188,8 +196,10 @@
     "pending_majors": [
       {
         "college": null,
+        "college_full_name": null,
         "major_abbr_code": "0-FINANC-01-12",
         "major_branch": null,
+        "major_branch_name": null,
         "major_cip_code": null,
         "major_concur_cc": null,
         "major_dept": null,
