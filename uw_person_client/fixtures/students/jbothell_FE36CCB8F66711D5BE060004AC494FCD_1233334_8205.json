@@ -122,8 +122,10 @@
     "majors": [
       {
         "college": "C",
+        "college_full_name": "College of Arts & Sciences",
         "major_abbr_code": "SIS",
         "major_branch": 0,
+        "major_branch_name": "Seattle",
         "major_cip_code": 50199,
         "major_concur_cc": false,
         "major_dept": "190",
