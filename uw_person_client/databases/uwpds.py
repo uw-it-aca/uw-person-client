@@ -98,7 +98,6 @@ class UWPDS(Postgres):
                 viewonly=True)
             degree = relationship(
                 "Degree", back_populates="student", uselist=True,
-                order_by="degree.degree_index, degree.degree_major_index",
                 viewonly=True)
             student_hold = relationship(
                 "student_hold", back_populates="student", uselist=True,
