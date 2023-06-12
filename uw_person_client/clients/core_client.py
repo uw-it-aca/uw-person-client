@@ -544,8 +544,7 @@ class UWPersonClient(AbstractUWPersonClient):
             sqla_hold.hold_office, sqla_hold.hold_office_desc)
         hold.hold_reason = sqla_hold.hold_reason
         hold.hold_type = sqla_hold.hold_type
-        hold.hold_type_desc = Hold.TYPE_DESCRIPTIONS.get(
-            sqla_hold.hold_type, sqla_hold.hold_type_desc)
+        hold.hold_type_desc = Hold.TYPE_DESCRIPTIONS.get(sqla_hold.hold_type)
         return hold
 
     def _map_degree(self, sqla_degree):
