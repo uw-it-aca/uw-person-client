@@ -552,6 +552,7 @@ class UWPersonClient(AbstractUWPersonClient):
         degree = Degree()
         degree.degree_term = self._map_term(sqla_degree.degree_term)
         degree.campus_code = sqla_degree.campus_code
+        degree.campus_name = Major.CAMPUS_NAMES.get(sqla_degree.campus_code)
         degree.degree_college_code = sqla_degree.degree_college_code
         degree.degree_college_name = Major.COLLEGE_FULL_NAMES.get(
             sqla_degree.degree_college_code)
