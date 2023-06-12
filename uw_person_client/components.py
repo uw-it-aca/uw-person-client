@@ -12,7 +12,7 @@ class AbstractBase():
         try:
             return self.__dict__[name]
         except KeyError:
-            raise AttributeError(f"Attribute '{name}' does not exist on "
+            raise AttributeError(f"Attribute '{name}' does not exist for "
                                  f"'{type(self).__name__}' instance.")
 
     def __setattr__(self, name, value):
@@ -127,11 +127,44 @@ class Hold(AbstractBase):
 
 
 class Degree(AbstractBase):
-    pass
+    GRAD_HONOR_DESCRIPTIONS = {
+        1: "SUMMA CUM LAUDE",
+        2: "MAGNA CUM LAUDE",
+        3: "CUM LAUDE"
+    }
 
 
 class Major(AbstractBase):
-    pass
+    CAMPUS_NAMES = {
+        0: "Seattle",
+        1: "Bothell",
+        2: "Tacoma"
+    }
+    COLLEGE_FULL_NAMES = {
+        "A": "Interdisciplinary Undergraduate Programs",
+        "B": "College of Built Environments",
+        "C": "College of Arts & Sciences",
+        "D": "College of the Environment",
+        "E": "Foster School of Business",
+        "H": "College of Education",
+        "J": "College of Engineering",
+        "J2": "School of Computer Science & Engineering",
+        "K": "College of Ocean & Fishery Sciences",
+        "L": "College of Forest Resources",
+        "M": "School of Public Health",
+        "N": "School of Nursing",
+        "O": "Interschool or Intercollege Programs",
+        "P": "School of Pharmacy",
+        "Q": "Evans School of Public Affairs",
+        "R": "Interdisciplinary Graduate Programs",
+        "S": "The Information School",
+        "T": "School of Social Work",
+        "U": "School of Dentistry",
+        "V": "UW Bothell",
+        "X": "School of Law",
+        "Y": "School of Medicine",
+        "Z": "UW Tacoma"
+    }
 
 
 class Sport(AbstractBase):

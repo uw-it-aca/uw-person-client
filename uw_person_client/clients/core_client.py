@@ -432,6 +432,8 @@ class UWPersonClient(AbstractUWPersonClient):
         major.major_abbr_code = sqla_major.major_abbr_code
         major.major_pathway = sqla_major.major_pathway
         major.major_branch = sqla_major.major_branch
+        major.major_branch_name = Major.CAMPUS_NAMES.get(
+            sqla_major.major_branch)
         major.major_name = sqla_major.major_name
         major.major_full_name = sqla_major.major_full_name
         major.major_short_name = sqla_major.major_short_name
@@ -463,6 +465,7 @@ class UWPersonClient(AbstractUWPersonClient):
         major.major_nonmatric = sqla_major.major_nonmatric
         major.major_gnm = sqla_major.major_gnm
         major.college = sqla_major.college
+        major.college_full_name = Major.COLLEGE_FULL_NAMES.get(major.college)
         return major
 
     def _map_transcript(self, sqla_transcript):
@@ -549,6 +552,10 @@ class UWPersonClient(AbstractUWPersonClient):
         degree = Degree()
         degree.degree_term = self._map_term(sqla_degree.degree_term)
         degree.campus_code = sqla_degree.campus_code
+        degree.campus_name = Major.CAMPUS_NAMES.get(sqla_degree.campus_code)
+        degree.degree_college_code = sqla_degree.degree_college_code
+        degree.degree_college_name = Major.COLLEGE_FULL_NAMES.get(
+            sqla_degree.degree_college_code)
         degree.degree_abbr_code = sqla_degree.degree_abbr_code
         degree.degree_pathway_num = sqla_degree.degree_pathway_num
         degree.degree_level_code = sqla_degree.degree_level_code
@@ -556,12 +563,18 @@ class UWPersonClient(AbstractUWPersonClient):
         degree.degree_type_code = sqla_degree.degree_type_code
         degree.degree_level_type_desc = sqla_degree.degree_level_type_desc
         degree.degree_desc = sqla_degree.degree_desc
+        degree.degree_status_code = sqla_degree.degree_status_code
+        degree.degree_status_desc = sqla_degree.degree_status_desc
+        degree.degree_date = sqla_degree.degree_date
+        degree.degree_grad_honor = sqla_degree.degree_grad_honor
+        degree.degree_grad_honor_desc = Degree.GRAD_HONOR_DESCRIPTIONS.get(
+            sqla_degree.degree_grad_honor)
         degree.degree_uw_credits = sqla_degree.degree_uw_credits
         degree.degree_transfer_credits = sqla_degree.degree_transfer_credits
         degree.degree_extension_credits = sqla_degree.degree_extension_credits
         degree.degree_gpa = sqla_degree.degree_gpa
-        degree.fin_org_key = sqla_degree.fin_org_key
-        degree.primary_fin_org_key = sqla_degree.primary_fin_org_key
+        degree.degree_index = sqla_degree.degree_index
+        degree.degree_major_index = sqla_degree.degree_major_index
         return degree
 
     def _map_term(self, sqla_term):
