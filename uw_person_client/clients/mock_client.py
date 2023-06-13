@@ -61,25 +61,25 @@ class MockedUWPersonClient(AbstractUWPersonClient):
             values = values[offset:offset+page_size]
         return values
 
-    def get_person_by_uwnetid(self, uwnetid):
+    def get_person_by_uwnetid(self, uwnetid, **kwargs):
         return self._read_person_file(f'**/*{uwnetid}*.json')
 
-    def get_person_by_uwregid(self, uwregid):
+    def get_person_by_uwregid(self, uwregid, **kwargs):
         return self._read_person_file(f'**/*{uwregid}*.json')
 
-    def get_person_by_student_number(self, student_number):
+    def get_person_by_student_number(self, student_number, **kwargs):
         return self._read_person_file(f'**/*{student_number}*.json')
 
     def get_person_by_system_key(self, system_key, **kwargs):
         return self._read_person_file(f'**/*{system_key}*.json')
 
-    def get_persons(self, page=None, page_size=None):
+    def get_persons(self, page=None, page_size=None, **kwargs):
         return self._paginate(
             self._read_person_files('**/**.json'),
             page=page,
             page_size=page_size)
 
-    def get_registered_students(self, page=None, page_size=None):
+    def get_registered_students(self, page=None, page_size=None, **kwargs):
         persons = self._read_person_files('**/students/**.json')
         registered_persons = [person for person in persons if
                               person.student.enroll_status_code == '12']
@@ -88,19 +88,19 @@ class MockedUWPersonClient(AbstractUWPersonClient):
             page=page,
             page_size=page_size)
 
-    def get_active_students(self, page=None, page_size=None):
+    def get_active_students(self, page=None, page_size=None, **kwargs):
         return self._paginate(
             self._read_person_files('**/students/**.json'),
             page=page,
             page_size=page_size)
 
-    def get_active_employees(self, page=None, page_size=None):
+    def get_active_employees(self, page=None, page_size=None, **kwargs):
         return self._paginate(
             self._read_person_files('**/employees/**/*.json'),
             page=page,
             page_size=page_size)
 
-    def get_advisers(self, advising_program=None):
+    def get_advisers(self, advising_program=None, **kwargs):
         advisers = self._read_person_files('**/employees/advisers/*.json')
         if advising_program:
             filtered_advisers = []
@@ -112,7 +112,7 @@ class MockedUWPersonClient(AbstractUWPersonClient):
         else:
             return advisers
 
-    def get_persons_by_adviser_netid(self, uwnetid):
+    def get_persons_by_adviser_netid(self, uwnetid, **kwargs):
         students = self.get_active_students()
         persons = []
         for person in students:
@@ -122,7 +122,7 @@ class MockedUWPersonClient(AbstractUWPersonClient):
                     break
         return persons
 
-    def get_persons_by_adviser_regid(self, uwregid):
+    def get_persons_by_adviser_regid(self, uwregid, **kwargs):
         students = self.get_active_students()
         persons = []
         for person in students:
