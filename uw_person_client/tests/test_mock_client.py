@@ -94,3 +94,32 @@ class MockedUWPersonClientTest(TestCase):
         self.assertEqual(len(persons), 2)
         persons = client.get_persons_by_adviser_regid("foo")
         self.assertEqual(len(persons), 0)
+
+    def test_person_includes(self):
+        client = MockedUWPersonClient()
+        filters = {"include_student_transcripts": False,
+                   "include_student_transfers": False,
+                   "include_student_sports": False,
+                   "include_student_advisers": False,
+                   "include_student_majors": False,
+                   "include_student_pending_majors": False,
+                   "include_student_holds": False,
+                   "include_student_degrees": False}
+        person = client.get_person_by_student_number("1033334", **filters)
+        self.assertFalse(hasattr(person.student, "transcripts"))
+        self.assertFalse(hasattr(person.student, "transfers"))
+        self.assertFalse(hasattr(person.student, "sports"))
+        self.assertFalse(hasattr(person.student, "advisers"))
+        self.assertFalse(hasattr(person.student, "majors"))
+        self.assertFalse(hasattr(person.student, "pending_majors"))
+        self.assertFalse(hasattr(person.student, "holds"))
+        self.assertFalse(hasattr(person.student, "degrees"))
+
+        person = client.get_person_by_student_number("1033334",
+                                                     include_student=False)
+        self.assertFalse(hasattr(person, "student"))
+
+        person = client.get_person_by_uwnetid("bill",
+                                              include_student=False,
+                                              include_employee=False)
+        self.assertFalse(hasattr(person, "employee"))
