@@ -53,12 +53,9 @@ class AbstractBase():
                 elif key == "student":
                     new_obj = Student()
                     obj.student = new_obj.from_dict(value, obj=new_obj)
-                elif key == "tran_term":
+                elif key in ["leave_ends_term", "degree_term", "tran_term"]:
                     new_obj = Term()
-                    obj.tran_term = new_obj.from_dict(value, obj=new_obj)
-                elif key == "leave_ends_term":
-                    new_obj = Term()
-                    obj.leave_ends_term = new_obj.from_dict(value, obj=new_obj)
+                    setattr(obj, key, new_obj.from_dict(value, obj=new_obj))
             elif isinstance(value, list):
                 if key == "majors" or key == "pending_majors":
                     obj_cls = Major
