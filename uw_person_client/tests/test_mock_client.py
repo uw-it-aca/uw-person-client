@@ -123,3 +123,8 @@ class MockedUWPersonClientTest(TestCase):
                                               include_student=False,
                                               include_employee=False)
         self.assertFalse(hasattr(person, "employee"))
+
+    def test_degree_term(self):
+        client = MockedUWPersonClient()
+        person = client.get_person_by_uwnetid("javerage")
+        self.assertEqual(person.student.degrees[0].degree_term.year, 2015)
