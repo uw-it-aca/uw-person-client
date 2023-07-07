@@ -98,6 +98,21 @@ class Student(AbstractBase):
         "7": "Not Indicated",
         "99": "International",
     }
+    INSTITUTION_TYPE_DESCRIPTIONS = {
+        1: "HIGH SCHOOL",
+        2: "COMMUNITY COLLEGE",
+        3: "4 YEAR COLL OR UNIV",
+        4: "UNACCREDITED SCHOOL",
+        5: "NURSING HOSPITAL",
+        6: "NON-MATRICULATED",
+    }
+    NCR_DESCRIPTIONS = {
+        0: 	"CONTINUING",
+        1: 	"NEW STUDENT",
+        2: 	"FORMER STUD",
+        3:  "NEW ACC-CONT",
+        4: 	"NEW ACC-FORM",
+    }
 
 
 class Employee(AbstractBase):
@@ -174,3 +189,10 @@ class Adviser(AbstractBase):
 
 class Term(AbstractBase):
     TERM_NAMES = {1: "Winter", 2: "Spring", 3: "Summer", 4: "Autumn"}
+
+    @staticmethod
+    def format_term_desc(year_qtr_code):
+        if year_qtr_code:
+            year = str(year_qtr_code)[:4]
+            quarter = Term.TERM_NAMES.get(int(str(year_qtr_code)[-1]))
+            return f"{quarter} {year}"

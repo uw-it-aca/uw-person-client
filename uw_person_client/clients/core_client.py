@@ -193,10 +193,10 @@ class UWPersonClient(AbstractUWPersonClient):
         student.application_status_desc = sqla_student.application_status_desc
         student.application_type_code = sqla_student.application_type_code
         student.application_type_desc = sqla_student.application_type_desc
-        student.applied_to_graduate_yr_qtr_desc = \
-            sqla_student.applied_to_graduate_yr_qtr_desc
-        student.applied_to_graduate_yr_qtr_id = \
-            sqla_student.applied_to_graduate_yr_qtr_id
+        student.applied_to_graduate_yr_qtr_desc = Term.format_term_desc(
+            sqla_student.applied_to_graduate_yr_qtr_id)
+        student.applied_to_graduate_yr_qtr_id = (
+            sqla_student.applied_to_graduate_yr_qtr_id)
         student.asuwind = sqla_student.asuwind
         student.birth_city = sqla_student.birth_city
         student.birth_country = sqla_student.birth_country
@@ -216,8 +216,8 @@ class UWPersonClient(AbstractUWPersonClient):
         student.emergency_name = sqla_student.emergency_name
         student.emergency_phone = sqla_student.emergency_phone
         student.enroll_status_code = sqla_student.enroll_status_code
-        student.enroll_status_request_code = \
-            sqla_student.enroll_status_request_code
+        student.enroll_status_request_code = (
+            sqla_student.enroll_status_request_code)
         student.enroll_status_desc = sqla_student.enroll_status_desc
         student.ethnic_code = sqla_student.ethnic_code
         student.ethnic_desc = sqla_student.ethnic_desc
@@ -228,13 +228,13 @@ class UWPersonClient(AbstractUWPersonClient):
         student.exemption_code = sqla_student.exemption_code
         student.exemption_desc = sqla_student.exemption_desc
         student.external_email = sqla_student.external_email
-        student.first_generation_4yr_ind = \
-            sqla_student.first_generation_4yr_ind
+        student.first_generation_4yr_ind = (
+            sqla_student.first_generation_4yr_ind)
         student.first_generation_ind = sqla_student.first_generation_ind
         student.gender = sqla_student.gender
         student.high_school_gpa = sqla_student.high_school_gpa
-        student.high_school_graduation_date = \
-            sqla_student.high_school_graduation_date
+        student.high_school_graduation_date = (
+            sqla_student.high_school_graduation_date)
         student.hispanic_code = sqla_student.hispanic_code
         student.hispanic_desc = sqla_student.hispanic_desc
         student.hispanic_long_desc = sqla_student.hispanic_long_desc
@@ -243,11 +243,11 @@ class UWPersonClient(AbstractUWPersonClient):
             sqla_student.hispanic_group_code)
         student.honors_program_code = sqla_student.honors_program_code
         student.honors_program_ind = sqla_student.honors_program_ind
-        student.iss_perm_resident_country = \
-            sqla_student.iss_perm_resident_country
+        student.iss_perm_resident_country = (
+            sqla_student.iss_perm_resident_country)
         student.jr_col_gpa = sqla_student.jr_col_gpa
-        student.last_enrolled_yr_qtr_desc = \
-            sqla_student.last_enrolled_yr_qtr_desc
+        student.last_enrolled_yr_qtr_desc = Term.format_term_desc(
+            sqla_student.last_enrolled_yr_qtr_id)
         student.last_enrolled_yr_qtr_id = sqla_student.last_enrolled_yr_qtr_id
         student.local_addr_4digit_zip = sqla_student.local_addr_4digit_zip
         student.local_addr_5digit_zip = sqla_student.local_addr_5digit_zip
@@ -258,10 +258,10 @@ class UWPersonClient(AbstractUWPersonClient):
         student.local_addr_postal_code = sqla_student.local_addr_postal_code
         student.local_addr_state = sqla_student.local_addr_state
         student.local_phone_number = sqla_student.local_phone_number
-        student.new_continuing_returning_code = \
-            sqla_student.new_continuing_returning_code
-        student.new_continuing_returning_desc = \
-            sqla_student.new_continuing_returning_desc
+        student.new_continuing_returning_code = (
+            sqla_student.new_continuing_returning_code)
+        student.new_continuing_returning_desc = Student.NCR_DESCRIPTIONS.get(
+            sqla_student.new_continuing_returning_code)
         student.parent_name = sqla_student.parent_name
         student.perm_addr_4digit_zip = sqla_student.perm_addr_4digit_zip
         student.perm_addr_5digit_zip = sqla_student.perm_addr_5digit_zip
@@ -271,15 +271,17 @@ class UWPersonClient(AbstractUWPersonClient):
         student.perm_addr_line2 = sqla_student.perm_addr_line2
         student.perm_addr_postal_code = sqla_student.perm_addr_postal_code
         student.perm_addr_state = sqla_student.perm_addr_state
-        student.previous_institution_name = \
-            sqla_student.previous_institution_name
-        student.previous_institution_type = \
-            sqla_student.previous_institution_type
-        student.previous_institution_type_desc = \
-            sqla_student.previous_institution_type_desc
+        student.previous_institution_name = (
+            sqla_student.previous_institution_name)
+        student.previous_institution_type = (
+            sqla_student.previous_institution_type)
+        student.previous_institution_type_desc = (
+            Student.INSTITUTION_TYPE_DESCRIPTIONS.get(
+                sqla_student.previous_institution_type))
         student.record_load_dttm = sqla_student.record_load_dttm
         student.record_update_dttm = sqla_student.record_update_dttm
-        student.reg_first_yr_qtr_desc = sqla_student.reg_first_yr_qtr_desc
+        student.reg_first_yr_qtr_desc = Term.format_term_desc(
+            sqla_student.reg_first_yr_qtr_id)
         student.reg_first_yr_qtr_id = sqla_student.reg_first_yr_qtr_id
         student.registered_in_quarter = sqla_student.registered_in_quarter
         student.registration_hold_ind = sqla_student.registration_hold_ind
@@ -290,8 +292,8 @@ class UWPersonClient(AbstractUWPersonClient):
         student.sr_col_gpa = sqla_student.sr_col_gpa
         student.student_email = sqla_student.student_email
         student.total_credits = sqla_student.total_credits
-        student.total_deductible_credits = \
-            sqla_student.total_deductible_credits
+        student.total_deductible_credits = (
+            sqla_student.total_deductible_credits)
         student.total_extension_credits = sqla_student.total_extension_credits
         student.total_grade_attempted = sqla_student.total_grade_attempted
         student.total_grade_points = sqla_student.total_grade_points
@@ -314,8 +316,8 @@ class UWPersonClient(AbstractUWPersonClient):
         # map academic term
         student.academic_term = self._map_term(sqla_student.academic_term)
 
-        student.admitted_for_yr_qtr_desc = \
-            sqla_student.admitted_for_yr_qtr_desc
+        student.admitted_for_yr_qtr_desc = Term.format_term_desc(
+            sqla_student.admitted_for_yr_qtr_id)
         student.admitted_for_yr_qtr_id = sqla_student.admitted_for_yr_qtr_id
 
         if include_student_majors:
@@ -399,8 +401,8 @@ class UWPersonClient(AbstractUWPersonClient):
     def _map_employee(self, sqla_employee):
         employee = Employee()
         employee.employee_number = sqla_employee.employee_number
-        employee.employee_affiliation_state = \
-            sqla_employee.employee_affiliation_state
+        employee.employee_affiliation_state = (
+            sqla_employee.employee_affiliation_state)
         employee.email_addresses = sqla_employee.email_addresses
         employee.home_department = sqla_employee.home_department
         employee.primary_title = sqla_employee.title
@@ -415,8 +417,7 @@ class UWPersonClient(AbstractUWPersonClient):
         adviser = Adviser()
         adviser.is_dept_adviser = sqla_adviser.is_dept_adviser
         adviser.advising_email = sqla_adviser.advising_email
-        adviser.advising_phone_number = \
-            sqla_adviser.advising_phone_number
+        adviser.advising_phone_number = sqla_adviser.advising_phone_number
         adviser.advising_program = sqla_adviser.advising_program
         adviser.advising_pronouns = sqla_adviser.advising_pronouns
         adviser.booking_url = sqla_adviser.booking_url
@@ -499,8 +500,8 @@ class UWPersonClient(AbstractUWPersonClient):
         transcript.num_ind_study = sqla_transcript.num_ind_study
         transcript.num_courses = sqla_transcript.num_courses
         transcript.enroll_status = sqla_transcript.enroll_status
-        transcript.enroll_status_request_code = \
-            sqla_transcript.enroll_status_request_code
+        transcript.enroll_status_request_code = (
+            sqla_transcript.enroll_status_request_code)
         transcript.enroll_status_desc = sqla_transcript.enroll_status_desc
         transcript.tenth_day_credits = float(sqla_transcript.tenth_day_credits)
         transcript.tr_en_stat_dt = sqla_transcript.tr_en_stat_dt

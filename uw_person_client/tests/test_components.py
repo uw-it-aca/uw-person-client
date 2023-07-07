@@ -17,3 +17,8 @@ class AbstractBaseTest(TestCase):
 
         with self.assertRaises(AttributeError):
             ab.foobar
+
+    def test_format_term_desc(self):
+        self.assertEqual(Term.format_term_desc(None), None)
+        self.assertEqual(Term.format_term_desc(20201), "Winter 2020")
+        self.assertEqual(Term.format_term_desc("20213"), "Summer 2021")
