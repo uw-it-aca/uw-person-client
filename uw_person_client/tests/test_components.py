@@ -3,7 +3,7 @@
 
 
 from unittest import TestCase
-from uw_person_client.components import AbstractBase
+from uw_person_client.components import AbstractBase, Term
 
 
 class AbstractBaseTest(TestCase):
@@ -19,6 +19,7 @@ class AbstractBaseTest(TestCase):
             ab.foobar
 
     def test_format_term_desc(self):
-        self.assertEqual(Term.format_term_desc(None), None)
+        self.assertEqual(Term.format_term_desc(None), "")
         self.assertEqual(Term.format_term_desc(20201), "Winter 2020")
         self.assertEqual(Term.format_term_desc("20213"), "Summer 2021")
+        self.assertEqual(Term.format_term_desc(" 20213 "), "Summer 2021")

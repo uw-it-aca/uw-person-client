@@ -192,7 +192,10 @@ class Term(AbstractBase):
 
     @staticmethod
     def format_term_desc(year_qtr_code):
-        if year_qtr_code:
-            year = str(year_qtr_code)[:4]
-            quarter = Term.TERM_NAMES.get(int(str(year_qtr_code)[-1]))
+        try:
+            year_qtr_code = str(year_qtr_code).strip()
+            year = year_qtr_code[:4]
+            quarter = Term.TERM_NAMES.get(int(year_qtr_code[-1]))
             return f"{quarter} {year}"
+        except ValueError:
+            return ""
