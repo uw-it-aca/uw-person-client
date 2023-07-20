@@ -122,7 +122,7 @@
     "majors": [
       {
         "college": "C",
-        "college_full_name": "College of Arts & Sciences",
+        "major_college_name": "College of Arts & Sciences",
         "major_abbr_code": "SIS",
         "major_branch": 0,
         "major_branch_name": "Seattle",

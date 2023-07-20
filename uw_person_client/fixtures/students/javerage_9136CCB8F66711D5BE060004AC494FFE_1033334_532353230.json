@@ -154,7 +154,7 @@
     "majors": [
       {
         "college": "C",
-        "college_full_name": "College of Arts & Sciences",
+        "major_college_name": "College of Arts & Sciences",
         "major_abbr_code": "PSOCS",
         "major_branch": 0,
         "major_campus_name": "Seattle",
@@ -197,7 +197,7 @@
     "pending_majors": [
       {
         "college": null,
-        "college_full_name": null,
+        "major_college_name": null,
         "major_abbr_code": "0-FINANC-01-12",
         "major_branch": null,
         "major_branch_name": null,
