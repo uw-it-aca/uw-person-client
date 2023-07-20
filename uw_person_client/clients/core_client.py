@@ -223,8 +223,7 @@ class UWPersonClient(AbstractUWPersonClient):
         student.ethnic_desc = sqla_student.ethnic_desc
         student.ethnic_long_desc = sqla_student.ethnic_long_desc
         student.ethnic_group_code = sqla_student.ethnic_group_code
-        student.ethnic_group_desc = Student.ETHNIC_GROUP_DESCRIPTIONS.get(
-            sqla_student.ethnic_group_code)
+        student.ethnic_group_desc = sqla_student.ethnic_group_desc
         student.exemption_code = sqla_student.exemption_code
         student.exemption_desc = sqla_student.exemption_desc
         student.external_email = sqla_student.external_email
@@ -239,8 +238,7 @@ class UWPersonClient(AbstractUWPersonClient):
         student.hispanic_desc = sqla_student.hispanic_desc
         student.hispanic_long_desc = sqla_student.hispanic_long_desc
         student.hispanic_group_code = sqla_student.hispanic_group_code
-        student.hispanic_group_desc = Student.ETHNIC_GROUP_DESCRIPTIONS.get(
-            sqla_student.hispanic_group_code)
+        student.hispanic_group_desc = sqla_student.hispanic_group_desc
         student.honors_program_code = sqla_student.honors_program_code
         student.honors_program_ind = sqla_student.honors_program_ind
         student.iss_perm_resident_country = \
@@ -432,8 +430,7 @@ class UWPersonClient(AbstractUWPersonClient):
         major.major_abbr_code = sqla_major.major_abbr_code
         major.major_pathway = sqla_major.major_pathway
         major.major_branch = sqla_major.major_branch
-        major.major_branch_name = Major.CAMPUS_NAMES.get(
-            sqla_major.major_branch)
+        major.major_branch_name = sqla_major.major_branch_name
         major.major_name = sqla_major.major_name
         major.major_full_name = sqla_major.major_full_name
         major.major_short_name = sqla_major.major_short_name
@@ -465,7 +462,7 @@ class UWPersonClient(AbstractUWPersonClient):
         major.major_nonmatric = sqla_major.major_nonmatric
         major.major_gnm = sqla_major.major_gnm
         major.college = sqla_major.college
-        major.college_full_name = Major.COLLEGE_FULL_NAMES.get(major.college)
+        major.major_college_name = sqla_major.major_college_name
         return major
 
     def _map_transcript(self, sqla_transcript):
@@ -540,21 +537,19 @@ class UWPersonClient(AbstractUWPersonClient):
         hold.seq = sqla_hold.seq
         hold.hold_dt = sqla_hold.hold_dt
         hold.hold_office = sqla_hold.hold_office
-        hold.hold_office_desc = Hold.OFFICE_DESCRIPTIONS.get(
-            sqla_hold.hold_office, sqla_hold.hold_office_desc)
+        hold.hold_office_desc = sqla_hold.hold_office_desc
         hold.hold_reason = sqla_hold.hold_reason
         hold.hold_type = sqla_hold.hold_type
-        hold.hold_type_desc = Hold.TYPE_DESCRIPTIONS.get(sqla_hold.hold_type)
+        hold.hold_type_desc = sqla_hold.hold_type_desc
         return hold
 
     def _map_degree(self, sqla_degree):
         degree = Degree()
         degree.degree_term = self._map_term(sqla_degree.degree_term)
         degree.campus_code = sqla_degree.campus_code
-        degree.campus_name = Major.CAMPUS_NAMES.get(sqla_degree.campus_code)
+        degree.campus_name = sqla_degree.campus_name
         degree.degree_college_code = sqla_degree.degree_college_code
-        degree.degree_college_name = Major.COLLEGE_FULL_NAMES.get(
-            sqla_degree.degree_college_code)
+        degree.degree_college_name = sqla_degree.degree_college_name
         degree.degree_abbr_code = sqla_degree.degree_abbr_code
         degree.degree_pathway_num = sqla_degree.degree_pathway_num
         degree.degree_level_code = sqla_degree.degree_level_code
@@ -566,8 +561,7 @@ class UWPersonClient(AbstractUWPersonClient):
         degree.degree_status_desc = sqla_degree.degree_status_desc
         degree.degree_date = sqla_degree.degree_date
         degree.degree_grad_honor = sqla_degree.degree_grad_honor
-        degree.degree_grad_honor_desc = Degree.GRAD_HONOR_DESCRIPTIONS.get(
-            sqla_degree.degree_grad_honor)
+        degree.degree_grad_honor_desc = sqla_degree.degree_grad_honor_desc
         degree.degree_uw_credits = sqla_degree.degree_uw_credits
         degree.degree_transfer_credits = sqla_degree.degree_transfer_credits
         degree.degree_extension_credits = sqla_degree.degree_extension_credits
@@ -580,5 +574,4 @@ class UWPersonClient(AbstractUWPersonClient):
         term = Term()
         term.year = sqla_term.year
         term.quarter = sqla_term.quarter
-        term.quarter_name = Term.TERM_NAMES.get(sqla_term.quarter, "")
         return term
