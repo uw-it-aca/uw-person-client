@@ -189,7 +189,9 @@ class UWPersonClient(AbstractUWPersonClient):
 
         student.system_key = sqla_student.system_key
         student.student_number = sqla_student.student_number
-        student.application_status_code = sqla_student.application_status_code
+        student.application_status_code = None if (
+            sqla_student.application_status_code is None) else str(
+                sqla_student.application_status_code)
         student.application_status_desc = sqla_student.application_status_desc
         student.application_type_code = sqla_student.application_type_code
         student.application_type_desc = sqla_student.application_type_desc
@@ -202,11 +204,15 @@ class UWPersonClient(AbstractUWPersonClient):
         student.birth_country = sqla_student.birth_country
         student.birth_state = sqla_student.birth_state
         student.birthdate = sqla_student.birthdate
-        student.campus_code = sqla_student.campus_code
+        student.campus_code = None if (
+            sqla_student.campus_code is None) else str(
+                sqla_student.campus_code)
         student.campus_desc = sqla_student.campus_desc
         student.child_of_alumni = sqla_student.child_of_alumni
         student.citizen_country = sqla_student.citizen_country
-        student.class_code = sqla_student.class_code
+        student.class_code = None if (
+            sqla_student.class_code is None) else str(
+                sqla_student.class_code)
         student.class_desc = sqla_student.class_desc
         student.cumulative_gpa = sqla_student.cumulative_gpa
         student.deceased_date = sqla_student.deceased_date
@@ -215,7 +221,9 @@ class UWPersonClient(AbstractUWPersonClient):
         student.emergency_email = sqla_student.emergency_email
         student.emergency_name = sqla_student.emergency_name
         student.emergency_phone = sqla_student.emergency_phone
-        student.enroll_status_code = sqla_student.enroll_status_code
+        student.enroll_status_code = None if (
+            sqla_student.enroll_status_code is None) else str(
+                sqla_student.enroll_status_code)
         student.enroll_status_request_code = \
             sqla_student.enroll_status_request_code
         student.enroll_status_desc = sqla_student.enroll_status_desc
@@ -224,7 +232,9 @@ class UWPersonClient(AbstractUWPersonClient):
         student.ethnic_long_desc = sqla_student.ethnic_long_desc
         student.ethnic_group_code = sqla_student.ethnic_group_code
         student.ethnic_group_desc = sqla_student.ethnic_group_desc
-        student.exemption_code = sqla_student.exemption_code
+        student.exemption_code = None if (
+            sqla_student.exemption_code is None) else str(
+                sqla_student.exemption_code)
         student.exemption_desc = sqla_student.exemption_desc
         student.external_email = sqla_student.external_email
         student.first_generation_4yr_ind = \
@@ -256,8 +266,9 @@ class UWPersonClient(AbstractUWPersonClient):
         student.local_addr_postal_code = sqla_student.local_addr_postal_code
         student.local_addr_state = sqla_student.local_addr_state
         student.local_phone_number = sqla_student.local_phone_number
-        student.new_continuing_returning_code = \
-            sqla_student.new_continuing_returning_code
+        student.new_continuing_returning_code = None if (
+            sqla_student.new_continuing_returning_code is None) else str(
+                sqla_student.new_continuing_returning_code)
         student.new_continuing_returning_desc = \
             sqla_student.new_continuing_returning_desc
         student.parent_name = sqla_student.parent_name
@@ -304,7 +315,9 @@ class UWPersonClient(AbstractUWPersonClient):
         student.total_uw_credits = sqla_student.total_uw_credits
         student.total_upper_div_transfer_credits = \
             sqla_student.total_upper_div_transfer_credits
-        student.veteran_benefit_code = sqla_student.veteran_benefit_code
+        student.veteran_benefit_code = None if (
+            sqla_student.veteran_benefit_code is None) else str(
+                sqla_student.veteran_benefit_code)
         student.veteran_benefit_desc = sqla_student.veteran_benefit_desc
         student.veteran_desc = sqla_student.veteran_desc
         student.visa_type = sqla_student.visa_type
