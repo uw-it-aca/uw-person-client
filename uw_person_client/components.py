@@ -53,12 +53,9 @@ class AbstractBase():
                 elif key == "student":
                     new_obj = Student()
                     obj.student = new_obj.from_dict(value, obj=new_obj)
-                elif key == "tran_term":
+                elif key in ["leave_ends_term", "degree_term", "tran_term"]:
                     new_obj = Term()
-                    obj.tran_term = new_obj.from_dict(value, obj=new_obj)
-                elif key == "leave_ends_term":
-                    new_obj = Term()
-                    obj.leave_ends_term = new_obj.from_dict(value, obj=new_obj)
+                    setattr(obj, key, new_obj.from_dict(value, obj=new_obj))
             elif isinstance(value, list):
                 if key == "majors" or key == "pending_majors":
                     obj_cls = Major
@@ -91,16 +88,7 @@ class Person(AbstractBase):
 
 
 class Student(AbstractBase):
-    ETHNIC_GROUP_DESCRIPTIONS = {
-        "1": "African American",
-        "2": "American Indian",
-        "3": "White",
-        "4": "Hispanic/Latino",
-        "5": "Asian American",
-        "6": "Hawaiian/Pacific Islander",
-        "7": "Not Indicated",
-        "99": "International",
-    }
+    pass
 
 
 class Employee(AbstractBase):
@@ -116,55 +104,15 @@ class Transfer(AbstractBase):
 
 
 class Hold(AbstractBase):
-    TYPE_DESCRIPTIONS = {
-        1: "REGISTRATION HOLD",
-        2: "TRANSCRIPT HOLD",
-        3: "REGISTRATION AND TRANSCRIPT HOLD"
-    }
-    OFFICE_DESCRIPTIONS = {
-        "EOP": "EDUCATIONAL OPPTNY PROGR"
-    }
+    pass
 
 
 class Degree(AbstractBase):
-    GRAD_HONOR_DESCRIPTIONS = {
-        1: "SUMMA CUM LAUDE",
-        2: "MAGNA CUM LAUDE",
-        3: "CUM LAUDE"
-    }
+    pass
 
 
 class Major(AbstractBase):
-    CAMPUS_NAMES = {
-        0: "Seattle",
-        1: "Bothell",
-        2: "Tacoma"
-    }
-    COLLEGE_FULL_NAMES = {
-        "A": "Interdisciplinary Undergraduate Programs",
-        "B": "College of Built Environments",
-        "C": "College of Arts & Sciences",
-        "D": "College of the Environment",
-        "E": "Foster School of Business",
-        "H": "College of Education",
-        "J": "College of Engineering",
-        "J2": "School of Computer Science & Engineering",
-        "K": "College of Ocean & Fishery Sciences",
-        "L": "College of Forest Resources",
-        "M": "School of Public Health",
-        "N": "School of Nursing",
-        "O": "Interschool or Intercollege Programs",
-        "P": "School of Pharmacy",
-        "Q": "Evans School of Public Affairs",
-        "R": "Interdisciplinary Graduate Programs",
-        "S": "The Information School",
-        "T": "School of Social Work",
-        "U": "School of Dentistry",
-        "V": "UW Bothell",
-        "X": "School of Law",
-        "Y": "School of Medicine",
-        "Z": "UW Tacoma"
-    }
+    pass
 
 
 class Sport(AbstractBase):
@@ -177,3 +125,7 @@ class Adviser(AbstractBase):
 
 class Term(AbstractBase):
     TERM_NAMES = {1: "Winter", 2: "Spring", 3: "Summer", 4: "Autumn"}
+
+    @property
+    def quarter_name(self):
+        return self.TERM_NAMES.get(self.quarter)

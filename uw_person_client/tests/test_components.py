@@ -3,7 +3,7 @@
 
 
 from unittest import TestCase
-from uw_person_client.components import AbstractBase
+from uw_person_client.components import AbstractBase, Term
 
 
 class AbstractBaseTest(TestCase):
@@ -17,3 +17,17 @@ class AbstractBaseTest(TestCase):
 
         with self.assertRaises(AttributeError):
             ab.foobar
+
+
+class TermTest(TestCase):
+    def test_quarter_name(self):
+        term = Term()
+
+        with self.assertRaises(AttributeError):
+            term.quarter_name
+        term.quarter = 0
+        self.assertEqual(term.quarter_name, None)
+        term.quarter = 1
+        self.assertEqual(term.quarter_name, "Winter")
+        term.quarter = 4
+        self.assertEqual(term.quarter_name, "Autumn")
