@@ -41,22 +41,23 @@ class UWPersonClient(AbstractUWPersonClient):
         return self._map_person(sqla_person, **kwargs)
 
     def get_person_by_student_number(self, student_number, **kwargs):
-        sqla_person = self.DB.session.query(self.DB.Person).join(
-            self.DB.Student
-        ).filter(
-            self.DB.Student.student_number == self.format_student_number(
-                student_number)
-        ).one_or_none()
+        sqla_person = None
+        student_number = self.format_student_number(student_number)
+        if student_number is not None:
+            sqla_person = self.DB.session.query(self.DB.Person).join(
+                self.DB.Student).filter(
+                self.DB.Student.student_number == student_number).one_or_none()
         if sqla_person is None:
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
 
     def get_person_by_system_key(self, system_key, **kwargs):
-        sqla_person = self.DB.session.query(self.DB.Person).join(
-            self.DB.Student
-        ).filter(
-            self.DB.Student.system_key == self.format_system_key(system_key)
-        ).one_or_none()
+        sqla_person = None
+        system_key = self.format_system_key(system_key)
+        if system_key is not None:
+            sqla_person = self.DB.session.query(self.DB.Person).join(
+                self.DB.Student).filter(
+                self.DB.Student.system_key == system_key).one_or_none()
         if sqla_person is None:
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
