@@ -96,9 +96,11 @@ class MockedUWPersonClient(AbstractUWPersonClient):
         return self._read_person_file(f'**/*{uwregid}*.json',  **kwargs)
 
     def get_person_by_student_number(self, student_number, **kwargs):
+        student_number = self.format_student_number(student_number)
         return self._read_person_file(f'**/*{student_number}*.json',  **kwargs)
 
     def get_person_by_system_key(self, system_key, **kwargs):
+        system_key = self.format_system_key(system_key)
         return self._read_person_file(f'**/*{system_key}*.json',  **kwargs)
 
     def get_persons(self, page=None, page_size=None, **kwargs):

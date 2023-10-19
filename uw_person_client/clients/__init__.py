@@ -33,3 +33,16 @@ class AbstractUWPersonClient():
 
     def get_persons_by_adviser_regid(self, uwregid):
         raise NotImplementedError()
+
+    def _zfill_or_none(self, value, length):
+        value = str(value).zfill(length) if (
+            value and len(str(value)) > 0) else None
+        if value == "0" * length:
+            return None
+        return value
+
+    def format_system_key(self, value):
+        return self._zfill_or_none(value, 9)
+
+    def format_student_number(self, value):
+        return self._zfill_or_none(value, 7)
