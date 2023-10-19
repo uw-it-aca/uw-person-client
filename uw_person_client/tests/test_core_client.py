@@ -74,7 +74,7 @@ class UWPersonClientTest(TestCase):
         client = self.get_mock_person_client()
         # person exists
         mock_person = MagicMock()
-        mock_student_number = 'test',
+        mock_student_number = '1234567'
         client.DB.session.query.return_value.join.return_value.filter.\
             return_value.one_or_none = MagicMock(return_value=mock_person)
 
@@ -104,7 +104,7 @@ class UWPersonClientTest(TestCase):
         client = self.get_mock_person_client()
         # person exists
         mock_person = MagicMock()
-        mock_system_key = 'test',
+        mock_system_key = '12345'
         client.DB.session.query.return_value.join.return_value.filter.\
             return_value.one_or_none = MagicMock(return_value=mock_person)
 

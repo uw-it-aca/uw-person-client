@@ -35,7 +35,13 @@ class MockedUWPersonClientTest(TestCase):
         self.assertEqual(person.student.student_number, "1033334")
 
         with self.assertRaises(PersonNotFoundException):
+            client.get_person_by_student_number("1234")
+
+        with self.assertRaises(PersonNotFoundException):
             client.get_person_by_student_number("foo")
+
+        with self.assertRaises(PersonNotFoundException):
+            client.get_person_by_student_number(None)
 
     def test_get_person_by_system_key(self):
         client = MockedUWPersonClient()
@@ -44,8 +50,15 @@ class MockedUWPersonClientTest(TestCase):
         self.assertEqual(person.uwregid, "9136CCB8F66711D5BE060004AC494FFE")
         self.assertEqual(person.student.student_number, "1033334")
         self.assertEqual(person.student.system_key, "532353230")
+
+        with self.assertRaises(PersonNotFoundException):
+            client.get_person_by_system_key("12345")
+
         with self.assertRaises(PersonNotFoundException):
             client.get_person_by_system_key("foo")
+
+        with self.assertRaises(PersonNotFoundException):
+            client.get_person_by_student_number(None)
 
     def test_get_persons(self):
         client = MockedUWPersonClient()
