@@ -4,6 +4,7 @@
 
 from commonconf import settings
 from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
 from uw_person_client.databases import AbstractDatabase
 
 
@@ -21,6 +22,12 @@ class Postgres(AbstractDatabase):
             port=getattr(settings, "UW_PERSON_DB_PORT"),
             database=getattr(settings, "UW_PERSON_DB_DATABASE")
         )
-        self.engine = create_engine(url,
-                                    echo=False,
-                                    logging_name='sqlalchemy')
+        self.engine = create_engine(
+            url,
+            logging_name="sqlalchemy.engine",
+            pool_logging_name="sqlalchemy.pool",
+            poolclass=QueuePool,
+            pool_size=getattr(settings, "UW_PERSON_DB_POOL_SIZE", 2),
+            max_overflow=getattr(settings, "UW_PERSON_DB_MAX_OVERFLOW", 5),
+            pool_recycle=getattr(settings, "UW_PERSON_DB_POOL_RECYCLE", 600)
+        )
