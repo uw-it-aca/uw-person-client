@@ -18,7 +18,7 @@ class UWPersonClientTest(TestCase):
     @patch('uw_person_client.clients.core_client.UWPDS')
     def get_mock_person_client(self, mock_uwpds):
         client = UWPersonClient()
-        client.DB = mock_uwpds.return_value
+        setattr(client.__class__, 'DB', mock_uwpds.return_value)
         return client
 
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_person')

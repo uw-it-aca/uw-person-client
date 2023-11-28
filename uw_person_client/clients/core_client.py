@@ -11,16 +11,18 @@ from uw_person_client.exceptions import (
 from uw_person_client.components import (
     Person, Student, Employee, Transcript, Major, Sport, Adviser, Term,
     Transfer, Hold, Degree)
+from threading import local
 
 
 class UWPersonClient(AbstractUWPersonClient):
 
-    """
-    Public methods
-    """
+    _local = local()
 
-    def __init__(self):
-        self.DB = UWPDS()
+    @property
+    def DB(self):
+        if not hasattr(self._local, "DB"):
+            self._local.DB = UWPDS()
+        return self._local.DB
 
     def get_person_by_uwnetid(self, uwnetid, **kwargs):
         sqla_person = self.DB.session.query(self.DB.Person).filter(
