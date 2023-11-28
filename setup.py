@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 README = """
 See the README on `GitHub
-<https://github.com/uw-it-aca/axdd-person-client>`_.
+<https://github.com/uw-it-aca/uw-person-client>`_.
 """
 
 version_path = 'uw_person_client/VERSION'
@@ -14,7 +14,7 @@ VERSION = VERSION.replace("\n", "")
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='axdd-person-client',
+    name='uw-person-client',
     version=VERSION,
     packages=find_packages(),
     package_data={
@@ -24,7 +24,7 @@ setup(
                              "fixtures/*.json"],
     },
     include_package_data=True,
-    author="UW-IT AXDD",
+    author="UW-IT T&LS",
     author_email="aca-it@uw.edu",
     install_requires=['commonconf',
                       'mock',
@@ -33,14 +33,13 @@ setup(
                      ],
     license='Apache License, Version 2.0',
     description=('A library for connecting to and querying the '
-                 'uw-person-datastore'),
+                 'T&LS UW person datastore'),
     long_description=README,
-    url='https://github.com/uw-it-aca/axdd-person-client',
+    url='https://github.com/uw-it-aca/uw-person-client',
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.6',
     ],
 )
