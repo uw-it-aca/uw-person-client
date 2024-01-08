@@ -1,4 +1,4 @@
-# Copyright 2023 UW-IT, University of Washington
+# Copyright 2024 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
 
@@ -62,14 +62,17 @@ class UWPDS(Postgres):
             major_1_id = Column('major_1_id',
                                 ForeignKey('major.id', ondelete="CASCADE"))
             major_1 = relationship("major", foreign_keys=[major_1_id],
+                                   back_populates="student", uselist=False,
                                    viewonly=True)
             major_2_id = Column('major_2_id',
                                 ForeignKey('major.id', ondelete="CASCADE"))
             major_2 = relationship("major", foreign_keys=[major_2_id],
+                                   back_populates="student", uselist=False,
                                    viewonly=True)
             major_3_id = Column('major_3_id',
                                 ForeignKey('major.id', ondelete="CASCADE"))
             major_3 = relationship("major", foreign_keys=[major_3_id],
+                                   back_populates="student", uselist=False,
                                    viewonly=True)
             # pending majors
             pending_major_1_id = Column(
@@ -77,18 +80,21 @@ class UWPDS(Postgres):
                 ForeignKey('major.id', ondelete="CASCADE"))
             pending_major_1 = \
                 relationship("major", foreign_keys=[pending_major_1_id],
+                             back_populates="student", uselist=False,
                              viewonly=True)
             pending_major_2_id = Column(
                 'pending_major_2_id',
                 ForeignKey('major.id', ondelete="CASCADE"))
             pending_major_2 = \
                 relationship("major", foreign_keys=[pending_major_2_id],
+                             back_populates="student", uselist=False,
                              viewonly=True)
             pending_major_3_id = Column(
                 'pending_major_3_id',
                 ForeignKey('major.id', ondelete="CASCADE"))
             pending_major_3 = \
                 relationship("major", foreign_keys=[pending_major_3_id],
+                             back_populates="student", uselist=False,
                              viewonly=True)
             transcript = relationship(
                 "Transcript", back_populates="student", uselist=True,
