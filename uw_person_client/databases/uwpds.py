@@ -64,21 +64,21 @@ class UWPDS(Postgres):
             major_1 = relationship(
                 "major",
                 foreign_keys=[major_1_id],
-                primaryjoin="Student.major_1_id == Major.id",
+                primaryjoin="Student.major_1_id == major.id",
                 viewonly=True)
             major_2_id = Column('major_2_id',
                                 ForeignKey('major.id', ondelete="CASCADE"))
             major_2 = relationship(
                 "major",
                 foreign_keys=[major_2_id],
-                primaryjoin="Student.major_2_id == Major.id",
+                primaryjoin="Student.major_2_id == major.id",
                 viewonly=True)
             major_3_id = Column('major_3_id',
                                 ForeignKey('major.id', ondelete="CASCADE"))
             major_3 = relationship(
                 "major",
                 foreign_keys=[major_3_id],
-                primaryjoin="Student.major_3_id == Major.id",
+                primaryjoin="Student.major_3_id == major.id",
                 viewonly=True)
             # pending majors
             pending_major_1_id = Column(
@@ -87,7 +87,7 @@ class UWPDS(Postgres):
             pending_major_1 = relationship(
                 "major",
                 foreign_keys=[pending_major_1_id],
-                primaryjoin="Student.pending_major_1_id == Major.id",
+                primaryjoin="Student.pending_major_1_id == major.id",
                 viewonly=True)
             pending_major_2_id = Column(
                 'pending_major_2_id',
@@ -95,7 +95,7 @@ class UWPDS(Postgres):
             pending_major_2 = relationship(
                 "major",
                 foreign_keys=[pending_major_2_id],
-                primaryjoin="Student.pending_major_2_id == Major.id",
+                primaryjoin="Student.pending_major_2_id == major.id",
                 viewonly=True)
             pending_major_3_id = Column(
                 'pending_major_3_id',
@@ -103,7 +103,7 @@ class UWPDS(Postgres):
             pending_major_3 = relationship(
                 "major",
                 foreign_keys=[pending_major_3_id],
-                primaryjoin="Student.pending_major_3_id == Major.id",
+                primaryjoin="Student.pending_major_3_id == major.id",
                 viewonly=True)
             transcript = relationship(
                 "Transcript", back_populates="student", uselist=True,
