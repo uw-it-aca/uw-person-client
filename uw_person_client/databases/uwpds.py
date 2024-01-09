@@ -61,41 +61,50 @@ class UWPDS(Postgres):
             # majors
             major_1_id = Column('major_1_id',
                                 ForeignKey('major.id', ondelete="CASCADE"))
-            major_1 = relationship("major", foreign_keys=[major_1_id],
-                                   back_populates="student", uselist=False,
-                                   viewonly=True)
+            major_1 = relationship(
+                "Major",
+                foreign_keys=[major_1_id],
+                primaryjoin="Student.major_1_id == Major.id",
+                viewonly=True)
             major_2_id = Column('major_2_id',
                                 ForeignKey('major.id', ondelete="CASCADE"))
-            major_2 = relationship("major", foreign_keys=[major_2_id],
-                                   back_populates="student", uselist=False,
-                                   viewonly=True)
+            major_2 = relationship(
+                "Major",
+                foreign_keys=[major_2_id],
+                primaryjoin="Student.major_2_id == Major.id",
+                viewonly=True)
             major_3_id = Column('major_3_id',
                                 ForeignKey('major.id', ondelete="CASCADE"))
-            major_3 = relationship("major", foreign_keys=[major_3_id],
-                                   back_populates="student", uselist=False,
-                                   viewonly=True)
+            major_3 = relationship(
+                "Major",
+                foreign_keys=[major_3_id],
+                primaryjoin="Student.major_3_id == Major.id",
+                viewonly=True)
             # pending majors
             pending_major_1_id = Column(
                 'pending_major_1_id',
                 ForeignKey('major.id', ondelete="CASCADE"))
-            pending_major_1 = \
-                relationship("major", foreign_keys=[pending_major_1_id],
-                             back_populates="student", uselist=False,
-                             viewonly=True)
+            pending_major_1 = relationship(
+                "Major",
+                foreign_keys=[pending_major_1_id],
+                primaryjoin="Student.pending_major_1_id == Major.id",
+                viewonly=True)
             pending_major_2_id = Column(
                 'pending_major_2_id',
                 ForeignKey('major.id', ondelete="CASCADE"))
-            pending_major_2 = \
-                relationship("major", foreign_keys=[pending_major_2_id],
-                             back_populates="student", uselist=False,
-                             viewonly=True)
+            pending_major_2 = relationship(
+                "Major",
+                foreign_keys=[pending_major_2_id],
+                primaryjoin="Student.pending_major_2_id == Major.id",
+                viewonly=True)
             pending_major_3_id = Column(
                 'pending_major_3_id',
                 ForeignKey('major.id', ondelete="CASCADE"))
-            pending_major_3 = \
-                relationship("major", foreign_keys=[pending_major_3_id],
-                             back_populates="student", uselist=False,
-                             viewonly=True)
+            pending_major_3 = relationship(
+                "Major",
+                foreign_keys=[pending_major_3_id],
+                primaryjoin="Student.pending_major_3_id == Major.id",
+                viewonly=True)
             transcript = relationship(
                 "Transcript", back_populates="student", uselist=True,
                 viewonly=True)
@@ -136,6 +145,10 @@ class UWPDS(Postgres):
                                            foreign_keys=[leave_ends_term_id],
                                            viewonly=True)
 
+        class Major(UWPDS.Base):
+            __tablename__ = "major"
+            __table_args__ = {'extend_existing': True}
+
         class Degree(UWPDS.Base):
             __tablename__ = "degree"
             __table_args__ = {'extend_existing': True}
@@ -149,6 +162,7 @@ class UWPDS(Postgres):
         UWPDS.Base.classes.student = Student
         UWPDS.Base.classes.employee = Employee
         UWPDS.Base.classes.transcript = Transcript
+        UWPDS.Base.classes.major = Major
         UWPDS.Base.classes.degree = Degree
         UWPDS.Base.classes.student_to_sport = student_to_sport
         UWPDS.Base.classes.student_to_adviser = student_to_adviser
