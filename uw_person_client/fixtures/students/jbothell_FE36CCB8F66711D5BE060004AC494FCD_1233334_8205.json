@@ -50,6 +50,7 @@
         "prior_uwregids": [],
         "pronouns": "He/him/his",
         "surname": "Adviser",
+        "system_key": null,
         "uwnetid": "jadviser",
         "uwregid": "5136CCB9F66711D5BE060004AC494FF0",
         "whitepages_publish": false
@@ -289,6 +290,7 @@
     "visa_type": "F1"
   },
   "surname": "Student",
+  "system_key": "820582050",
   "uwnetid": "jbothell",
   "uwregid": "FE36CCB8F66711D5BE060004AC494FCD",
   "whitepages_publish": false
