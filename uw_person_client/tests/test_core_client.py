@@ -110,22 +110,17 @@ class UWPersonClientTest(TestCase):
 
         return_value = client.get_person_by_system_key(
             mock_system_key, arg1='arg1')
+
         # assertions
-        client.DB.session.query.assert_called_once_with(
-            client.DB.Person)
-        client.DB.session.query.return_value.join.assert_called_once_with(
-            client.DB.Student)
-        client.DB.session.query.return_value.join.return_value.filter.\
-            assert_called_once_with(
-                client.DB.Student.system_key == mock_system_key)
-        client.DB.session.query.return_value.join.return_value.filter.\
-            return_value.one_or_none.assert_called_once()
+        client.DB.session.query.assert_called_once_with(client.DB.Person)
+        client.DB.session.query.return_value.filter.return_value.one_or_none.\
+            assert_called_once()
         self.assertEqual(
             return_value, mock_map_person(mock_person, arg1='arg1'))
 
         # no person found
-        client.DB.session.query.return_value.join.return_value.filter.\
-            return_value.one_or_none = MagicMock(return_value=None)
+        client.DB.session.query.return_value.filter.return_value.one_or_none =\
+            MagicMock(return_value=None)
         with self.assertRaises(PersonNotFoundException):
             client.get_person_by_system_key(mock_system_key)
 
