@@ -57,9 +57,8 @@ class UWPersonClient(AbstractUWPersonClient):
         sqla_person = None
         system_key = self.format_system_key(system_key)
         if system_key is not None:
-            sqla_person = self.DB.session.query(self.DB.Person).join(
-                self.DB.Student).filter(
-                self.DB.Student.system_key == system_key).one_or_none()
+            sqla_person = self.DB.session.query(self.DB.Person).filter(
+                self.DB.Person.system_key == system_key).one_or_none()
         if sqla_person is None:
             raise PersonNotFoundException()
         return self._map_person(sqla_person, **kwargs)
@@ -144,6 +143,7 @@ class UWPersonClient(AbstractUWPersonClient):
         person.uwregid = sqla_person.uwregid
         person.prior_uwnetids = sqla_person.prior_uwnetids
         person.prior_uwregids = sqla_person.prior_uwregids
+        person.system_key = sqla_person.system_key
         person.pronouns = sqla_person.pronouns
         person.full_name = sqla_person.full_name
         person.display_name = sqla_person.display_name
