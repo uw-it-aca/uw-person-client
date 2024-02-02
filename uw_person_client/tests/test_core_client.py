@@ -119,8 +119,8 @@ class UWPersonClientTest(TestCase):
             return_value, mock_map_person(mock_person, arg1='arg1'))
 
         # no person found
-        client.DB.session.query.return_value.join.return_value.filter.\
-            return_value.one_or_none = MagicMock(return_value=None)
+        client.DB.session.query.return_value.filter.return_value.one_or_none =\
+            MagicMock(return_value=None)
         with self.assertRaises(PersonNotFoundException):
             client.get_person_by_system_key(mock_system_key)
 
