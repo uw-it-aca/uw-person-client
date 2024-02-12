@@ -53,7 +53,8 @@ class MockedUWPersonClient(AbstractUWPersonClient):
         return list(persons.values())
 
     def _load_person_from_file(self, filename,  **kwargs):
-        person = Person().from_dict(json.load(open(filename)))
+        filehandle = open(filename)
+        person = Person().from_dict(json.load(filehandle))
         if not kwargs.get('include_employee', True):
             self._delete_attr(person, "employee")
         if not kwargs.get('include_student', True):
@@ -75,6 +76,7 @@ class MockedUWPersonClient(AbstractUWPersonClient):
                 self._delete_attr(person.student, "holds")
             if not kwargs.get('include_student_degrees', True):
                 self._delete_attr(person.student, "degrees")
+        filehandle.close()
         return person
 
     def _delete_attr(self, obj, attr):
