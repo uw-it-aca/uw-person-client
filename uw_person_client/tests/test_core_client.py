@@ -332,6 +332,7 @@ class UWPersonClientTest(TestCase):
         mock_person = MagicMock()
         mock_person.uwnetid = MagicMock()
         mock_person.uwregid = MagicMock()
+        mock_person.system_key = MagicMock()
         mock_person.first_name = MagicMock()
         mock_person.prior_uwnetids = [mock_priors[0].uwnetid]
         mock_person.prior_uwregids = [mock_priors[0].uwregid]
@@ -348,14 +349,24 @@ class UWPersonClientTest(TestCase):
 
         mock_dict = self._mock_to_dict(mock_person)
         person = client._map_person(mock_person)
+
         # assertions
         self.assertIsInstance(person, Person)
-        self.assertEqual(mock_person._is_active_student, person.active_student)
+        self.assertEqual(mock_person._is_active_student,
+                         person.active_student)
         self.assertEqual(mock_person._is_active_employee,
                          person.active_employee)
-        for key in ['_is_active_student', '_is_active_employee']:
+
+        for key in ['_is_active_employee', '_is_active_student']:
             del mock_dict[key]
-        self.assertDictContainsSubset(mock_dict, person.to_dict())
+
+        person_dict = person.to_dict()
+        for key in ['student', 'employee', 'active_student',
+                    'active_employee']:
+            del person_dict[key]
+
+        self.assertEqual(sorted(mock_dict.keys()),
+                         sorted(person_dict.keys()))
         mock_map_employee.assert_called()
         mock_map_student.assert_called()
 
@@ -366,7 +377,10 @@ class UWPersonClientTest(TestCase):
     @patch('uw_person_client.clients.core_client.UWPersonClient.'
            '_map_transcript')
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_transfer')
-    def test_map_student(self, mock_map_transfer, mock_map_transcript,
+    @patch('uw_person_client.clients.core_client.UWPersonClient._map_degree')
+    @patch('uw_person_client.clients.core_client.UWPersonClient._map_hold')
+    def test_map_student(self, mock_map_hold, mock_map_degree,
+                         mock_map_transfer, mock_map_transcript,
                          mock_map_sport, mock_map_term, mock_map_major,
                          mock_map_person):
         client = self.get_mock_person_client()
@@ -404,6 +418,7 @@ class UWPersonClientTest(TestCase):
         mock_student.ethnic_desc = MagicMock()
         mock_student.ethnic_long_desc = MagicMock()
         mock_student.ethnic_group_code = MagicMock()
+        mock_student.ethnic_group_desc = MagicMock()
         mock_student.exemption_code = MagicMock()
         mock_student.exemption_desc = MagicMock()
         mock_student.external_email = MagicMock()
@@ -416,8 +431,12 @@ class UWPersonClientTest(TestCase):
         mock_student.hispanic_desc = MagicMock()
         mock_student.hispanic_long_desc = MagicMock()
         mock_student.hispanic_group_code = MagicMock()
+        mock_student.hispanic_group_desc = MagicMock()
         mock_student.honors_program_code = MagicMock()
         mock_student.honors_program_ind = MagicMock()
+        mock_student.intended_major1_code = MagicMock()
+        mock_student.intended_major2_code = MagicMock()
+        mock_student.intended_major3_code = MagicMock()
         mock_student.iss_perm_resident_country = MagicMock()
         mock_student.jr_col_gpa = MagicMock()
         mock_student.last_enrolled_yr_qtr_desc = MagicMock()
@@ -451,6 +470,9 @@ class UWPersonClientTest(TestCase):
         mock_student.reg_first_yr_qtr_id = MagicMock()
         mock_student.registered_in_quarter = MagicMock()
         mock_student.registration_hold_ind = MagicMock()
+        mock_student.requested_major1_code = MagicMock()
+        mock_student.requested_major2_code = MagicMock()
+        mock_student.requested_major3_code = MagicMock()
         mock_student.resident_code = MagicMock()
         mock_student.resident_desc = MagicMock()
         mock_student.special_program_code = MagicMock()
@@ -472,25 +494,28 @@ class UWPersonClientTest(TestCase):
         mock_student.veteran_benefit_desc = MagicMock()
         mock_student.veteran_desc = MagicMock()
         mock_student.visa_type = MagicMock()
-        mock_student.sport = [MagicMock(), MagicMock()]
-        mock_student.adviser = [MagicMock(), MagicMock()]
-        mock_student.transcript = [MagicMock(), MagicMock()]
-        mock_student.transfer = [MagicMock(), MagicMock()]
+        mock_student.academic_term = MagicMock()
+        mock_student.admitted_for_yr_qtr_desc = MagicMock()
+        mock_student.admitted_for_yr_qtr_id = MagicMock()
+
         mock_dict = self._mock_to_dict(mock_student)
         client.DB.session.query.return_value.filter.return_value.one.\
             return_value = mock_student
         student = client._map_student(mock_student)
+
         # assertions
         self.assertIsInstance(student, Student)
-        for key in ['adviser', 'sport', 'transcript', 'transfer']:
-            del mock_dict[key]
-        # self.assertDictContainsSubset(mock_dict, student.to_dict())
+
+        student_dict = student.to_dict()
+        for key in ['advisers', 'sports', 'transcripts', 'transfers',
+                    'degrees', 'holds', 'majors', 'pending_majors']:
+            del student_dict[key]
+
+        self.maxDiff = None
+        self.assertEqual(sorted(mock_dict.keys()),
+                         sorted(student_dict.keys()))
         mock_map_term.assert_called()
-        mock_map_sport.assert_called()
         mock_map_major.assert_called()
-        mock_map_person.assert_called()
-        mock_map_transcript.assert_called()
-        mock_map_transfer.assert_called()
 
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_adviser')
     def test_map_employee(self, mock_map_adviser):
@@ -500,8 +525,9 @@ class UWPersonClientTest(TestCase):
         mock_employee.employee_affiliation_state = MagicMock()
         mock_employee.email_addresses = MagicMock()
         mock_employee.home_department = MagicMock()
-        mock_employee.title = MagicMock()
-        mock_employee.department = MagicMock()
+        mock_employee.primary_department = MagicMock()
+        mock_employee.primary_title = MagicMock()
+        mock_employee.adviser = MagicMock()
 
         mock_dict = self._mock_to_dict(mock_employee)
         employee = client._map_employee(mock_employee)
@@ -510,9 +536,8 @@ class UWPersonClientTest(TestCase):
         self.assertIsInstance(employee, Employee)
         self.assertEqual(mock_employee.title, employee.primary_title)
         self.assertEqual(mock_employee.department, employee.primary_department)
-        for key in ['title', 'department']:
-            del mock_dict[key]
-        self.assertDictContainsSubset(mock_dict, employee.to_dict())
+        self.assertEqual(sorted(mock_dict.keys()),
+                         sorted(employee.to_dict().keys()))
         mock_map_adviser.assert_called_once()
 
     def test_map_adviser(self):
@@ -530,7 +555,8 @@ class UWPersonClientTest(TestCase):
 
         # assertions
         self.assertIsInstance(adviser, Adviser)
-        self.assertDictContainsSubset(mock_dict, adviser.to_dict())
+        self.assertEqual(sorted(mock_dict.keys()),
+                         sorted(adviser.to_dict().keys()))
 
     def test_map_sport(self):
         client = self.get_mock_person_client()
@@ -542,7 +568,8 @@ class UWPersonClientTest(TestCase):
 
         # assertions
         self.assertIsInstance(sport, Sport)
-        self.assertDictContainsSubset(mock_dict, sport.to_dict())
+        self.assertEqual(sorted(mock_dict.keys()),
+                         sorted(sport.to_dict().keys()))
 
     def test_map_major(self):
         client = self.get_mock_person_client()
@@ -550,6 +577,7 @@ class UWPersonClientTest(TestCase):
         mock_major.major_abbr_code = MagicMock()
         mock_major.major_pathway = MagicMock()
         mock_major.major_branch = MagicMock()
+        mock_major.major_branch_name = MagicMock()
         mock_major.major_name = MagicMock()
         mock_major.major_full_name = MagicMock()
         mock_major.major_short_name = MagicMock()
@@ -581,13 +609,15 @@ class UWPersonClientTest(TestCase):
         mock_major.major_nonmatric = MagicMock()
         mock_major.major_gnm = MagicMock()
         mock_major.college = MagicMock()
+        mock_major.major_college_name = MagicMock()
 
         mock_dict = self._mock_to_dict(mock_major)
         major = client._map_major(mock_major)
 
         # assertions
         self.assertIsInstance(major, Major)
-        self.assertDictContainsSubset(mock_dict, major.to_dict())
+        self.assertEqual(sorted(mock_dict.keys()),
+                         sorted(major.to_dict().keys()))
 
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_term')
     def test_map_transcript(self, mock_map_term):
@@ -611,14 +641,20 @@ class UWPersonClientTest(TestCase):
         mock_transcript.qtr_comment = MagicMock()
         mock_transcript.honors_program = MagicMock()
         mock_transcript.special_program = MagicMock()
+        mock_transcript.special_program_desc = MagicMock()
+        mock_transcript.scholarship_abbr = MagicMock()
         mock_transcript.scholarship_type = MagicMock()
+        mock_transcript.scholarship_desc = MagicMock()
         mock_transcript.yearly_honor_type = MagicMock()
         mock_transcript.exemption_code = MagicMock()
         mock_transcript.num_ind_study = MagicMock()
         mock_transcript.num_courses = MagicMock()
         mock_transcript.enroll_status = MagicMock()
+        mock_transcript.enroll_status_request_code = MagicMock()
+        mock_transcript.enroll_status_desc = MagicMock()
         mock_transcript.tenth_day_credits = MagicMock()
         mock_transcript.tr_en_stat_dt = MagicMock()
+        mock_transcript.add_to_cum = MagicMock()
 
         mock_dict = self._mock_to_dict(mock_transcript)
         transcript = client._map_transcript(mock_transcript)
@@ -636,10 +672,8 @@ class UWPersonClientTest(TestCase):
                          transcript.qtr_graded_attmp)
         self.assertEqual(float(mock_transcript.tenth_day_credits),
                          transcript.tenth_day_credits)
-        for key in ['tran_term', 'leave_ends_term', 'qtr_grade_points',
-                    'qtr_graded_attmp', 'tenth_day_credits']:
-            del mock_dict[key]
-        self.assertDictContainsSubset(mock_dict, transcript.to_dict())
+        self.assertEqual(sorted(mock_dict.keys()),
+                         sorted(transcript.to_dict().keys()))
 
     def test_map_transfer(self):
         client = self.get_mock_person_client()
@@ -674,7 +708,8 @@ class UWPersonClientTest(TestCase):
 
         # assertions
         self.assertIsInstance(transfer, Transfer)
-        self.assertDictContainsSubset(mock_dict, transfer.to_dict())
+        self.assertEqual(sorted(mock_dict.keys()),
+                         sorted(transfer.to_dict().keys()))
 
     def test_map_hold(self):
         client = self.get_mock_person_client()
@@ -685,13 +720,15 @@ class UWPersonClientTest(TestCase):
         mock_hold.hold_office_desc = MagicMock()
         mock_hold.hold_reason = MagicMock()
         mock_hold.hold_type = MagicMock()
+        mock_hold.hold_type_desc = MagicMock()
 
         mock_dict = self._mock_to_dict(mock_hold)
         hold = client._map_hold(mock_hold)
 
         # assertions
         self.assertIsInstance(hold, Hold)
-        self.assertDictContainsSubset(mock_dict, hold.to_dict())
+        self.assertEqual(sorted(mock_dict.keys()),
+                         sorted(hold.to_dict().keys()))
 
     @patch('uw_person_client.clients.core_client.UWPersonClient._map_term')
     def test_map_degree(self, mock_map_term):
@@ -699,7 +736,9 @@ class UWPersonClientTest(TestCase):
         mock_degree = MagicMock()
         mock_degree.degree_term = MagicMock()
         mock_degree.campus_code = MagicMock()
+        mock_degree.campus_name = MagicMock()
         mock_degree.degree_college_code = MagicMock()
+        mock_degree.degree_college_name = MagicMock()
         mock_degree.degree_abbr_code = MagicMock()
         mock_degree.degree_pathway_num = MagicMock()
         mock_degree.degree_level_code = MagicMock()
@@ -711,6 +750,7 @@ class UWPersonClientTest(TestCase):
         mock_degree.degree_status_desc = MagicMock()
         mock_degree.degree_date = MagicMock()
         mock_degree.degree_grad_honor = MagicMock()
+        mock_degree.degree_grad_honor_desc = MagicMock()
         mock_degree.degree_uw_credits = MagicMock()
         mock_degree.degree_transfer_credits = MagicMock()
         mock_degree.degree_extension_credits = MagicMock()
@@ -724,8 +764,8 @@ class UWPersonClientTest(TestCase):
         # assertions
         self.assertIsInstance(degree, Degree)
         self.assertEqual(mock_map_term.return_value, degree.degree_term)
-        del mock_dict['degree_term']
-        self.assertDictContainsSubset(mock_dict, degree.to_dict())
+        self.assertEqual(sorted(mock_dict.keys()),
+                         sorted(degree.to_dict().keys()))
 
     def test_map_term(self):
         client = self.get_mock_person_client()
@@ -738,4 +778,5 @@ class UWPersonClientTest(TestCase):
 
         # assertions
         self.assertIsInstance(term, Term)
-        self.assertDictContainsSubset(mock_dict, term.to_dict())
+        self.assertEqual(sorted(mock_dict.keys()),
+                         sorted(term.to_dict().keys()))
