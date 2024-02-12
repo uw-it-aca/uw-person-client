@@ -119,9 +119,8 @@ class UWPDS(Postgres):
                 order_by="student_hold.seq", viewonly=True)
             academic_term_id = Column(
                 'academic_term_id', ForeignKey('term.id', ondelete="CASCADE"))
-            academic_term = \
-                relationship("term", foreign_keys=[academic_term_id],
-                             viewonly=True)
+            academic_term = relationship(
+                "term", foreign_keys=[academic_term_id], viewonly=True)
 
         class Employee(UWPDS.Base):
             __tablename__ = "employee"
