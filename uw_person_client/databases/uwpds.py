@@ -38,14 +38,12 @@ class UWPDS(Postgres):
         student_to_sport = Table(
             'student_to_sport',
             UWPDS.Base.metadata,
-            autoload=True,
             autoload_with=self.engine
         )
 
         student_to_adviser = Table(
             'student_to_adviser',
             UWPDS.Base.metadata,
-            autoload=True,
             autoload_with=self.engine
         )
 
